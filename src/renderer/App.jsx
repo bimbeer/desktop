@@ -1,7 +1,9 @@
-import './App.css';
 import { Box, ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
 
 import Start from './components/Start';
+import Login from './components/Login';
 
 const theme = extendTheme({
   fonts: {
@@ -10,13 +12,25 @@ const theme = extendTheme({
   },
 });
 
-function App() {
+function StartPage() {
+  return <Start />;
+}
+
+function LoginPage() {
+  return <Login />;
+}
+
+export default function App() {
   return (
     <ChakraProvider theme={theme}>
       <Box bg="#1a1a1a">
-        <Start />
+        <Router>
+          <Routes>
+            <Route path="/" element={<StartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+        </Router>
       </Box>
     </ChakraProvider>
   );
 }
-export default App;
