@@ -3,21 +3,19 @@
   padding-left: 50px;
   padding-right: 50px;
   padding-top: 50px;
+  padding-bottom: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
 
-.logo {
-
-}
-
 form {
-  margin-top: -4em;
+  margin-top: 2em;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 20px;
 }
 
@@ -63,7 +61,7 @@ form .input_field input:focus ~ label {
 }
 
 .social-media-login {
-  margin-top: 2em;
+  margin-top: 0.5em;
   width: 330px;
   display: flex;
   align-items: center;
@@ -101,6 +99,7 @@ form .input_field input:focus ~ label {
 }
 
 .login-button {
+  margin: 40px;
   width: 4.5em;
   height: 4.5em;
   border: 3px solid #a29b92;

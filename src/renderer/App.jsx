@@ -4,6 +4,7 @@ import './App.css';
 
 import Start from './components/Start';
 import Login from './pages/Login';
+import AuthDetails from './components/AuthDetails';
 
 const theme = extendTheme({
   fonts: {
@@ -16,8 +17,8 @@ function StartPage() {
   return <Login />;
 }
 
-function LoginPage() {
-  return <Login />;
+function LoggedPage() {
+  return <Start />;
 }
 
 export default function App() {
@@ -25,9 +26,10 @@ export default function App() {
     <ChakraProvider theme={theme}>
       <Box bg="#1a1a1a">
         <Router>
+          <AuthDetails />
           <Routes>
             <Route path="/" element={<StartPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/start" element={<LoggedPage />} />
           </Routes>
         </Router>
       </Box>

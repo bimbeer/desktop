@@ -1,28 +1,29 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillApple } from 'react-icons/ai';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { Text } from '@chakra-ui/react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase';
 import './LoginForm.css';
+import AuthDetails from './AuthDetails';
 
 export default function Login() {
-  const [dataUser, setDataUser] = useState({
-    username: '',
-    password: '',
-    save_login: false,
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleInputChange = (e) => {
-    const { name, value, checked } = e.target;
-
-    setDataUser({
-      ...dataUser,
-      [name]: checked || value,
-    });
+  const logIn = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      // eslint-disable-next-line promise/always-return
+      .then((userCredential) => {
+        console.log(userCredential);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-
-  console.log(dataUser);
 
   return (
     <div className="login_section">
@@ -33,53 +34,50 @@ export default function Login() {
           alt="Bimbeer Logo"
         />
       </div>
-      <Text fontSize="lg" color="white">
-        Log in and find yourself a drinking buddy!
-      </Text>
       <div>
-        <form>
+        <form onSubmit={logIn}>
           <div className="input_field">
             <input
               type="text"
-              onChange={(e) => handleInputChange(e)}
-              name="username"
-              id="username"
+              name="email"
+              id="email"
               required
-              value={dataUser.username}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
           </div>
           <div className="input_field">
             <input
               type="password"
-              onChange={(e) => handleInputChange(e)}
               name="password"
               id="password"
               required
-              value={dataUser.password}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label htmlFor="password">Password</label>
           </div>
+          <div className="social-media-login">
+            <div className="media-item fb-item">
+              <BsFacebook className="icon" alt="Facebook icon" />
+            </div>
+            <div className="media-item google-item">
+              <FcGoogle className="icon" alt="Google Icon" />
+            </div>
+            <div className="media-item apple-item">
+              <AiFillApple className="icon" alt="Apple Icon" />
+            </div>
+          </div>
+          <div className="login-button">
+            <button type="submit">
+              <RiArrowRightLine className="icon" />
+            </button>
+          </div>
         </form>
-
-        <div className="social-media-login">
-          <div className="media-item fb-item">
-            <BsFacebook className="icon" alt="Facebook icon" />
-          </div>
-          <div className="media-item google-item">
-            <FcGoogle className="icon" alt="Google Icon" />
-          </div>
-          <div className="media-item apple-item">
-            <AiFillApple className="icon" alt="Apple Icon" />
-          </div>
-        </div>
       </div>
-
-      <div className="login-button">
-        <RiArrowRightLine className="icon" />
-      </div>
-
       <div className="other-actions">
+        <AuthDetails />
         <div>
           <div>V1.0.0</div>
         </div>
