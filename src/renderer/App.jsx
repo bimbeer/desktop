@@ -3,7 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import Start from './components/Start';
-import Login from './components/Login';
+import Login from './pages/Login';
 
 const theme = extendTheme({
   fonts: {
@@ -13,7 +13,7 @@ const theme = extendTheme({
 });
 
 function StartPage() {
-  return <Start />;
+  return <Login />;
 }
 
 function LoginPage() {
