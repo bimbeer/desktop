@@ -19,7 +19,7 @@ export default function SignUpForm() {
     e.preventDefault();
     setError('');
     try {
-      await createUser(email, username, password);
+      await createUser(email, password, username);
       navigate('/profile');
       // eslint-disable-next-line no-shadow
     } catch (e) {

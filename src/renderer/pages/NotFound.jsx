@@ -14,8 +14,8 @@ export default function NotFound() {
                 404
               </Text>
               <Text color="white">
-                You happened to get lost in our mysterious bimbeery. Pressing home
-                button will take you back to civilization.
+                You happened to get lost in our mysterious bimbeery. Pressing
+                home button will take you back to civilization.
               </Text>
               <div className="home-button">
                 <a href="/" className="button">
