@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { Text } from '@chakra-ui/react';
 import { UserAuth } from '../context/AuthContext';
-import '../theme/LoginForm.css';
 import logo from '../assets/images/logo.png';
+import '../theme/LoginForm.css';
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
@@ -70,6 +71,12 @@ export default function SignUpForm() {
             />
             <label htmlFor="password">Password</label>
           </div>
+          <Text fontSize="sm" color="white">
+            Already have an account?{` `}
+            <a href="/">
+              <b>Log In</b>
+            </a>
+          </Text>
           <div className="login-button">
             <button type="submit">
               <RiArrowRightLine className="icon" />
