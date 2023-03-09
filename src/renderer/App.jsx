@@ -24,7 +24,6 @@ export default function App() {
         <Router>
           <AuthContextProvider>
             <Routes>
-              <Route component={NotFound} />
               <Route
                 path="/"
                 element={
@@ -49,6 +48,7 @@ export default function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthContextProvider>
         </Router>

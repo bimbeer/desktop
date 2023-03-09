@@ -1,21 +1,31 @@
+import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
+
+import { RiHome2Line } from 'react-icons/ri';
+import '../theme/NotFound.css';
+
 export default function NotFound() {
   return (
-    <div className="container flex mx-auto items-center h-screen">
-      <div className="sm:w-20 md:w-20 lg:w-full" />
-      <div className="flex flex-col w-4\/5 ">
-        <div className="flex flex-col items-center darkthemebg p-4 lg:p-2 mb-4 rounded homeborder">
-          <div className="flex flex-col w-full">
-            <div className="flex justify-center items-center flex-col w-full rounded text-white">
-              Not Found!
-              <div className="text-center">
-                You happened to get lost in our mysterious pantry. Pressing home
+    <Flex minH="80vh" align="center" justify="center">
+      <Card bg="whiteAlpha.100" maxW={600}>
+        <CardBody p={30}>
+          <Stack spacing="3">
+            <Center>
+              <Text fontSize="6xl" color="white" pr="4">
+                404
+              </Text>
+              <Text color="white">
+                You happened to get lost in our mysterious bimbeery. Pressing home
                 button will take you back to civilization.
+              </Text>
+              <div className="home-button">
+                <a href="/" className="button">
+                  <RiHome2Line className="icon" />
+                </a>
               </div>
-              <div className="flex justify-center items-center w-30 pt-2 rounded" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Center>
+          </Stack>
+        </CardBody>
+      </Card>
+    </Flex>
   );
 }
