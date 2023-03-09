@@ -70,7 +70,7 @@ form .input_field input:focus ~ label {
 }
 
 .social-media-login .media-item {
-  width: 103px;
+  width: 160px;
   display: grid;
   place-items: center;
   padding: 8px;

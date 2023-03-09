@@ -1,28 +1,41 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
-import { AiFillApple } from 'react-icons/ai';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebase';
-import './LoginForm.css';
-import AuthDetails from './AuthDetails';
+import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
+import '../theme/LoginForm.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { signIn, googleSignIn } = UserAuth();
 
-  const logIn = (e) => {
+  const logIn = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      // eslint-disable-next-line promise/always-return
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setError('');
+    try {
+      await signIn(email, password);
+      navigate('/profile');
+      // eslint-disable-next-line no-shadow
+    } catch (e) {
+      setError(e.message);
+      console.log(e.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+      navigate('/profile');
+    } catch (e) {
+      setError(e.message);
+      console.log(error);
+    }
   };
 
   return (
@@ -59,14 +72,13 @@ export default function Login() {
             <label htmlFor="password">Password</label>
           </div>
           <div className="social-media-login">
+            <div className="media-item google-item">
+              <button type="button" onClick={handleGoogleSignIn}>
+                <FcGoogle className="icon" alt="Google Icon" />
+              </button>
+            </div>
             <div className="media-item fb-item">
               <BsFacebook className="icon" alt="Facebook icon" />
-            </div>
-            <div className="media-item google-item">
-              <FcGoogle className="icon" alt="Google Icon" />
-            </div>
-            <div className="media-item apple-item">
-              <AiFillApple className="icon" alt="Apple Icon" />
             </div>
           </div>
           <div className="login-button">
@@ -77,7 +89,6 @@ export default function Login() {
         </form>
       </div>
       <div className="other-actions">
-        <AuthDetails />
         <div>
           <div>V1.0.0</div>
         </div>

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBuuBldZLbOnJYVea1sHs5247GuXBYYmK0',
@@ -12,6 +12,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
-// eslint-disable-next-line import/prefer-default-export
+const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);
+export { provider };
+export default app;
