@@ -1,0 +1,145 @@
+.login_section {
+  background-color: #1c1e1f;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+form {
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+form .input_field {
+  width: 100%;
+  position: relative;
+}
+
+form .input_field label {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  letter-spacing: 1px;
+  font-family: var(--fontSpecial);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #a29b92;
+  transition: all ease 0.1s;
+}
+
+form .input_field input {
+  background-color: #222526;
+  font-family: var(--fontSpecial);
+  font-size: 1.1em;
+  width: 330px;
+  color: #ffffff;
+  height: 55px;
+  padding: 15px 8px 1px 8px;
+  border: none;
+  border-radius: 5px;
+  position: relative;
+}
+
+form .input_field input:focus {
+  outline: none;
+  border: 2px solid #a29b92;
+}
+
+form .input_field input:valid ~ label,
+form .input_field input:focus ~ label {
+  transform: translate(-11px, -12px);
+  font-size: 0.7em;
+}
+
+.social-media-login {
+  margin-top: 0.5em;
+  width: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.social-media-login .media-item {
+  width: 103px;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: rgba(255, 255, 255, 0.227) 0px 1px 4px;
+  transition: all ease 0.4s;
+  cursor: pointer;
+}
+
+.social-media-login .media-item:hover {
+  opacity: 1.2;
+}
+
+.social-media-login .fb-item{
+  background-color: #0b57bb;
+  color: white;
+}
+
+.social-media-login .google-item{
+  background-color: #ffffff;
+  color: white;
+}
+.social-media-login .apple-item {
+  background-color: #222526;
+  color: white;
+}
+
+.login-button {
+  margin: 40px;
+  width: 4.5em;
+  height: 4.5em;
+  border: 3px solid #a29b92;
+  border-radius: 30%;
+  display: grid;
+  place-items: center;
+}
+
+.login-button:hover {
+  border: 3px solid rgb(255, 255, 255);
+}
+
+.login-button .icon {
+  width: 1.8em;
+  height: 1.8em;
+  color: #a29b92;
+}
+
+.login-button .icon:hover {
+  color: rgb(255, 255, 255);
+}
+
+.other-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.other-actions > div {
+  text-align: center;
+  width: 100%;
+  text-transform: uppercase;
+  color: #a29b92;
+  font-size: 0.9em;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.other-actions div:last-child {
+  display: flex;
+  justify-content: flex-end;
+  gap: 100px;
+}
