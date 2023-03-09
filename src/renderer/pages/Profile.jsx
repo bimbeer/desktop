@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext.jsx';
 
-function Account() {
+export default function Profile() {
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
 
@@ -27,5 +27,3 @@ function Account() {
     </div>
   );
 }
-
-export default Account;

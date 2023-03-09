@@ -1,9 +1,6 @@
 .login_section {
   background-color: #1c1e1f;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -99,7 +96,7 @@ form .input_field input:focus ~ label {
 }
 
 .login-button {
-  margin: 40px;
+  margin: 20px;
   width: 4.5em;
   height: 4.5em;
   border: 3px solid #a29b92;

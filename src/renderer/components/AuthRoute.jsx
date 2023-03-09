@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext.jsx';
 
 // eslint-disable-next-line react/prop-types
-function ProtectedRoute({ children }) {
+export default function AuthRoute({ children }) {
   const { user } = UserAuth();
 
   if (user) {
@@ -11,5 +11,3 @@ function ProtectedRoute({ children }) {
   }
   return children;
 }
-
-export default ProtectedRoute;
