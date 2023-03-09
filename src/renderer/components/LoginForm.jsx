@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
 import '../theme/LoginForm.css';
+import logo from '../assets/images/logo.png';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -41,11 +42,7 @@ export default function Login() {
   return (
     <div className="login_section">
       <div>
-        <img
-          src="https://i.imgur.com/AjNUvAg.png"
-          className="logo"
-          alt="Bimbeer Logo"
-        />
+        <img src={logo} className="logo" alt="Bimbeer Logo" />
       </div>
       <div>
         <form onSubmit={logIn}>

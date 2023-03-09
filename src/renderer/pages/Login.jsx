@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginForm from '../components/LoginForm';
 import '../theme/Login.css';
+import background from '../assets/images/background.jpg';
 
 export default function Login() {
   return (
@@ -9,7 +10,7 @@ export default function Login() {
       <div className="img_login_section">
         <img
           className="background_img"
-          src="https://static.theceomagazine.net/wp-content/uploads/2019/11/25131105/worlds-most-expensive-beer.jpg"
+          src={background}
           alt="Beer background"
         />
       </div>
