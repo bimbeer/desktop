@@ -4,7 +4,7 @@ import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { Text } from '@chakra-ui/react';
+import { Text, Spinner, Flex } from '@chakra-ui/react';
 import { UserAuth } from '../context/AuthContext';
 import '../theme/LoginForm.css';
 import logo from '../assets/images/logo.png';
@@ -13,11 +13,15 @@ export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const navigate = useNavigate();
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
 
   const logIn = async (e) => {
     e.preventDefault();
+    setIsAuthLoading(true);
     setError('');
     try {
       await signIn(email, password);
@@ -25,26 +29,33 @@ export default function LoginForm() {
     } catch (e) {
       setError(e.message);
       console.log(e.message);
+    } finally {
+      setIsAuthLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    console.log(isGoogleLoading);
     try {
       await googleSignIn();
-      navigate('/profile');
     } catch (e) {
       setError(e.message);
       console.log(error);
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
   const handleFacebookSignIn = async () => {
     try {
       await facebookSignIn();
-      navigate('/profile');
+      setIsFacebookLoading(true);
     } catch (e) {
       setError(e.message);
       console.log(error);
+    } finally {
+      setIsFacebookLoading(false);
     }
   };
 
@@ -81,14 +92,22 @@ export default function LoginForm() {
           </div>
           <div className="social-media-login">
             <div className="media-item google-item">
-              <button type="button" onClick={handleGoogleSignIn}>
-                <FcGoogle className="icon" alt="Google Icon" />
-              </button>
+              {isGoogleLoading ? (
+                <Spinner size="sm" color="black" />
+              ) : (
+                <button type="button" onClick={handleGoogleSignIn}>
+                  <FcGoogle className="icon" alt="Google Icon" />
+                </button>
+              )}
             </div>
             <div className="media-item fb-item">
-              <button type="button" onClick={handleFacebookSignIn}>
-                <BsFacebook className="icon" alt="Facebook icon" />
-              </button>
+              {isFacebookLoading ? (
+                <Spinner size="sm" color="white" />
+              ) : (
+                <button type="button" onClick={handleFacebookSignIn}>
+                  <BsFacebook className="icon" alt="Facebook icon" />
+                </button>
+              )}
             </div>
           </div>
           <Text fontSize="sm" color="white">
@@ -98,9 +117,15 @@ export default function LoginForm() {
             </a>
           </Text>
           <div className="login-button">
-            <button type="submit">
-              <RiArrowRightLine className="icon" />
-            </button>
+            {isAuthLoading ? (
+              <Flex>
+                <Spinner size="md" color="white" />
+              </Flex>
+            ) : (
+              <button type="submit">
+                <RiArrowRightLine className="icon" />
+              </button>
+            )}
           </div>
         </form>
       </div>
