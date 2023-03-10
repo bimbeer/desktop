@@ -5,6 +5,7 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
+  FacebookAuthProvider,
   signInWithRedirect,
 } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
@@ -24,8 +25,13 @@ export function AuthContextProvider({ children }) {
   };
 
   const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithRedirect(auth, provider);
+    const GoogleProvider = new GoogleAuthProvider();
+    signInWithRedirect(auth, GoogleProvider);
+  };
+
+  const facebookSignIn = () => {
+    const FacebookProvider = new FacebookAuthProvider();
+    signInWithRedirect(auth, FacebookProvider);
   };
 
   const logout = () => {
@@ -45,7 +51,7 @@ export function AuthContextProvider({ children }) {
   return (
     <AuthContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
-      value={{ createUser, user, logout, signIn, googleSignIn }}
+      value={{ createUser, user, logout, signIn, googleSignIn, facebookSignIn }}
     >
       {children}
     </AuthContext.Provider>

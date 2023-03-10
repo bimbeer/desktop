@@ -12,10 +12,9 @@ import logo from '../assets/images/logo.png';
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { signIn, googleSignIn } = UserAuth();
+  const { signIn, googleSignIn, facebookSignIn } = UserAuth();
 
   const logIn = async (e) => {
     e.preventDefault();
@@ -23,7 +22,6 @@ export default function LoginForm() {
     try {
       await signIn(email, password);
       navigate('/profile');
-      // eslint-disable-next-line no-shadow
     } catch (e) {
       setError(e.message);
       console.log(e.message);
@@ -33,6 +31,16 @@ export default function LoginForm() {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
+      navigate('/profile');
+    } catch (e) {
+      setError(e.message);
+      console.log(error);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      await facebookSignIn();
       navigate('/profile');
     } catch (e) {
       setError(e.message);
@@ -78,7 +86,9 @@ export default function LoginForm() {
               </button>
             </div>
             <div className="media-item fb-item">
-              <BsFacebook className="icon" alt="Facebook icon" />
+              <button type="button" onClick={handleFacebookSignIn}>
+                <BsFacebook className="icon" alt="Facebook icon" />
+              </button>
             </div>
           </div>
           <Text fontSize="sm" color="white">
