@@ -1,0 +1,14 @@
+.home-button {
+  width: 11em;
+  height: 4.5em;
+  border: 3px solid #ffffff;
+  border-radius: 30%;
+  display: grid;
+  place-items: center;
+}
+
+.home-button .icon {
+  width: 1.8em;
+  height: 1.8em;
+  color: #ffffff;
+}

@@ -1,12 +1,12 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm';
+import SignUpForm from '../components/SignUpForm';
 import '../theme/Login.css';
 import background from '../assets/images/background.jpg';
 
-export default function Login() {
+export default function SignUp() {
   return (
     <section className="page">
-      <LoginForm />
+      <SignUpForm />
       <div className="img_login_section">
         <img
           className="background_img"
