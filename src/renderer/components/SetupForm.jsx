@@ -36,7 +36,7 @@ export default function SetupForm() {
               <Box>
                 <FormControl id="firstName">
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input focusBorderColor="yellow" type="text" />
                 </FormControl>
               </Box>
               <Box>

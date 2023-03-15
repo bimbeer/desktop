@@ -9,7 +9,6 @@ import '../theme/LoginForm.css';
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState('');
@@ -20,7 +19,7 @@ export default function SignUpForm() {
     e.preventDefault();
     setError('');
     try {
-      await createUser(email, password, username);
+      await createUser(email, password);
       navigate('/profile');
       // eslint-disable-next-line no-shadow
     } catch (e) {
@@ -38,17 +37,6 @@ export default function SignUpForm() {
       </div>
       <div>
         <form onSubmit={signUp}>
-          <div className="input_field">
-            <input
-              type="text"
-              name="username"
-              id="username"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label htmlFor="email">Username</label>
-          </div>
           <div className="input_field">
             <input
               type="text"
