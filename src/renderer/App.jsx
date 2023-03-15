@@ -6,11 +6,24 @@ import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
 import './theme/App.css';
 
 import Login from './pages/Login';
-import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
+import Setup from './pages/Setup';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      'html, body': {
+        color: 'white',
+      },
+    },
+  },
+  palette: {
+    primary: '#141517',
+    secondary: '#1c1e1f',
+    accent: '#d4af37',
+  },
   fonts: {
     heading: `'Poppins', sans-serif`,
     body: `'Poppins', sans-serif`,
@@ -38,6 +51,14 @@ export default function App() {
                   <ProtectedRouteRedirect>
                     <SignUp />
                   </ProtectedRouteRedirect>
+                }
+              />
+              <Route
+                path="/setup"
+                element={
+                  <ProtectedRoute>
+                    <Setup />
+                  </ProtectedRoute>
                 }
               />
               <Route
