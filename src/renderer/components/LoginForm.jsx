@@ -36,14 +36,11 @@ export default function LoginForm() {
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
-    console.log(isGoogleLoading);
     try {
       await googleSignIn();
     } catch (e) {
       setError(e.message);
       console.log(error);
-    } finally {
-      setIsGoogleLoading(false);
     }
   };
 
@@ -54,8 +51,6 @@ export default function LoginForm() {
     } catch (e) {
       setError(e.message);
       console.log(error);
-    } finally {
-      setIsFacebookLoading(false);
     }
   };
 

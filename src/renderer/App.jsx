@@ -2,7 +2,7 @@ import { Box, ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthRoute from './components/AuthRoute';
+import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
 import './theme/App.css';
 
 import Login from './pages/Login';
@@ -27,17 +27,17 @@ export default function App() {
               <Route
                 path="/"
                 element={
-                  <AuthRoute>
+                  <ProtectedRouteRedirect>
                     <Login />
-                  </AuthRoute>
+                  </ProtectedRouteRedirect>
                 }
               />
               <Route
                 path="/sign-up"
                 element={
-                  <AuthRoute>
+                  <ProtectedRouteRedirect>
                     <SignUp />
-                  </AuthRoute>
+                  </ProtectedRouteRedirect>
                 }
               />
               <Route
