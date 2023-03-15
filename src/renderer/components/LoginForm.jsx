@@ -6,8 +6,8 @@ import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Text, Spinner, Flex } from '@chakra-ui/react';
 import { UserAuth } from '../context/AuthContext';
-import '../theme/LoginForm.css';
 import logo from '../assets/images/logo.png';
+import '../theme/css/LoginForm.css';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');

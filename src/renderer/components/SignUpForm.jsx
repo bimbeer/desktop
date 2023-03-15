@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
 import { UserAuth } from '../context/AuthContext';
 import logo from '../assets/images/logo.png';
-import '../theme/LoginForm.css';
+import '../theme/css/LoginForm.css';
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');

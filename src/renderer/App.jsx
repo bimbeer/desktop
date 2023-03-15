@@ -1,34 +1,16 @@
-import { Box, ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
-import './theme/App.css';
+import './theme/css/App.css';
+import theme from './theme/theme';
 
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
-
-const theme = extendTheme({
-  styles: {
-    global: {
-      'html, body': {
-        color: 'white',
-      },
-    },
-  },
-  palette: {
-    primary: '#141517',
-    secondary: '#1c1e1f',
-    accent: '#d4af37',
-  },
-  fonts: {
-    heading: `'Poppins', sans-serif`,
-    body: `'Poppins', sans-serif`,
-  },
-});
 
 export default function App() {
   return (

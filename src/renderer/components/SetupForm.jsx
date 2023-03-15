@@ -36,7 +36,7 @@ export default function SetupForm() {
               <Box>
                 <FormControl id="firstName">
                   <FormLabel>First Name</FormLabel>
-                  <Input focusBorderColor="yellow" type="text" />
+                  <Input type="text" />
                 </FormControl>
               </Box>
               <Box>
@@ -68,12 +68,8 @@ export default function SetupForm() {
               <FormLabel as="legend">Gender</FormLabel>
               <RadioGroup>
                 <HStack spacing="24px">
-                  <Radio colorScheme="yellow" value="Male">
-                    Male
-                  </Radio>
-                  <Radio colorScheme="yellow" value="Female">
-                    Female
-                  </Radio>
+                  <Radio value="Male">Male</Radio>
+                  <Radio value="Female">Female</Radio>
                 </HStack>
               </RadioGroup>
             </FormControl>
@@ -81,15 +77,9 @@ export default function SetupForm() {
               <FormLabel as="legend">Show me</FormLabel>
               <RadioGroup>
                 <HStack spacing="24px">
-                  <Radio colorScheme="yellow" value="Male">
-                    Man
-                  </Radio>
-                  <Radio colorScheme="yellow" value="Female">
-                    Woman
-                  </Radio>
-                  <Radio colorScheme="yellow" value="Both">
-                    Both
-                  </Radio>
+                  <Radio value="Male">Man</Radio>
+                  <Radio value="Female">Woman</Radio>
+                  <Radio value="Both">Both</Radio>
                 </HStack>
               </RadioGroup>
             </FormControl>
