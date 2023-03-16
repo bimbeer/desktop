@@ -25,7 +25,7 @@ export default function LoginForm() {
     setError('');
     try {
       await signIn(email, password);
-      navigate('/profile');
+      navigate('/dashboard');
     } catch (e) {
       setError(e.message);
       console.log(e.message);
