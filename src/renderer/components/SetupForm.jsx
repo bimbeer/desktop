@@ -216,12 +216,21 @@ export default function SetupForm() {
             <Button
               bg={theme.palette.accent}
               onClick={handleSubmit}
-              disabled={selectedBeers.length === 0}
+              isDisabled={selectedBeers.length === 0}
               color="black"
+              _hover={{
+                bg: 'yellow.500',
+              }}
             >
               Submit
             </Button>
-            <Button bg="gray.700" onClick={handleBackStep}>
+            <Button
+              bg="gray.700"
+              _hover={{
+                bg: 'gray',
+              }}
+              onClick={handleBackStep}
+            >
               Back
             </Button>
           </Stack>
