@@ -16,11 +16,11 @@ export default function LoginForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
-  const navigate = useNavigate();
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
+  const navigate = useNavigate();
 
-  const logIn = async (e) => {
-    e.preventDefault();
+  const logIn = async (event) => {
+    event.preventDefault();
     setIsAuthLoading(true);
     setError('');
     try {

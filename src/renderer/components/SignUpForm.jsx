@@ -10,18 +10,16 @@ import '../theme/css/LoginForm.css';
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState('');
   const { createUser } = UserAuth();
   const navigate = useNavigate();
 
-  const signUp = async (e) => {
-    e.preventDefault();
+  const signUp = async (event) => {
+    event.preventDefault();
     setError('');
     try {
       await createUser(email, password);
       navigate('/profile');
-      // eslint-disable-next-line no-shadow
     } catch (e) {
       setError(e.message);
       console.log(e.message);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Flex,
   Box,
@@ -16,6 +16,7 @@ import {
   useTheme,
   Image,
   Grid,
+  Center,
 } from '@chakra-ui/react';
 
 import beerList from './BeerList';
@@ -31,6 +32,7 @@ export default function SetupForm() {
   const [gender, setGender] = useState('');
   const [interest, setInterest] = useState('');
   const [selectedBeers, setSelectedBeers] = useState([]);
+  const [isValid, setIsValid] = useState(false);
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -45,8 +47,7 @@ export default function SetupForm() {
     setSelectedBeers((prevSelectedBeers) => {
       if (prevSelectedBeers.includes(beer)) {
         return prevSelectedBeers.filter(
-          // eslint-disable-next-line no-shadow
-          (selectedBeers) => selectedBeers !== beer
+          (selectedBeer) => selectedBeer !== beer
         );
       }
       return [...prevSelectedBeers, beer];
@@ -66,6 +67,13 @@ export default function SetupForm() {
     });
   };
 
+  useEffect(() => {
+    const isFormValid = () => {
+      return firstName && username && age && about && gender && interest;
+    };
+    setIsValid(isFormValid());
+  }, [firstName, username, age, about, gender, interest]);
+
   const setupFormUserInfo = () => (
     <Stack spacing={8} mx="auto" py={12} px={6}>
       <Stack align="center">
@@ -77,7 +85,7 @@ export default function SetupForm() {
         <Stack spacing={4}>
           <HStack spacing={4}>
             <Box>
-              <FormControl w="sm" id="firstName">
+              <FormControl isRequired w="sm" id="firstName">
                 <FormLabel>First Name</FormLabel>
                 <Input
                   type="text"
@@ -87,7 +95,7 @@ export default function SetupForm() {
               </FormControl>
             </Box>
             <Box>
-              <FormControl w="sm" id="lastName">
+              <FormControl isRequired w="sm" id="lastName">
                 <FormLabel>Last Name</FormLabel>
                 <Input
                   type="text"
@@ -97,7 +105,7 @@ export default function SetupForm() {
               </FormControl>
             </Box>
           </HStack>
-          <FormControl id="text">
+          <FormControl isRequired id="text">
             <FormLabel>Username</FormLabel>
             <Input
               type="text"
@@ -105,7 +113,7 @@ export default function SetupForm() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
-          <FormControl id="text">
+          <FormControl isRequired id="text">
             <FormLabel>Age</FormLabel>
             <InputGroup>
               <Input
@@ -115,7 +123,7 @@ export default function SetupForm() {
               />
             </InputGroup>
           </FormControl>
-          <FormControl>
+          <FormControl isRequired>
             <FormLabel>About me</FormLabel>
             <Textarea
               _placeholder={{ color: 'white' }}
@@ -126,7 +134,7 @@ export default function SetupForm() {
               onChange={(e) => setAbout(e.target.value)}
             />
           </FormControl>
-          <FormControl as="fieldset">
+          <FormControl isRequired as="fieldset">
             <FormLabel as="legend">Gender</FormLabel>
             <RadioGroup value={gender} onChange={(e) => setGender(e)}>
               <HStack spacing="24px">
@@ -136,7 +144,7 @@ export default function SetupForm() {
               </HStack>
             </RadioGroup>
           </FormControl>
-          <FormControl as="fieldset">
+          <FormControl isRequired as="fieldset">
             <FormLabel as="legend">Show me</FormLabel>
             <RadioGroup value={interest} onChange={(e) => setInterest(e)}>
               <HStack spacing="24px">
@@ -155,6 +163,7 @@ export default function SetupForm() {
               _hover={{
                 bg: 'yellow.500',
               }}
+              isDisabled={!isValid}
             >
               Proceed
             </Button>
@@ -177,20 +186,24 @@ export default function SetupForm() {
           <Grid templateColumns="repeat(3, 1fr)" gap={6}>
             {beerList.map((beer, index) => (
               <Box
-                key={index}
+                key={index.id}
                 cursor="pointer"
                 borderRadius="lg"
                 overflow="hidden"
                 boxShadow="lg"
                 onClick={() => handleSelectBeer(index)}
                 bg={selectedBeers.includes(beer) ? theme.palette.accent : ''}
+                maxW="300px"
               >
-                <Image
-                  maxW="100px"
-                  maxH="100px"
-                  src={beer.link}
-                  alt={beer.name}
-                />
+                <Center>
+                  <Image
+                    p={2}
+                    maxW="100%"
+                    maxH="250px"
+                    src={beer.link}
+                    alt={beer.name}
+                  />
+                </Center>
                 {/* <Box p={4} bg={theme.palette.primary}>
                 <Heading size="md" color="white">
                   {beer.name}
@@ -199,10 +212,7 @@ export default function SetupForm() {
               </Box>
             ))}
           </Grid>
-          <HStack mt={8} justify="space-between">
-            <Button bg="gray.700" onClick={handleBackStep}>
-              Back
-            </Button>
+          <Stack mt={8} justify="space-between">
             <Button
               bg={theme.palette.accent}
               onClick={handleSubmit}
@@ -211,7 +221,10 @@ export default function SetupForm() {
             >
               Submit
             </Button>
-          </HStack>
+            <Button bg="gray.700" onClick={handleBackStep}>
+              Back
+            </Button>
+          </Stack>
         </Stack>
       </Box>
     </Stack>
