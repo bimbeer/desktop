@@ -9,7 +9,7 @@ import theme from './theme/theme';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
-import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -44,10 +44,10 @@ export default function App() {
                 }
               />
               <Route
-                path="/profile"
+                path="/dashboard"
                 element={
                   <ProtectedRoute>
-                    <Profile />
+                    <Dashboard />
                   </ProtectedRoute>
                 }
               />

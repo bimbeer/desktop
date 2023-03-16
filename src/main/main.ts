@@ -73,7 +73,7 @@ const createWindow = async () => {
     show: false,
     width: 1280,
     height: 820,
-    minWidth: 860,
+    minWidth: 920,
     minHeight: 820,
     autoHideMenuBar: true,
     icon: getAssetPath('logo.ico'),

@@ -22,7 +22,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
-
+import { useNavigate } from 'react-router-dom';
 import beerList from './BeerList';
 
 export default function SetupForm() {
@@ -37,6 +37,7 @@ export default function SetupForm() {
   const [interest, setInterest] = useState('');
   const [selectedBeers, setSelectedBeers] = useState([]);
   const [isValid, setIsValid] = useState(false);
+  const navigate = useNavigate();
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -59,6 +60,7 @@ export default function SetupForm() {
   };
 
   const handleSubmit = () => {
+    navigate('/dashboard');
     console.log({
       firstName,
       lastName,
@@ -135,7 +137,7 @@ export default function SetupForm() {
           <FormControl isRequired>
             <FormLabel>About me</FormLabel>
             <Textarea
-              _placeholder={{ color: 'white' }}
+              _placeholder={{ color: 'gray' }}
               borderColor="gray"
               placeholder="Say something about yourself."
               size="sm"
