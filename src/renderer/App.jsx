@@ -15,7 +15,7 @@ import NotFound from './pages/NotFound';
 export default function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Box bg="#1a1a1a">
+      <Box bg={theme.palette.primary}>
         <Router>
           <AuthContextProvider>
             <Routes>

@@ -5,7 +5,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  InputGroup,
   HStack,
   Stack,
   Button,
@@ -17,6 +16,11 @@ import {
   Image,
   Grid,
   Center,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 
 import beerList from './BeerList';
@@ -113,15 +117,20 @@ export default function SetupForm() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
-          <FormControl isRequired id="text">
+          <FormControl isRequired id="number">
             <FormLabel>Age</FormLabel>
-            <InputGroup>
-              <Input
-                type="text"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </InputGroup>
+            <NumberInput
+              min={18}
+              value={age}
+              onChange={(valueString) => setAge(parseInt(valueString, 10))}
+              borderColor="gray"
+            >
+              <NumberInputField type="number" />
+              <NumberInputStepper>
+                <NumberIncrementStepper color="gray" />
+                <NumberDecrementStepper color="gray" size="sm" />
+              </NumberInputStepper>
+            </NumberInput>
           </FormControl>
           <FormControl isRequired>
             <FormLabel>About me</FormLabel>
