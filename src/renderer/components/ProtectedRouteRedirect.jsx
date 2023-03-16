@@ -7,7 +7,7 @@ export default function AuthRoute({ children }) {
   const { user } = UserAuth();
 
   if (user) {
-    return <Navigate to="/profile" />;
+    return <Navigate to="/setup" />;
   }
   return children;
 }

@@ -1,43 +1,46 @@
-import { Box, ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import AuthRoute from './components/AuthRoute';
-import './theme/App.css';
+import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
+import './theme/css/App.css';
+import theme from './theme/theme';
 
 import Login from './pages/Login';
-import Profile from './pages/Profile';
 import SignUp from './pages/SignUp';
+import Setup from './pages/Setup';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
-
-const theme = extendTheme({
-  fonts: {
-    heading: `'Poppins', sans-serif`,
-    body: `'Poppins', sans-serif`,
-  },
-});
 
 export default function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Box bg="#1a1a1a">
+      <Box bg={theme.palette.primary}>
         <Router>
           <AuthContextProvider>
             <Routes>
               <Route
                 path="/"
                 element={
-                  <AuthRoute>
+                  <ProtectedRouteRedirect>
                     <Login />
-                  </AuthRoute>
+                  </ProtectedRouteRedirect>
                 }
               />
               <Route
                 path="/sign-up"
                 element={
-                  <AuthRoute>
+                  <ProtectedRouteRedirect>
                     <SignUp />
-                  </AuthRoute>
+                  </ProtectedRouteRedirect>
+                }
+              />
+              <Route
+                path="/setup"
+                element={
+                  <ProtectedRoute>
+                    <Setup />
+                  </ProtectedRoute>
                 }
               />
               <Route
