@@ -122,12 +122,13 @@ export default function SetupForm() {
           <FormControl isRequired id="number">
             <FormLabel>Age</FormLabel>
             <NumberInput
+              defaultValue={18}
               min={18}
               value={age}
               onChange={(valueString) => setAge(parseInt(valueString, 10))}
               borderColor="gray"
             >
-              <NumberInputField type="number" />
+              <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper color="gray" />
                 <NumberDecrementStepper color="gray" size="sm" />
