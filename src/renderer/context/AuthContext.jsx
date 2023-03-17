@@ -8,7 +8,7 @@ import {
   FacebookAuthProvider,
   signInWithRedirect,
 } from 'firebase/auth';
-import { addDoc, collection, setDoc, doc, getDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebase';
 
 const AuthContext = createContext();
