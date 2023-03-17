@@ -8,7 +8,8 @@ import {
   FacebookAuthProvider,
   signInWithRedirect,
 } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
+import { addDoc, collection, setDoc, doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebase';
 
 const AuthContext = createContext();
 
@@ -38,13 +39,23 @@ export function AuthContextProvider({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       console.log(currentUser);
       setUser(currentUser);
+
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (!userDoc.exists()) {
+          await setDoc(doc(db, 'users', currentUser.uid), {
+            userId: currentUser.uid,
+            emailAddress: currentUser.email.toLowerCase(),
+            dateCreated: currentUser.metadata.creationTime,
+          });
+        }
+      }
     });
-    return () => {
-      unsubscribe();
-    };
+
+    return unsubscribe;
   }, []);
 
   return (

@@ -45,9 +45,9 @@ export default function LoginForm() {
   };
 
   const handleFacebookSignIn = async () => {
+    setIsFacebookLoading(true);
     try {
       await facebookSignIn();
-      setIsFacebookLoading(true);
     } catch (e) {
       setError(e.message);
       console.log(error);
