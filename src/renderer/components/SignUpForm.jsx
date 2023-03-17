@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
-import { db } from 'renderer/firebase/firebase';
-import { addDoc, collection } from 'firebase/firestore';
 import { UserAuth } from '../context/AuthContext';
 import logo from '../assets/images/logo.png';
 import '../theme/css/LoginForm.css';

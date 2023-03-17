@@ -23,6 +23,8 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { setDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
 import beerList from './BeerList';
 
 export default function SetupForm() {
@@ -59,18 +61,28 @@ export default function SetupForm() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      // Add data to the user collection using the user's ID
+      const userId = 'NDRoUcRJFahmtjKc0ky0AZE8qVA2';
+      const userDocRef = doc(db, 'profile', userId);
+      await setDoc(userDocRef, {
+        userId,
+        firstName,
+        lastName,
+        username,
+        age,
+        about,
+        gender,
+        interest,
+        selectedBeers,
+      });
+      console.log('Data added to user collection');
+    } catch (error) {
+      console.error('Error adding data to user collection: ', error);
+    }
     navigate('/dashboard');
-    console.log({
-      firstName,
-      lastName,
-      username,
-      age,
-      about,
-      gender,
-      interest,
-      selectedBeers,
-    });
   };
 
   useEffect(() => {
