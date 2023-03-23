@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/SignIn';
 import '../theme/css/Login.css';
 import ThemeBackground from '../components/ThemeBackground';
 

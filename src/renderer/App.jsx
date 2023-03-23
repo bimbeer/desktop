@@ -10,6 +10,9 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
 import Dashboard from './pages/Dashboard';
+import Pairs from './pages/Pairs';
+import Messages from './pages/Messages';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -48,6 +51,30 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/pairs"
+                element={
+                  <ProtectedRoute>
+                    <Pairs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
                   </ProtectedRoute>
                 }
               />
