@@ -1,7 +1,7 @@
 import React from 'react';
 import SignUpForm from '../components/SignUpForm';
 import ThemeBackground from '../components/ThemeBackground';
-import '../theme/css/Login.css';
+import '../theme/css/Start.css';
 
 export default function SignUp() {
   return (

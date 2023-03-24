@@ -63,25 +63,20 @@ export default function SetupForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      // Add data to the user collection using the user's ID
-      const userId = 'NDRoUcRJFahmtjKc0ky0AZE8qVA2';
-      const userDocRef = doc(db, 'profile', userId);
-      await setDoc(userDocRef, {
-        userId,
-        firstName,
-        lastName,
-        username,
-        age,
-        about,
-        gender,
-        interest,
-        selectedBeers,
-      });
-      console.log('Data added to user collection');
-    } catch (error) {
-      console.error('Error adding data to user collection: ', error);
-    }
+    const userId = 'NDRoUcRJFahmtjKc0ky0AZE8qVA2';
+    const userDocRef = doc(db, 'profile', userId);
+    await setDoc(userDocRef, {
+      userId,
+      firstName,
+      lastName,
+      username,
+      age,
+      about,
+      gender,
+      interest,
+      selectedBeers,
+    });
+
     navigate('/dashboard');
   };
 

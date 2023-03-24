@@ -1,9 +1,9 @@
 import React from 'react';
-import LoginForm from '../components/SignIn';
-import '../theme/css/Login.css';
+import LoginForm from '../components/SignInForm';
+import '../theme/css/Start.css';
 import ThemeBackground from '../components/ThemeBackground';
 
-export default function Login() {
+export default function Start() {
   return (
     <section className="page">
       <LoginForm />

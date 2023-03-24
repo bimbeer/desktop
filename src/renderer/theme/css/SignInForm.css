@@ -1,4 +1,4 @@
-.login_section {
+.signin_section {
   background-color: #1c1e1f;
   padding: 50px;
   display: flex;
@@ -57,7 +57,7 @@ form .input_field input:focus ~ label {
   font-size: 0.7em;
 }
 
-.social-media-login {
+.social-media-signin {
   margin-top: 0.5em;
   width: 330px;
   display: flex;
@@ -66,7 +66,7 @@ form .input_field input:focus ~ label {
   gap: 5px;
 }
 
-.social-media-login .media-item {
+.social-media-signin .media-item {
   width: 160px;
   display: grid;
   place-items: center;
@@ -77,25 +77,25 @@ form .input_field input:focus ~ label {
   cursor: pointer;
 }
 
-.social-media-login .media-item:hover {
+.social-media-signin .media-item:hover {
   opacity: 1.2;
 }
 
-.social-media-login .fb-item{
+.social-media-signin .fb-item{
   background-color: #0b57bb;
   color: white;
 }
 
-.social-media-login .google-item{
+.social-media-signin .google-item{
   background-color: #ffffff;
   color: white;
 }
-.social-media-login .apple-item {
+.social-media-signin .apple-item {
   background-color: #222526;
   color: white;
 }
 
-.login-button {
+.signin-button {
   margin: 20px;
   width: 4.5em;
   height: 4.5em;
@@ -105,17 +105,17 @@ form .input_field input:focus ~ label {
   place-items: center;
 }
 
-.login-button:hover {
+.signin-button:hover {
   border: 3px solid rgb(255, 255, 255);
 }
 
-.login-button .icon {
+.signin-button .icon {
   width: 1.8em;
   height: 1.8em;
   color: #a29b92;
 }
 
-.login-button .icon:hover {
+.signin-button .icon:hover {
   color: rgb(255, 255, 255);
 }
 
