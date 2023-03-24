@@ -16,12 +16,12 @@ Bimbeer is created for lonely beer lovers, that have no one to drink with. Thank
 ## Functionality
 
 - creating a new account using social media
-- possibility to customize the profile
+- profile customisation
 - real-time chat implementation
 - an interface that allows you to swipe the displayed profiles
 - setting the profile search scope
-- automatically suggesting profiles to the user based on users preferences
-- favorite brewery selection panel
+- automatically suggesting profiles based on users preferences
+- favorite beers selection panel
 - possibility to disconnect the pair
 - message status display
 
