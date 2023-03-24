@@ -9,12 +9,14 @@ import {
   signInWithRedirect,
 } from 'firebase/auth';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase/firebase';
 
 const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export function AuthContextProvider({ children }) {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -51,12 +53,13 @@ export function AuthContextProvider({ children }) {
             emailAddress: currentUser.email.toLowerCase(),
             dateCreated: currentUser.metadata.creationTime,
           });
+          navigate('/setup');
         }
       }
     });
 
     return unsubscribe;
-  }, []);
+  }, [navigate]);
 
   return (
     <AuthContext.Provider

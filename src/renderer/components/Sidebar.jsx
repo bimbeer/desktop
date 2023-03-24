@@ -15,9 +15,9 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@chakra-ui/react';
 import { Avatar } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
 import beer from '../assets/images/beer.png';
 
@@ -71,20 +71,16 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MiniDrawer() {
+export default function Sidebar() {
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [open, setOpen] = React.useState(false);
 
   const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (e) {
-      console.log(e.message);
-    }
+    await logout();
+    navigate('/');
   };
-
-  const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -109,62 +105,84 @@ export default function MiniDrawer() {
               <ListItemIcon
                 sx={{ paddingLeft: 1, paddingBottom: 1, paddingTop: 1 }}
               >
-                <img src={beer} alt="beer logo" width="40px" />
+                <a href="/#/dashboard">
+                  <img src={beer} alt="beer logo" width="40px" />
+                </a>
               </ListItemIcon>
-              <ListItemText
-                primary="Bimbeer"
-                primaryTypographyProps={{
-                  sx: {
-                    fontWeight: 'medium',
-                    fontSize: '2rem',
-                    paddingLeft: '15px',
-                  },
-                }}
-              />
+              <a href="/#/dashboard">
+                <ListItemText
+                  primary="Bimbeer"
+                  primaryTypographyProps={{
+                    sx: {
+                      fontWeight: 'medium',
+                      fontSize: '2rem',
+                      paddingLeft: '15px',
+                    },
+                  }}
+                />
+              </a>
             </ListItemButton>
           </ListItem>
           <Divider />
           <List>
-            {['Dashboard', 'Pairs', 'Messages', 'Profile', 'Logout'].map(
-              (text, index) => (
-                <ListItem disablePadding key={text} sx={{ paddingBottom: 1 }}>
-                  <ListItemButton
-                    component={Link}
-                    to={
-                      text === 'Logout' ? undefined : `/#/${text.toLowerCase()}`
-                    }
-                    onClick={text === 'Logout' ? handleLogout : undefined}
+            {[
+              { text: 'Dashboard', to: '/#/dashboard' },
+              { text: 'Pairs', to: '/#/pairs' },
+              { text: 'Messages', to: '/#/messages' },
+              { text: 'Profile', to: '/#/profile' },
+              { text: 'Logout', to: undefined },
+            ].map((item) => (
+              <ListItem
+                disablePadding
+                key={item.text}
+                sx={{ paddingBottom: 1 }}
+              >
+                <ListItemButton
+                  component={Link}
+                  to={item.to}
+                  onClick={item.text === 'Logout' ? handleLogout : undefined}
+                  sx={{
+                    backgroundColor:
+                      item.to && `/#${location.pathname}` === item.to
+                        ? '#d4af37'
+                        : 'inherit',
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      paddingLeft: 1.5,
+                      paddingRight: 5,
+                      // color: '#d4af37',
+                    }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        paddingLeft: 1.5,
-                        paddingRight: 5,
-                        // color: '#d4af37',
-                      }}
-                    >
-                      {index === 0 && <DashboardOutlinedIcon />}
-                      {index === 1 && <Diversity1Icon />}
-                      {index === 2 && <ChatBubbleOutlineOutlinedIcon />}
-                      {index === 3 && <AccountCircleOutlinedIcon />}
-                      {index === 4 && <LogoutIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItemButton>
-                </ListItem>
-              )
-            )}
+                    {item.text === 'Dashboard' && <DashboardOutlinedIcon />}
+                    {item.text === 'Pairs' && <Diversity1Icon />}
+                    {item.text === 'Messages' && (
+                      <ChatBubbleOutlineOutlinedIcon />
+                    )}
+                    {item.text === 'Profile' && <AccountCircleOutlinedIcon />}
+                    {item.text === 'Logout' && <LogoutIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
-            <Avatar
-              alt={user && user.email}
-              sx={{ width: 40, height: 40 }}
-              style={{ backgroundColor: '#d4af37' }}
-            />
+            <a href="/#/profile">
+              <Avatar
+                alt={user && user.email}
+                sx={{ width: 40, height: 40 }}
+                style={{ backgroundColor: '#d4af37' }}
+              />
+            </a>
             {open && (
-              <Typography variant="body2" sx={{ ml: 2 }}>
-                {user && user.email}
-              </Typography>
+              <a href="/#/profile">
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  {user && user.email}
+                </Typography>
+              </a>
             )}
           </Box>
         </Drawer>
