@@ -35,6 +35,11 @@ const theme = extendTheme({
         focusBorderColor: 'yellow.500',
       },
     },
+    NumberInput: {
+      defaultProps: {
+        focusBorderColor: 'yellow.500',
+      },
+    },
     Radio: {
       defaultProps: {
         colorScheme: 'yellow',

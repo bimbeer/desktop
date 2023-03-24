@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
 import { Text, Spinner, Flex } from '@chakra-ui/react';
 import { UserAuth } from '../context/AuthContext';
 import logo from '../assets/images/logo.png';
-import '../theme/css/LoginForm.css';
+import '../theme/css/SignInForm.css';
 
-export default function LoginForm() {
+export default function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,18 +16,22 @@ export default function LoginForm() {
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
-  const navigate = useNavigate();
 
-  const logIn = async (event) => {
+  const handleEmailSignIn = async (event) => {
     event.preventDefault();
     setIsAuthLoading(true);
     setError('');
     try {
       await signIn(email, password);
-      navigate('/dashboard');
     } catch (e) {
       setError(e.message);
-      console.log(e.message);
+      const errorCode = e.code;
+      if (
+        errorCode === 'auth/invalid-email' ||
+        errorCode === 'auth/wrong-password'
+      ) {
+        setError('  The email address or password you entered is invalid.');
+      }
     } finally {
       setIsAuthLoading(false);
     }
@@ -36,33 +39,28 @@ export default function LoginForm() {
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
-    try {
-      await googleSignIn();
-    } catch (e) {
-      setError(e.message);
-      console.log(error);
-    }
+    await googleSignIn();
   };
 
   const handleFacebookSignIn = async () => {
-    try {
-      await facebookSignIn();
-      setIsFacebookLoading(true);
-    } catch (e) {
-      setError(e.message);
-      console.log(error);
-    }
+    setIsFacebookLoading(true);
+    await facebookSignIn();
   };
 
   return (
-    <div className="login_section">
+    <div className="signin_section">
       <div>
         <a href="/">
           <img src={logo} className="logo" alt="Bimbeer Logo" />
         </a>
       </div>
+      {error && (
+        <Text fontSize="sm" color="red">
+          {error}
+        </Text>
+      )}
       <div>
-        <form onSubmit={logIn}>
+        <form onSubmit={handleEmailSignIn}>
           <div className="input_field">
             <input
               type="text"
@@ -85,7 +83,7 @@ export default function LoginForm() {
             />
             <label htmlFor="password">Password</label>
           </div>
-          <div className="social-media-login">
+          <div className="social-media-signin">
             <div className="media-item google-item">
               {isGoogleLoading ? (
                 <Spinner size="sm" color="black" />
@@ -111,7 +109,7 @@ export default function LoginForm() {
               <b>Sign up</b>
             </a>
           </Text>
-          <div className="login-button">
+          <div className="signin-button">
             {isAuthLoading ? (
               <Flex>
                 <Spinner size="md" color="white" />

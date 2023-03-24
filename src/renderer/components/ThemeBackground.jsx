@@ -1,5 +1,5 @@
 import background from '../assets/images/background.jpg';
-import '../theme/css/Login.css';
+import '../theme/css/Start.css';
 
 export default function ThemeBackground() {
   return (

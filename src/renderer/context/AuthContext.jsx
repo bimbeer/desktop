@@ -8,12 +8,15 @@ import {
   FacebookAuthProvider,
   signInWithRedirect,
 } from 'firebase/auth';
-import { auth } from '../firebase/firebase';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { auth, db } from '../firebase/firebase';
 
 const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export function AuthContextProvider({ children }) {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -38,14 +41,25 @@ export function AuthContextProvider({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       console.log(currentUser);
       setUser(currentUser);
+
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (!userDoc.exists()) {
+          await setDoc(doc(db, 'users', currentUser.uid), {
+            userId: currentUser.uid,
+            emailAddress: currentUser.email.toLowerCase(),
+            dateCreated: currentUser.metadata.creationTime,
+          });
+          navigate('/setup');
+        }
+      }
     });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+
+    return unsubscribe;
+  }, [navigate]);
 
   return (
     <AuthContext.Provider

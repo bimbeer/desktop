@@ -6,10 +6,13 @@ import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
 import './theme/css/App.css';
 import theme from './theme/theme';
 
-import Login from './pages/Login';
+import Start from './pages/Start';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
 import Dashboard from './pages/Dashboard';
+import Pairs from './pages/Pairs';
+import Messages from './pages/Messages';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -23,7 +26,7 @@ export default function App() {
                 path="/"
                 element={
                   <ProtectedRouteRedirect>
-                    <Login />
+                    <Start />
                   </ProtectedRouteRedirect>
                 }
               />
@@ -48,6 +51,30 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/pairs"
+                element={
+                  <ProtectedRoute>
+                    <Pairs />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/messages"
+                element={
+                  <ProtectedRoute>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
                   </ProtectedRoute>
                 }
               />

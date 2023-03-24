@@ -1,12 +1,13 @@
-import React from 'react';
-import BimbeerCard from 'renderer/components/BimbeerCard.jsx';
+import { Center } from '@chakra-ui/react';
 import Sidebar from '../components/Sidebar';
 
 export default function Profile() {
   return (
     <>
       <Sidebar />
-      <BimbeerCard />
+      <Center>
+        <h1> Profile page</h1>
+      </Center>
     </>
   );
 }
