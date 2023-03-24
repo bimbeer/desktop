@@ -6,7 +6,7 @@ import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
 import './theme/css/App.css';
 import theme from './theme/theme';
 
-import Login from './pages/Login';
+import Start from './pages/Start';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
 import Dashboard from './pages/Dashboard';
@@ -26,7 +26,7 @@ export default function App() {
                 path="/"
                 element={
                   <ProtectedRouteRedirect>
-                    <Login />
+                    <Start />
                   </ProtectedRouteRedirect>
                 }
               />
