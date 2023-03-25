@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Flex,
+  Icon,
   Box,
   FormControl,
   FormLabel,
@@ -31,11 +33,15 @@ import {
   Text,
   VStack,
   VisuallyHidden,
+  Spinner,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { setDoc, doc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import useDebounce from 'renderer/hooks/useDebounceInput';
 import { db } from '../firebase/firebase';
 import beerList from './BeerList';
 
@@ -48,6 +54,11 @@ export default function SetupForm() {
   const userId = getUserFromLocalStorage();
   const [step, setStep] = useState(1);
   const [isValid, setIsValid] = useState(false);
+  const [city, setCity] = useState('');
+  const [cities, setCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState({});
+  const [citiesLoading, setCitiesLoading] = useState(false);
+  const debounceInput = useDebounce();
   const navigate = useNavigate();
   const [profile, setProfile] = useState({
     firstName: '',
@@ -120,6 +131,7 @@ export default function SetupForm() {
     await setDoc(userDocRef, {
       ...profile,
       avatar: downloadURL,
+      location: city,
     });
     navigate('/profile');
   };
@@ -144,6 +156,35 @@ export default function SetupForm() {
     profile.gender,
     profile.interest,
   ]);
+
+  useEffect(() => {
+    if (!city) {
+      setCities([]);
+      setCitiesLoading(false);
+      return;
+    }
+    if (selectedCity.address?.label === city) {
+      setCitiesLoading(false);
+      return;
+    }
+    setCitiesLoading(true);
+    debounceInput(city, fetchCities, 500);
+  }, [city]);
+
+  const fetchCities = async (newString) => {
+    const res = await axios.get(
+      `https://geocode.search.hereapi.com/v1/geocode?q=${newString}&apiKey=RQnyfAQCOhZukJzCLB6AEWHRZrSgU8mYkwSL80KZDrs`
+    );
+    setCities(res.data.items);
+    setCitiesLoading(false);
+  };
+
+  const handleCitySelect = (cityId) => {
+    const selectedCity = cities.find((city) => city.id === cityId);
+    setSelectedCity(selectedCity);
+    setCity(selectedCity.address.label);
+    setCities([]);
+  };
 
   const profileInfoForm = () => (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -327,13 +368,42 @@ export default function SetupForm() {
             <FormLabel>Location</FormLabel>
             <Input
               type="text"
-              onChange={(e) =>
-                setProfile((prevProfile) => ({
-                  ...prevProfile,
-                  location: e.target.value,
-                }))
-              }
+              _placeholder={{ color: 'gray' }}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Enter your city"
             />
+            <Flex
+              justify="center"
+              align="center"
+              visibility={citiesLoading ? 'visible' : 'hidden'}
+            >
+              <Spinner size="md" mt={4} color="yellow.500" />
+            </Flex>
+
+            <List
+              display={cities.length > 0 && !citiesLoading ? 'block' : 'none'}
+            >
+              {cities.map((city) => (
+                <ListItem key={city.id}>
+                  <Box
+                    _hover={{
+                      bg: 'yellow.500',
+                      ml: '1rem',
+                    }}
+                    bg="gray.700"
+                    transition="all 0.15s ease-in"
+                    p="1rem"
+                    mb="0.5rem"
+                    rounded="1rem"
+                    cursor="pointer"
+                    onClick={() => handleCitySelect(city.id)}
+                  >
+                    {city.address.label}
+                  </Box>
+                </ListItem>
+              ))}
+            </List>
           </FormControl>
           <FormControl isRequired>
             <FormLabel mb={8}>Range setting</FormLabel>
