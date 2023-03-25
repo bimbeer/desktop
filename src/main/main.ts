@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -115,6 +115,15 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
+// Block users from reloading using F5/Ctrl+R
+app.on('browser-window-focus', function () {
+  globalShortcut.register('CommandOrControl+R', () => {});
+  globalShortcut.register('F5', () => {});
+});
+app.on('browser-window-blur', function () {
+  globalShortcut.unregister('CommandOrControl+R');
+  globalShortcut.unregister('F5');
+});
 /**
  * Add event listeners...
  */
