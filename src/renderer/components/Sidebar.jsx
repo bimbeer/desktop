@@ -1,5 +1,6 @@
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -18,7 +19,12 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@chakra-ui/react';
 import { Avatar } from '@material-ui/core';
-import { UserAuth } from '../context/AuthContext';
+import { doc, getDoc } from 'firebase/firestore';
+import {
+  getUserFromLocalStorage,
+  UserAuth,
+} from 'renderer/context/AuthContext';
+import { db } from '../firebase/firebase';
 import beer from '../assets/images/beer.png';
 
 const darkTheme = createTheme({
@@ -72,6 +78,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
+  const [profileData, setProfileData] = useState({
+    avatar: '',
+  });
   const { user, logout } = UserAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -89,6 +98,19 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const userId = getUserFromLocalStorage();
+    const docRef = doc(db, 'profile', userId);
+
+    async function fetchData() {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProfileData(docSnap.data());
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -172,9 +194,10 @@ export default function Sidebar() {
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
             <a href="/#/profile">
               <Avatar
-                alt={user && user.email}
+                alt={user.email}
                 sx={{ width: 40, height: 40 }}
                 style={{ backgroundColor: '#d4af37' }}
+                src={profileData.avatar}
               />
             </a>
             {open && (

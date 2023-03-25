@@ -42,10 +42,9 @@ export function AuthContextProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      console.log(currentUser);
       setUser(currentUser);
-
       if (currentUser) {
+        localStorage.setItem('user', JSON.stringify(currentUser.uid));
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         if (!userDoc.exists()) {
           await setDoc(doc(db, 'users', currentUser.uid), {
@@ -64,7 +63,14 @@ export function AuthContextProvider({ children }) {
   return (
     <AuthContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
-      value={{ createUser, user, logout, signIn, googleSignIn, facebookSignIn }}
+      value={{
+        user,
+        createUser,
+        logout,
+        signIn,
+        googleSignIn,
+        facebookSignIn,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -73,4 +79,9 @@ export function AuthContextProvider({ children }) {
 
 export const UserAuth = () => {
   return useContext(AuthContext);
+};
+
+export const getUserFromLocalStorage = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user;
 };

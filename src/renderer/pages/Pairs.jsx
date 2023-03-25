@@ -47,8 +47,8 @@ function MatchedPairsPage({}) {
       <Sidebar />
       <Center>
         <Box p={6} minH="100vh">
-        <Center>
-          <Heading mb={8}>Matched Pairs</Heading>
+          <Center>
+            <Heading mb={8}>Matched Pairs</Heading>
           </Center>
           <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={10}>
             {matchedPairs.map((pair) => (
@@ -56,7 +56,7 @@ function MatchedPairsPage({}) {
             ))}
           </SimpleGrid>
         </Box>
-        </Center>
+      </Center>
     </>
   );
 }
