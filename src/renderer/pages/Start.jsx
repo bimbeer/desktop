@@ -1,12 +1,12 @@
 import React from 'react';
-import LoginForm from '../components/SignInForm';
+import SignInForm from '../components/SignInForm';
 import '../theme/css/Start.css';
 import ThemeBackground from '../components/ThemeBackground';
 
 export default function Start() {
   return (
     <section className="page">
-      <LoginForm />
+      <SignInForm />
       <ThemeBackground />
     </section>
   );
