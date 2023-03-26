@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Box, Center, Text, Spinner, Flex, Image } from '@chakra-ui/react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { Text, Spinner, Flex } from '@chakra-ui/react';
+import { getRedirectResult } from 'firebase/auth';
 import { UserAuth } from '../context/AuthContext';
+import { auth } from '../firebase/firebase';
 import logo from '../assets/images/logo.png';
 import '../theme/css/SignInForm.css';
 
@@ -15,6 +17,7 @@ export default function SignInForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
 
   const handleEmailSignIn = async (event) => {
@@ -47,6 +50,14 @@ export default function SignInForm() {
     await facebookSignIn();
   };
 
+  useEffect(() => {
+    if (window.sessionStorage.getItem('pending')) {
+      window.sessionStorage.removeItem('pending');
+      setIsLoading(true);
+      getRedirectResult(auth);
+    }
+  }, []);
+
   return (
     <div className="signin_section">
       <div>
@@ -54,6 +65,24 @@ export default function SignInForm() {
           <img src={logo} className="logo" alt="Bimbeer Logo" />
         </a>
       </div>
+      <Box
+        pos="fixed"
+        top={0}
+        left={0}
+        w="100%"
+        h="100%"
+        bg="#141517"
+        display={isLoading ? 'flex' : 'none'}
+        zIndex={10}
+      >
+        <Center h="100%" w="100%">
+          <Image position="fixed" top={130} src={logo} alt="Bimbeer Logo" />
+          <Text fontSize="4xl" mr={4}>
+            We&apos;re logging you in, sit tight!
+          </Text>
+          <Spinner thickness="4px" size="xl" color="white" />
+        </Center>
+      </Box>
       {error && (
         <Text fontSize="sm" color="red">
           {error}

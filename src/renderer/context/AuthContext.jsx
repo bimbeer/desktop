@@ -28,11 +28,13 @@ export function AuthContextProvider({ children }) {
 
   const googleSignIn = () => {
     const GoogleProvider = new GoogleAuthProvider();
+    window.sessionStorage.setItem('pending', 1);
     signInWithRedirect(auth, GoogleProvider);
   };
 
   const facebookSignIn = () => {
     const FacebookProvider = new FacebookAuthProvider();
+    window.sessionStorage.setItem('pending', 1);
     signInWithRedirect(auth, FacebookProvider);
   };
 
