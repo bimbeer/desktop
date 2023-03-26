@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -53,6 +55,7 @@ export default function SetupForm() {
   const userId = getUserFromLocalStorage();
   const [step, setStep] = useState(1);
   const [isValid, setIsValid] = useState(false);
+  const [error, setError] = useState('');
   const [city, setCity] = useState('');
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState({});
@@ -106,13 +109,21 @@ export default function SetupForm() {
 
   async function handleAvatarChange(event) {
     const avatar = event.target.files[0];
-    if (avatar) {
+    setError('');
+    if (
+      avatar &&
+      (avatar.type === 'image/jpeg' ||
+        avatar.type === 'image/png' ||
+        avatar.type === 'image/gif')
+    ) {
       setSelectedFile(avatar);
       const reader = new FileReader();
       reader.onload = (e) => {
         setAvatarPreview(e.target.result);
       };
       reader.readAsDataURL(avatar);
+    } else {
+      setError('Wrong format. Please upload a JPEG, PNG or GIF image.');
     }
   }
 
@@ -158,6 +169,14 @@ export default function SetupForm() {
     selectedFile,
   ]);
 
+  const fetchCities = async (newString) => {
+    const res = await axios.get(
+      `https://geocode.search.hereapi.com/v1/geocode?q=${newString}&apiKey=RQnyfAQCOhZukJzCLB6AEWHRZrSgU8mYkwSL80KZDrs`
+    );
+    setCities(res.data.items);
+    setCitiesLoading(false);
+  };
+
   useEffect(() => {
     if (!city) {
       setCities([]);
@@ -171,14 +190,6 @@ export default function SetupForm() {
     setCitiesLoading(true);
     debounceInput(city, fetchCities, 500);
   }, [city]);
-
-  const fetchCities = async (newString) => {
-    const res = await axios.get(
-      `https://geocode.search.hereapi.com/v1/geocode?q=${newString}&apiKey=RQnyfAQCOhZukJzCLB6AEWHRZrSgU8mYkwSL80KZDrs`
-    );
-    setCities(res.data.items);
-    setCitiesLoading(false);
-  };
 
   const handleCitySelect = (cityId) => {
     const selectedCity = cities.find((city) => city.id === cityId);
@@ -265,7 +276,7 @@ export default function SetupForm() {
                   onChange={handleAvatarChange}
                 />
               </VisuallyHidden>
-              <Flex gap={100} alignItems="center">
+              <Flex gap={30} alignItems="center">
                 <VStack pl={5}>
                   <FormLabel>Avatar</FormLabel>
                   <Button
@@ -280,6 +291,11 @@ export default function SetupForm() {
                     {selectedFile ? 'Uploaded!' : 'Choose File'}
                   </Button>
                 </VStack>
+                {error && (
+                  <Text fontSize="sm" color="red">
+                    {error}
+                  </Text>
+                )}
                 {avatarPreview && (
                   <Image
                     src={avatarPreview}
