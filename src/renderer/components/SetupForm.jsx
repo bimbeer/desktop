@@ -58,7 +58,7 @@ export default function SetupForm() {
   const [error, setError] = useState('');
   const [city, setCity] = useState('');
   const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState({});
+  const [selectedCity, setSelectedCity] = useState(null);
   const [citiesLoading, setCitiesLoading] = useState(false);
   const debounceInput = useDebounce();
   const navigate = useNavigate();
@@ -82,6 +82,7 @@ export default function SetupForm() {
   }
 
   const handleNextStep = () => {
+    console.log(selectedCity);
     setStep(step + 1);
   };
 
@@ -183,7 +184,7 @@ export default function SetupForm() {
       setCitiesLoading(false);
       return;
     }
-    if (selectedCity.address?.label === city) {
+    if (selectedCity && selectedCity.address?.label === city) {
       setCitiesLoading(false);
       return;
     }
@@ -193,9 +194,13 @@ export default function SetupForm() {
 
   const handleCitySelect = (cityId) => {
     const selectedCity = cities.find((city) => city.id === cityId);
-    setSelectedCity(selectedCity);
-    setCity(selectedCity.address.label);
-    setCities([]);
+    if (selectedCity) {
+      setSelectedCity(selectedCity);
+      setCity(selectedCity.address.label);
+      setCities([]);
+    } else {
+      alert('Please select a city from the list of suggestions.');
+    }
   };
 
   const profileInfoForm = () => (
@@ -492,7 +497,7 @@ export default function SetupForm() {
               color="black"
               size="lg"
               onClick={handleNextStep}
-              isDisabled={!city}
+              isDisabled={!selectedCity}
               _hover={{
                 bg: 'yellow.500',
               }}
