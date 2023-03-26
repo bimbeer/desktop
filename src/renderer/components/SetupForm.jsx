@@ -82,7 +82,6 @@ export default function SetupForm() {
   }
 
   const handleNextStep = () => {
-    console.log(selectedCity);
     setStep(step + 1);
   };
 
@@ -198,8 +197,6 @@ export default function SetupForm() {
       setSelectedCity(selectedCity);
       setCity(selectedCity.address.label);
       setCities([]);
-    } else {
-      alert('Please select a city from the list of suggestions.');
     }
   };
 
