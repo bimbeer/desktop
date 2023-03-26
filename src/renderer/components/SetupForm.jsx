@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Flex,
-  Icon,
   Box,
   FormControl,
   FormLabel,
@@ -144,7 +143,8 @@ export default function SetupForm() {
         profile.age &&
         profile.about &&
         profile.gender &&
-        profile.interest
+        profile.interest &&
+        selectedFile
       );
     };
     setIsValid(isFormValid());
@@ -155,6 +155,7 @@ export default function SetupForm() {
     profile.about,
     profile.gender,
     profile.interest,
+    selectedFile,
   ]);
 
   useEffect(() => {
@@ -276,7 +277,7 @@ export default function SetupForm() {
                     }}
                     onClick={handleUploadClick}
                   >
-                    {'Uploaded!' || 'Choose File'}
+                    {selectedFile ? 'Uploaded!' : 'Choose File'}
                   </Button>
                 </VStack>
                 {avatarPreview && (
@@ -475,6 +476,7 @@ export default function SetupForm() {
               color="black"
               size="lg"
               onClick={handleNextStep}
+              isDisabled={!city}
               _hover={{
                 bg: 'yellow.500',
               }}
