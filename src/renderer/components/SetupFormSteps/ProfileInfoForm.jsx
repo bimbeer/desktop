@@ -22,6 +22,7 @@ import {
   RadioGroup,
   Radio,
   FormErrorMessage,
+  FormErrorIcon,
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
 import {
@@ -211,7 +212,10 @@ export default function ProfileInfoForm({
                 onChange={(event) => handleFirstNameChange(event)}
               />
               {errors.firstName && (
-                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+                <FormErrorMessage>
+                  <FormErrorIcon />
+                  {errors.firstName}
+                </FormErrorMessage>
               )}
             </FormControl>
 
@@ -228,7 +232,10 @@ export default function ProfileInfoForm({
                 onChange={(event) => handleLastNameChange(event)}
               />
               {errors.lastName && (
-                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+                <FormErrorMessage>
+                  <FormErrorIcon />
+                  {errors.lastName}
+                </FormErrorMessage>
               )}
             </FormControl>
           </HStack>
@@ -244,7 +251,10 @@ export default function ProfileInfoForm({
               onChange={(event) => handleUsernameChange(event)}
             />
             {errors.username.map((error) => (
-              <FormErrorMessage key={error}>{error}</FormErrorMessage>
+              <FormErrorMessage key={error}>
+                <FormErrorIcon />
+                {error}
+              </FormErrorMessage>
             ))}
           </FormControl>
           <HStack>
@@ -293,7 +303,10 @@ export default function ProfileInfoForm({
                   </Button>
                 </VStack>
                 {errors.avatar && (
-                  <FormErrorMessage>{errors.avatar}</FormErrorMessage>
+                  <FormErrorMessage>
+                    <FormErrorIcon />
+                    {errors.avatar}
+                  </FormErrorMessage>
                 )}
                 {avatarPreview && (
                   <Image
@@ -318,7 +331,10 @@ export default function ProfileInfoForm({
               onChange={(event) => handleAboutChange(event)}
             />
             {errors.about && (
-              <FormErrorMessage>{errors.about}</FormErrorMessage>
+              <FormErrorMessage>
+                <FormErrorIcon />
+                {errors.about}
+              </FormErrorMessage>
             )}
           </FormControl>
           <FormControl isRequired as="fieldset">
