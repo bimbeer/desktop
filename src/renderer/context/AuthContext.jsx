@@ -50,7 +50,6 @@ export function AuthContextProvider({ children }) {
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
         if (!userDoc.exists()) {
           await setDoc(doc(db, 'users', currentUser.uid), {
-            userId: currentUser.uid,
             emailAddress: currentUser.email.toLowerCase(),
             dateCreated: currentUser.metadata.creationTime,
           });
