@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import useDebounce from 'renderer/hooks/useDebounceInput';
 import axios from 'axios';
 import {
@@ -28,22 +29,22 @@ export default function ProfileDiscoverySettingsForm({
   setProfile,
   handleNextStep,
   handleBackStep,
-  city,
+  city: cityProp,
   setCity,
 }) {
   const theme = useTheme();
   const debounceInput = useDebounce();
   const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedCityState, setSelectedCityState] = useState(null);
   const [citiesLoading, setCitiesLoading] = useState(false);
 
   const DEBOUNCE_DELAY = 500;
 
   const handleCitySelect = (cityId) => {
-    const selectedCity = cities.find((city) => city.id === cityId);
-    if (selectedCity) {
-      setSelectedCity(selectedCity);
-      setCity(selectedCity.address.label);
+    const foundCity = cities.find((city) => city.id === cityId);
+    if (foundCity) {
+      setSelectedCityState(foundCity);
+      setCity(foundCity.address.label);
       setCities([]);
     }
   };
@@ -57,18 +58,19 @@ export default function ProfileDiscoverySettingsForm({
   };
 
   useEffect(() => {
-    if (!city) {
+    if (!cityProp) {
       setCities([]);
       setCitiesLoading(false);
       return;
     }
-    if (selectedCity && selectedCity.address?.label === city) {
+    if (selectedCityState && selectedCityState.address?.label === cityProp) {
       setCitiesLoading(false);
       return;
     }
     setCitiesLoading(true);
-    debounceInput(city, fetchCities, DEBOUNCE_DELAY);
-  }, [city]);
+    debounceInput(cityProp, fetchCities, DEBOUNCE_DELAY);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityProp]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -84,7 +86,7 @@ export default function ProfileDiscoverySettingsForm({
             <Input
               type="text"
               _placeholder={{ color: 'gray' }}
-              value={city}
+              value={cityProp}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Enter your city"
             />
@@ -198,7 +200,7 @@ export default function ProfileDiscoverySettingsForm({
               color="black"
               size="lg"
               onClick={handleNextStep}
-              isDisabled={!selectedCity}
+              isDisabled={!selectedCityState}
               _hover={{
                 bg: 'yellow.500',
               }}
@@ -220,3 +222,16 @@ export default function ProfileDiscoverySettingsForm({
     </Stack>
   );
 }
+
+ProfileDiscoverySettingsForm.propTypes = {
+  profile: PropTypes.shape({
+    range: PropTypes.number,
+    isGlobal: PropTypes.bool,
+    isLocal: PropTypes.bool,
+  }).isRequired,
+  setProfile: PropTypes.func.isRequired,
+  handleNextStep: PropTypes.func.isRequired,
+  handleBackStep: PropTypes.func.isRequired,
+  city: PropTypes.string.isRequired,
+  setCity: PropTypes.func.isRequired,
+};

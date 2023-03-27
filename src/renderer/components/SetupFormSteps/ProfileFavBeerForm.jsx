@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Box,
   Stack,
@@ -105,3 +106,13 @@ export default function ProfileDiscoverySettingsForm({
     </Stack>
   );
 }
+
+ProfileDiscoverySettingsForm.propTypes = {
+  profile: PropTypes.shape({
+    selectedBeers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }).isRequired,
+  setProfile: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleBackStep: PropTypes.func.isRequired,
+  isFormSubmitting: PropTypes.bool.isRequired,
+};

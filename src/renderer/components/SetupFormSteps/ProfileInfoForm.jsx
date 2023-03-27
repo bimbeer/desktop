@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Stack,
   Heading,
@@ -16,13 +17,20 @@ import {
   Flex,
   VStack,
   Button,
-  Text,
   Image,
   Textarea,
   RadioGroup,
   Radio,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
+import {
+  validateTextOnly,
+  validateTextAndNumbersOnly,
+  validateMaxLength,
+  validateFileType,
+} from 'renderer/helpers/validators';
+import capitalizer from 'renderer/helpers/capitalizer';
 
 export default function ProfileInfoForm({
   profile,
@@ -32,10 +40,17 @@ export default function ProfileInfoForm({
   setSelectedFile,
 }) {
   const theme = useTheme();
-  const [isValid, setIsValid] = useState(false);
-  const [error, setError] = useState('');
   const [avatarPreview, setAvatarPreview] = React.useState();
   const fileInputRef = React.useRef();
+
+  const [isValid, setIsValid] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    username: [],
+    about: '',
+    avatar: '',
+  });
 
   useEffect(() => {
     const isFormValid = () => {
@@ -60,32 +75,108 @@ export default function ProfileInfoForm({
     selectedFile,
   ]);
 
+  function handleFirstNameChange(event) {
+    const { value } = event.target;
+    if (!validateTextOnly(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        firstName: 'First name can only contain letters',
+      }));
+    } else if (!validateMaxLength(value, 30)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        firstName: 'First name cannot be longer than 30 characters',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
+    }
+    const capitalizedFirstLetter = capitalizer(value);
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      firstName: capitalizedFirstLetter,
+    }));
+  }
+
+  function handleLastNameChange(event) {
+    const { value } = event.target;
+    if (!validateTextOnly(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        lastName: 'Last name can only contain letters',
+      }));
+    } else if (!validateMaxLength(value, 30)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        lastName: 'Last name cannot be longer than 30 characters',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
+    }
+    const capitalizedFirstLetter = capitalizer(value);
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      lastName: capitalizedFirstLetter,
+    }));
+  }
+
+  function handleUsernameChange(event) {
+    const { value } = event.target;
+    const newErrors = [];
+    if (!validateTextAndNumbersOnly(value)) {
+      newErrors.push('Username can only contain letters and numbers');
+    }
+    if (!validateMaxLength(value, 15)) {
+      newErrors.push('Username cannot be longer than 15 characters');
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
+    setProfile((prevProfile) => ({ ...prevProfile, username: value }));
+  }
+
+  function handleAboutChange(event) {
+    const { value } = event.target;
+    if (!value.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        about: 'About section cannot be empty or contain only spaces',
+      }));
+    } else if (!validateMaxLength(value, 255)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        about: 'About section cannot be longer than 255 characters',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, about: '' }));
+    }
+    const capitalizedFirstLetter = capitalizer(value);
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      about: capitalizedFirstLetter,
+    }));
+  }
+
+  async function handleAvatarChange(event) {
+    const avatar = event.target.files[0];
+    if (!validateFileType(avatar, ['image/jpeg', 'image/png', 'image/gif'])) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        avatar: 'Avatar must be a JPEG, PNG, or GIF image',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, avatar: '' }));
+      setSelectedFile(avatar);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatarPreview(e.target.result);
+      };
+      reader.readAsDataURL(avatar);
+    }
+  }
+
   const handleUploadClick = React.useCallback(() => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   }, []);
-
-  const handleAvatarChange = React.useCallback(
-    async (event) => {
-      const avatar = event.target.files[0];
-      setError('');
-      if (
-        avatar &&
-        (avatar.type === 'image/jpeg' ||
-          avatar.type === 'image/png' ||
-          avatar.type === 'image/gif')
-      ) {
-        setSelectedFile(avatar);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setAvatarPreview(e.target.result);
-        };
-        reader.readAsDataURL(avatar);
-      }
-    },
-    [setSelectedFile]
-  );
 
   React.useEffect(() => {
     if (selectedFile) {
@@ -106,49 +197,58 @@ export default function ProfileInfoForm({
       </Stack>
       <Box rounded="lg" bg={theme.palette.secondary} boxShadow="lg" p={8}>
         <Stack spacing={4}>
-          <HStack spacing={4}>
-            <FormControl isRequired w="sm" id="text">
+          <HStack spacing={4} alignItems="flex-start">
+            <FormControl
+              isRequired
+              w="sm"
+              id="firstName"
+              isInvalid={errors.firstName}
+            >
               <FormLabel>First Name</FormLabel>
               <Input
                 type="text"
                 value={profile.firstName}
-                onChange={(e) =>
-                  setProfile((prevProfile) => ({
-                    ...prevProfile,
-                    firstName: e.target.value,
-                  }))
-                }
+                onChange={(event) => handleFirstNameChange(event)}
               />
+              {errors.firstName && (
+                <FormErrorMessage>{errors.firstName}</FormErrorMessage>
+              )}
             </FormControl>
-            <FormControl isRequired w="sm" id="text">
+
+            <FormControl
+              isRequired
+              w="sm"
+              id="lastName"
+              isInvalid={errors.lastName}
+            >
               <FormLabel>Last Name</FormLabel>
               <Input
                 type="text"
                 value={profile.lastName}
-                onChange={(e) =>
-                  setProfile((prevProfile) => ({
-                    ...prevProfile,
-                    lastName: e.target.value,
-                  }))
-                }
+                onChange={(event) => handleLastNameChange(event)}
               />
+              {errors.lastName && (
+                <FormErrorMessage>{errors.lastName}</FormErrorMessage>
+              )}
             </FormControl>
           </HStack>
-          <FormControl isRequired id="text">
+          <FormControl
+            isRequired
+            id="username"
+            isInvalid={errors.username.length > 0}
+          >
             <FormLabel>Username</FormLabel>
             <Input
               type="text"
               value={profile.username}
-              onChange={(e) =>
-                setProfile((prevProfile) => ({
-                  ...prevProfile,
-                  username: e.target.value,
-                }))
-              }
+              onChange={(event) => handleUsernameChange(event)}
             />
+            {errors.username.map((error) => (
+              <FormErrorMessage key={error}>{error}</FormErrorMessage>
+            ))}
           </FormControl>
           <HStack>
-            <FormControl isRequired id="number">
+            <FormControl isRequired id="age">
               <FormLabel>Age</FormLabel>
               <NumberInput
                 min={18}
@@ -169,12 +269,12 @@ export default function ProfileInfoForm({
                 </NumberInputStepper>
               </NumberInput>
             </FormControl>
-            <FormControl isRequired id="avatar">
+            <FormControl isRequired id="avatar" isInvalid={errors.avatar}>
               <VisuallyHidden>
                 <Input
                   type="file"
                   ref={fileInputRef}
-                  onChange={handleAvatarChange}
+                  onChange={(event) => handleAvatarChange(event)}
                 />
               </VisuallyHidden>
               <Flex gap={30} alignItems="center">
@@ -192,10 +292,8 @@ export default function ProfileInfoForm({
                     {selectedFile ? 'Uploaded!' : 'Choose File'}
                   </Button>
                 </VStack>
-                {error && (
-                  <Text fontSize="sm" color="red">
-                    {error}
-                  </Text>
+                {errors.avatar && (
+                  <FormErrorMessage>{errors.avatar}</FormErrorMessage>
                 )}
                 {avatarPreview && (
                   <Image
@@ -209,7 +307,7 @@ export default function ProfileInfoForm({
               </Flex>
             </FormControl>
           </HStack>
-          <FormControl isRequired>
+          <FormControl isRequired id="about" isInvalid={errors.about}>
             <FormLabel>About me</FormLabel>
             <Textarea
               _placeholder={{ color: 'gray' }}
@@ -217,13 +315,11 @@ export default function ProfileInfoForm({
               placeholder="Say something about yourself."
               size="sm"
               value={profile.about}
-              onChange={(e) =>
-                setProfile((prevProfile) => ({
-                  ...prevProfile,
-                  about: e.target.value,
-                }))
-              }
+              onChange={(event) => handleAboutChange(event)}
             />
+            {errors.about && (
+              <FormErrorMessage>{errors.about}</FormErrorMessage>
+            )}
           </FormControl>
           <FormControl isRequired as="fieldset">
             <FormLabel as="legend">Gender</FormLabel>
@@ -277,3 +373,19 @@ export default function ProfileInfoForm({
     </Stack>
   );
 }
+
+ProfileInfoForm.propTypes = {
+  profile: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    username: PropTypes.string,
+    age: PropTypes.number,
+    about: PropTypes.string,
+    gender: PropTypes.string,
+    interest: PropTypes.string,
+  }).isRequired,
+  setProfile: PropTypes.func.isRequired,
+  handleNextStep: PropTypes.func.isRequired,
+  selectedFile: PropTypes.instanceOf(File).isRequired,
+  setSelectedFile: PropTypes.func.isRequired,
+};
