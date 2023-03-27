@@ -1,38 +1,45 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Text, Spinner, Flex } from '@chakra-ui/react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { Text, Spinner, Flex } from '@chakra-ui/react';
+import { getRedirectResult } from 'firebase/auth';
 import { UserAuth } from '../context/AuthContext';
+import { auth } from '../firebase/firebase';
 import logo from '../assets/images/logo.png';
+import LoadingScreen from './LoadingScreen';
 import '../theme/css/SignInForm.css';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [authError, setAuthError] = useState('');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
+
+  const ERROR_INVALID_EMAIL = 'auth/invalid-email';
+  const ERROR_WRONG_PASSWORD = 'auth/wrong-password';
 
   const handleEmailSignIn = async (event) => {
     event.preventDefault();
     setIsAuthLoading(true);
-    setError('');
+    setAuthError('');
     try {
       await signIn(email, password);
+      setIsAuthLoading(false);
     } catch (e) {
-      setError(e.message);
+      setAuthError(e.message);
       const errorCode = e.code;
       if (
-        errorCode === 'auth/invalid-email' ||
-        errorCode === 'auth/wrong-password'
+        errorCode === ERROR_INVALID_EMAIL ||
+        errorCode === ERROR_WRONG_PASSWORD
       ) {
-        setError('  The email address or password you entered is invalid.');
+        setAuthError('The email address or password you entered is invalid.');
       }
-    } finally {
       setIsAuthLoading(false);
     }
   };
@@ -47,6 +54,14 @@ export default function SignInForm() {
     await facebookSignIn();
   };
 
+  useEffect(() => {
+    if (window.sessionStorage.getItem('pending')) {
+      window.sessionStorage.removeItem('pending');
+      setIsLoading(true);
+      getRedirectResult(auth);
+    }
+  }, []);
+
   return (
     <div className="signin_section">
       <div>
@@ -54,9 +69,10 @@ export default function SignInForm() {
           <img src={logo} className="logo" alt="Bimbeer Logo" />
         </a>
       </div>
-      {error && (
-        <Text fontSize="sm" color="red">
-          {error}
+      <LoadingScreen isLoading={isLoading} />
+      {authError && (
+        <Text fontSize="sm" color="red" mt={8}>
+          {authError}
         </Text>
       )}
       <div>
