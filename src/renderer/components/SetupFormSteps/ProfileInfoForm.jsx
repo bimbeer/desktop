@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
 
-function ProfileInfoForm({
+export default function ProfileInfoForm({
   profile,
   setProfile,
   handleNextStep,
@@ -83,6 +83,16 @@ function ProfileInfoForm({
       reader.readAsDataURL(avatar);
     }
   }
+
+  React.useEffect(() => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatarPreview(e.target.result);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }, [selectedFile]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -264,5 +274,3 @@ function ProfileInfoForm({
     </Stack>
   );
 }
-
-export default ProfileInfoForm;
