@@ -30,18 +30,22 @@ import {
   validateTextAndNumbersOnly,
   validateMaxLength,
   validateFileType,
+  validateNotOnlyNumbers,
+  validateNumbersOnly,
 } from 'renderer/helpers/validators';
-import capitalizer from 'renderer/helpers/capitalizer';
+import { capitalizer, decapitalizer } from 'renderer/helpers/stringManipulator';
 
 export default function ProfileInfoForm({
   profile,
   setProfile,
-  handleNextStep,
+  avatarPreview,
   selectedFile,
   setSelectedFile,
+  handleNextStep,
 }) {
   const theme = useTheme();
-  const [avatarPreview, setAvatarPreview] = React.useState();
+  const [avatarPreviewState, setAvatarPreviewState] =
+    React.useState(avatarPreview);
   const fileInputRef = React.useRef();
 
   const [isValid, setIsValid] = useState(false);
@@ -49,9 +53,14 @@ export default function ProfileInfoForm({
     firstName: '',
     lastName: '',
     username: [],
+    age: '',
     about: '',
     avatar: '',
   });
+
+  useEffect(() => {
+    setAvatarPreviewState(avatarPreview);
+  }, [avatarPreview]);
 
   useEffect(() => {
     const isFormValid = () => {
@@ -62,7 +71,8 @@ export default function ProfileInfoForm({
         profile.about &&
         profile.gender &&
         profile.interest &&
-        selectedFile
+        (selectedFile || avatarPreview) &&
+        !Object.values(errors).some((error) => error.length > 0)
       );
     };
     setIsValid(isFormValid());
@@ -74,6 +84,8 @@ export default function ProfileInfoForm({
     profile.gender,
     profile.interest,
     selectedFile,
+    avatarPreview,
+    errors,
   ]);
 
   function handleFirstNameChange(event) {
@@ -130,28 +142,25 @@ export default function ProfileInfoForm({
       newErrors.push('Username cannot be longer than 15 characters');
     }
     setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
-    setProfile((prevProfile) => ({ ...prevProfile, username: value }));
-  }
-
-  function handleAboutChange(event) {
-    const { value } = event.target;
-    if (!value.trim()) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        about: 'About section cannot be empty or contain only spaces',
-      }));
-    } else if (!validateMaxLength(value, 255)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        about: 'About section cannot be longer than 255 characters',
-      }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, about: '' }));
-    }
-    const capitalizedFirstLetter = capitalizer(value);
+    const decapizalizedString = decapitalizer(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
-      about: capitalizedFirstLetter,
+      username: decapizalizedString,
+    }));
+  }
+
+  function handleAgeChange(value) {
+    if (!validateNumbersOnly(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        age: 'Age can only contain numbers',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, age: '' }));
+    }
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      age: value,
     }));
   }
 
@@ -167,10 +176,38 @@ export default function ProfileInfoForm({
       setSelectedFile(avatar);
       const reader = new FileReader();
       reader.onload = (e) => {
-        setAvatarPreview(e.target.result);
+        setAvatarPreviewState(e.target.result);
       };
       reader.readAsDataURL(avatar);
     }
+  }
+
+  function handleAboutChange(event) {
+    const { value } = event.target;
+    if (!value.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        about: 'About section cannot be empty or contain only spaces',
+      }));
+    } else if (!validateMaxLength(value, 255)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        about: 'About section cannot be longer than 255 characters',
+      }));
+    } else if (!validateNotOnlyNumbers(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        about:
+          'About section cannot contain only numbers or only spaces and zeros',
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, about: '' }));
+    }
+    const capitalizedFirstLetter = capitalizer(value);
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      about: capitalizedFirstLetter,
+    }));
   }
 
   const handleUploadClick = React.useCallback(() => {
@@ -183,7 +220,7 @@ export default function ProfileInfoForm({
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setAvatarPreview(e.target.result);
+        setAvatarPreviewState(e.target.result);
       };
       reader.readAsDataURL(selectedFile);
     }
@@ -218,7 +255,6 @@ export default function ProfileInfoForm({
                 </FormErrorMessage>
               )}
             </FormControl>
-
             <FormControl
               isRequired
               w="sm"
@@ -258,18 +294,13 @@ export default function ProfileInfoForm({
             ))}
           </FormControl>
           <HStack>
-            <FormControl isRequired id="age">
+            <FormControl isRequired id="age" isInvalid={errors.age}>
               <FormLabel>Age</FormLabel>
               <NumberInput
                 min={18}
                 max={120}
                 value={profile.age}
-                onChange={(value) =>
-                  setProfile((prevProfile) => ({
-                    ...prevProfile,
-                    age: value,
-                  }))
-                }
+                onChange={(event) => handleAgeChange(event)}
                 borderColor="gray"
               >
                 <NumberInputField />
@@ -278,6 +309,10 @@ export default function ProfileInfoForm({
                   <NumberDecrementStepper color="gray" size="sm" />
                 </NumberInputStepper>
               </NumberInput>
+              <FormErrorMessage>
+                <FormErrorIcon />
+                {errors.age}
+              </FormErrorMessage>
             </FormControl>
             <FormControl isRequired id="avatar" isInvalid={errors.avatar}>
               <VisuallyHidden>
@@ -308,9 +343,9 @@ export default function ProfileInfoForm({
                     {errors.avatar}
                   </FormErrorMessage>
                 )}
-                {avatarPreview && (
+                {avatarPreviewState && (
                   <Image
-                    src={avatarPreview}
+                    src={avatarPreviewState}
                     alt="Avatar preview"
                     boxSize="70px"
                     objectFit="cover"
@@ -404,4 +439,5 @@ ProfileInfoForm.propTypes = {
   handleNextStep: PropTypes.func.isRequired,
   selectedFile: PropTypes.instanceOf(File).isRequired,
   setSelectedFile: PropTypes.func.isRequired,
+  avatarPreview: PropTypes.string.isRequired,
 };

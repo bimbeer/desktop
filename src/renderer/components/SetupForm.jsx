@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db } from '../firebase/firebase';
 import ProfileInfoForm from './SetupFormSteps/ProfileInfoForm';
@@ -52,11 +52,23 @@ export default function SetupForm() {
     const userDocRef = doc(db, 'profile', userId);
     await setDoc(userDocRef, {
       ...profile,
-      avatar: downloadURL,
+      avatar: selectedFile ? downloadURL : profile.avatar,
       location: city,
     });
     navigate('/profile');
   };
+
+  useEffect(() => {
+    const docRef = doc(db, 'profile', userId);
+
+    async function fetchData() {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProfile(docSnap.data());
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <Flex minHeight="100vh" justify="center" align="center">
@@ -65,6 +77,7 @@ export default function SetupForm() {
           <ProfileInfoForm
             profile={profile}
             setProfile={setProfile}
+            avatarPreview={profile.avatar}
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
             handleNextStep={handleNextStep}
@@ -74,8 +87,11 @@ export default function SetupForm() {
           <ProfileDiscoverySettingsForm
             profile={profile}
             setProfile={setProfile}
-            city={city}
+            city={profile.location}
             setCity={setCity}
+            range={profile.range}
+            isGlobal={profile.isGlobal}
+            isLocal={profile.isLocal}
             handleNextStep={handleNextStep}
             handleBackStep={handleBackStep}
           />
@@ -84,6 +100,7 @@ export default function SetupForm() {
           <ProfileFavBeerForm
             profile={profile}
             setProfile={setProfile}
+            selectedBeers={profile.selectedBeers}
             handleBackStep={handleBackStep}
             handleSubmit={handleSubmit}
             isFormSubmitting={isFormSubmitting}
