@@ -35,6 +35,10 @@ export default function ProfileDiscoverySettingsForm({
   handleBackStep,
   city: cityProp,
   setCity,
+  location,
+  range,
+  isGlobal,
+  isLocal,
 }) {
   const theme = useTheme();
   const debounceInput = useDebounce();
@@ -43,6 +47,7 @@ export default function ProfileDiscoverySettingsForm({
   const [selectedCityState, setSelectedCityState] = useState(null);
   const [isCityEmpty, setIsCityEmpty] = useState(false);
   const [isCityTouched, setIsCityTouched] = useState(false);
+  const [cityInputValue, setCityInputValue] = useState(cityProp);
 
   const handleCityBlur = () => {
     setIsCityTouched(true);
@@ -52,6 +57,7 @@ export default function ProfileDiscoverySettingsForm({
     const foundCity = cities.find((city) => city.id === cityId);
     if (foundCity) {
       setSelectedCityState(foundCity);
+      setCityInputValue(foundCity.address.label);
       setCity(foundCity.address.label);
       setCities([]);
       setIsCityEmpty(true);
@@ -67,21 +73,21 @@ export default function ProfileDiscoverySettingsForm({
   };
 
   useEffect(() => {
-    if (!cityProp) {
+    if (!cityInputValue) {
       setCities([]);
       setCitiesLoading(false);
       setIsCityEmpty(false);
       return;
     }
-    if (selectedCityState && selectedCityState.address?.label === cityProp) {
+    if (selectedCityState && selectedCityState.address?.label === cityInputValue) {
       setCitiesLoading(false);
       setIsCityEmpty(true);
       return;
     }
     setCitiesLoading(true);
-    debounceInput(cityProp, fetchCities, DEBOUNCE_DELAY);
+    debounceInput(cityInputValue, fetchCities, DEBOUNCE_DELAY);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cityProp]);
+  }, [cityInputValue]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -92,13 +98,17 @@ export default function ProfileDiscoverySettingsForm({
       </Stack>
       <Box rounded="lg" bg={theme.palette.secondary} boxShadow="lg" p={8}>
         <Stack spacing={4}>
-          <FormControl isRequired id="location" isInvalid={isCityTouched && !cityProp}>
+          <FormControl isRequired id="location" isInvalid={isCityTouched && !cityInputValue}>
             <FormLabel>Location</FormLabel>
             <Input
               type="text"
               _placeholder={{ color: 'gray' }}
               value={cityProp}
-              onChange={(e) => setCity(e.target.value)}
+              value={cityInputValue}
+              onChange={(e) => {
+                setCityInputValue(e.target.value);
+                setCity(e.target.value);
+              }}
               onBlur={handleCityBlur}
               placeholder="Enter your city"
             />
@@ -140,7 +150,7 @@ export default function ProfileDiscoverySettingsForm({
           <FormControl isRequired>
             <FormLabel mb={8}>Range settings</FormLabel>
             <Slider
-              defaultValue={50}
+              defaultValue={profile.range}
               aria-label="slider-ex-6"
               onChange={(val) =>
                 setProfile((prevProfile) => ({
@@ -175,7 +185,7 @@ export default function ProfileDiscoverySettingsForm({
                 }}
                 colorScheme="yellow"
                 me="10px"
-                value={profile.isGlobal}
+                isChecked={profile.isGlobal}
                 onChange={(e) =>
                   setProfile((prevProfile) => ({
                     ...prevProfile,
@@ -196,7 +206,7 @@ export default function ProfileDiscoverySettingsForm({
                 }}
                 colorScheme="yellow"
                 me="10px"
-                value={profile.isLocal}
+                isChecked={profile.isLocal}
                 onChange={(e) =>
                   setProfile((prevProfile) => ({
                     ...prevProfile,

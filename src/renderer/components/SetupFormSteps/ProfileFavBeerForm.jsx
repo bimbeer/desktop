@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -13,23 +13,27 @@ import {
 } from '@chakra-ui/react';
 import beerList from '../BeerList';
 
-export default function ProfileDiscoverySettingsForm({
+export default function ProfileFavBeerForm({
   profile,
   setProfile,
   handleSubmit,
   handleBackStep,
   isFormSubmitting,
+  selectedBeers,
 }) {
   const theme = useTheme();
 
   const handleSelectBeer = (index) => {
     const beer = beerList[index];
     setProfile((prevProfile) => {
-      if (prevProfile.selectedBeers.includes(beer)) {
+      const selectedIndex = prevProfile.selectedBeers.findIndex(
+        (selectedBeer) => selectedBeer.name === beer.name
+      );
+      if (selectedIndex !== -1) {
         return {
           ...prevProfile,
           selectedBeers: prevProfile.selectedBeers.filter(
-            (selectedBeer) => selectedBeer !== beer
+            (selectedBeer, i) => i !== selectedIndex
           ),
         };
       }
@@ -39,6 +43,13 @@ export default function ProfileDiscoverySettingsForm({
       };
     });
   };
+
+  useEffect(() => {
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      selectedBeers: selectedBeers || [],
+    }));
+  }, [selectedBeers, setProfile]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -60,7 +71,9 @@ export default function ProfileDiscoverySettingsForm({
                 boxShadow="lg"
                 onClick={() => handleSelectBeer(index)}
                 bg={
-                  profile.selectedBeers.includes(beer)
+                  profile.selectedBeers.find(
+                    (selectedBeer) => selectedBeer.name === beer.name
+                  )
                     ? theme.palette.accent
                     : ''
                 }
@@ -107,11 +120,12 @@ export default function ProfileDiscoverySettingsForm({
   );
 }
 
-ProfileDiscoverySettingsForm.propTypes = {
+ProfileFavBeerForm.propTypes = {
   profile: PropTypes.shape({
     selectedBeers: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   setProfile: PropTypes.func.isRequired,
+  selectedBeers: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleBackStep: PropTypes.func.isRequired,
   isFormSubmitting: PropTypes.bool.isRequired,
