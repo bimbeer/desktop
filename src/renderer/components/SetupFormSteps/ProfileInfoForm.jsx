@@ -60,29 +60,32 @@ export default function ProfileInfoForm({
     selectedFile,
   ]);
 
-  function handleUploadClick() {
+  const handleUploadClick = React.useCallback(() => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-  }
+  }, []);
 
-  async function handleAvatarChange(event) {
-    const avatar = event.target.files[0];
-    setError('');
-    if (
-      avatar &&
-      (avatar.type === 'image/jpeg' ||
-        avatar.type === 'image/png' ||
-        avatar.type === 'image/gif')
-    ) {
-      setSelectedFile(avatar);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setAvatarPreview(e.target.result);
-      };
-      reader.readAsDataURL(avatar);
-    }
-  }
+  const handleAvatarChange = React.useCallback(
+    async (event) => {
+      const avatar = event.target.files[0];
+      setError('');
+      if (
+        avatar &&
+        (avatar.type === 'image/jpeg' ||
+          avatar.type === 'image/png' ||
+          avatar.type === 'image/gif')
+      ) {
+        setSelectedFile(avatar);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setAvatarPreview(e.target.result);
+        };
+        reader.readAsDataURL(avatar);
+      }
+    },
+    [setSelectedFile]
+  );
 
   React.useEffect(() => {
     if (selectedFile) {
