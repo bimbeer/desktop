@@ -16,11 +16,11 @@ export default function LoadingScreen({ isLoading }) {
       zIndex={10}
     >
       <Center h="100%" w="100%">
-        <Image position="fixed" top={130} src={logo} alt="Bimbeer Logo" />
-        <Text fontSize="4xl" mr={4}>
+        <Image position="fixed" top="25vh" src={logo} alt="Bimbeer Logo" />
+        <Text fontSize="4xl" mr={4} mt="25vh">
           We&apos;re logging you in, sit tight!
         </Text>
-        <Spinner thickness="4px" size="xl" color="white" />
+        <Spinner thickness="4px" size="xl" color="white" mt="25vh" />
       </Center>
     </Box>
   );
