@@ -3,6 +3,11 @@ import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
+import {
+  passwordsMatch,
+  isStrongPassword,
+  isValidEmail,
+} from '../helpers/validators';
 import { UserAuth } from '../context/AuthContext';
 import logo from '../assets/images/logo.png';
 import '../theme/css/SignInForm.css';
@@ -15,11 +20,31 @@ export default function SignUpForm() {
   const { createUser } = UserAuth();
   const navigate = useNavigate();
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
+
   const handleSignUp = async (event) => {
     event.preventDefault();
     setError('');
-    if (password !== confirmPassword) {
+    if (!passwordsMatch(password, confirmPassword)) {
       setError('Passwords do not match');
+      return;
+    }
+    if (!isStrongPassword(password)) {
+      setError('The password must be at least 6 characters.');
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setError('Invalid email address.');
       return;
     }
     try {
@@ -28,9 +53,6 @@ export default function SignUpForm() {
     } catch (e) {
       setError(e.message);
       const errorCode = e.code;
-      if (errorCode === 'auth/weak-password') {
-        setError('The password must be at least 6 characters.');
-      }
       if (errorCode === 'auth/email-already-in-use') {
         setError('Email is already in use.');
       }
@@ -45,7 +67,7 @@ export default function SignUpForm() {
         </a>
       </div>
       {error && (
-        <Text fontSize="sm" color="white">
+        <Text fontSize="sm" mt={8} color="red">
           {error}
         </Text>
       )}
@@ -58,7 +80,7 @@ export default function SignUpForm() {
               id="email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             />
             <label htmlFor="email">Email</label>
           </div>
@@ -69,7 +91,7 @@ export default function SignUpForm() {
               id="password"
               required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             />
             <label htmlFor="password">Password</label>
           </div>
@@ -80,14 +102,14 @@ export default function SignUpForm() {
               id="confirm_password"
               required
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={handleConfirmPasswordChange}
             />
             <label htmlFor="confirm_password">Confirm Password</label>
           </div>
           <Text fontSize="sm" color="white">
             Already have an account?{` `}
             <a href="/">
-              <b>Log In</b>
+              <b>Sign In</b>
             </a>
           </Text>
           <div className="signin-button">
