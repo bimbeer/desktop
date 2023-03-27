@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
 
-function ProfileInfoForm({
+export default function ProfileInfoForm({
   profile,
   setProfile,
   handleNextStep,
@@ -60,29 +60,42 @@ function ProfileInfoForm({
     selectedFile,
   ]);
 
-  function handleUploadClick() {
+  const handleUploadClick = React.useCallback(() => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-  }
+  }, []);
 
-  async function handleAvatarChange(event) {
-    const avatar = event.target.files[0];
-    setError('');
-    if (
-      avatar &&
-      (avatar.type === 'image/jpeg' ||
-        avatar.type === 'image/png' ||
-        avatar.type === 'image/gif')
-    ) {
-      setSelectedFile(avatar);
+  const handleAvatarChange = React.useCallback(
+    async (event) => {
+      const avatar = event.target.files[0];
+      setError('');
+      if (
+        avatar &&
+        (avatar.type === 'image/jpeg' ||
+          avatar.type === 'image/png' ||
+          avatar.type === 'image/gif')
+      ) {
+        setSelectedFile(avatar);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setAvatarPreview(e.target.result);
+        };
+        reader.readAsDataURL(avatar);
+      }
+    },
+    [setSelectedFile]
+  );
+
+  React.useEffect(() => {
+    if (selectedFile) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setAvatarPreview(e.target.result);
       };
-      reader.readAsDataURL(avatar);
+      reader.readAsDataURL(selectedFile);
     }
-  }
+  }, [selectedFile]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -264,5 +277,3 @@ function ProfileInfoForm({
     </Stack>
   );
 }
-
-export default ProfileInfoForm;
