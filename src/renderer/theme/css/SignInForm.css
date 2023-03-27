@@ -89,8 +89,13 @@ form .input_field input:focus ~ label {
   background-color: #ffffff;
   color: white;
 }
-.social-media-signin .apple-item {
-  background-color: #222526;
+
+.social-media-signin .fb-item:hover {
+  background-color: #167bff;
+}
+
+.social-media-signin .google-item:hover {
+  background-color: #bfbfbf;
   color: white;
 }
 
@@ -138,4 +143,5 @@ form .input_field input:focus ~ label {
   display: flex;
   justify-content: flex-end;
   gap: 100px;
+  margin-top: 3.75vh;
 }
