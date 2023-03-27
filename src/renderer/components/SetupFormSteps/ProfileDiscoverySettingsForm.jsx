@@ -22,7 +22,11 @@ import {
   SliderThumb,
   Switch,
   Text,
+  FormErrorMessage,
+  FormErrorIcon,
 } from '@chakra-ui/react';
+
+const DEBOUNCE_DELAY = 500;
 
 export default function ProfileDiscoverySettingsForm({
   profile,
@@ -35,10 +39,14 @@ export default function ProfileDiscoverySettingsForm({
   const theme = useTheme();
   const debounceInput = useDebounce();
   const [cities, setCities] = useState([]);
-  const [selectedCityState, setSelectedCityState] = useState(null);
   const [citiesLoading, setCitiesLoading] = useState(false);
+  const [selectedCityState, setSelectedCityState] = useState(null);
+  const [isCityEmpty, setIsCityEmpty] = useState(false);
+  const [isCityTouched, setIsCityTouched] = useState(false);
 
-  const DEBOUNCE_DELAY = 500;
+  const handleCityBlur = () => {
+    setIsCityTouched(true);
+  };
 
   const handleCitySelect = (cityId) => {
     const foundCity = cities.find((city) => city.id === cityId);
@@ -46,6 +54,7 @@ export default function ProfileDiscoverySettingsForm({
       setSelectedCityState(foundCity);
       setCity(foundCity.address.label);
       setCities([]);
+      setIsCityEmpty(true);
     }
   };
 
@@ -61,10 +70,12 @@ export default function ProfileDiscoverySettingsForm({
     if (!cityProp) {
       setCities([]);
       setCitiesLoading(false);
+      setIsCityEmpty(false);
       return;
     }
     if (selectedCityState && selectedCityState.address?.label === cityProp) {
       setCitiesLoading(false);
+      setIsCityEmpty(true);
       return;
     }
     setCitiesLoading(true);
@@ -81,15 +92,20 @@ export default function ProfileDiscoverySettingsForm({
       </Stack>
       <Box rounded="lg" bg={theme.palette.secondary} boxShadow="lg" p={8}>
         <Stack spacing={4}>
-          <FormControl isRequired id="text">
+          <FormControl isRequired id="location" isInvalid={isCityTouched && !cityProp}>
             <FormLabel>Location</FormLabel>
             <Input
               type="text"
               _placeholder={{ color: 'gray' }}
               value={cityProp}
               onChange={(e) => setCity(e.target.value)}
+              onBlur={handleCityBlur}
               placeholder="Enter your city"
             />
+            <FormErrorMessage><FormErrorIcon/>
+            Please select a city from the list
+            </FormErrorMessage>
+
             <Flex
               justify="center"
               align="center"
@@ -97,7 +113,6 @@ export default function ProfileDiscoverySettingsForm({
             >
               <Spinner size="md" mt={4} color="yellow.500" />
             </Flex>
-
             <List
               display={cities.length > 0 && !citiesLoading ? 'block' : 'none'}
             >
@@ -200,13 +215,13 @@ export default function ProfileDiscoverySettingsForm({
               color="black"
               size="lg"
               onClick={handleNextStep}
-              isDisabled={!selectedCityState}
+              isDisabled={!selectedCityState || !isCityEmpty}
               _hover={{
                 bg: 'yellow.500',
               }}
             >
               Proceed
-            </Button>
+              </Button>
             <Button
               bg="gray.700"
               _hover={{
