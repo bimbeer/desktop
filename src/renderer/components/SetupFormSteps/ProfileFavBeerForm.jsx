@@ -19,27 +19,27 @@ export default function ProfileFavBeerForm({
   handleSubmit,
   handleBackStep,
   isFormSubmitting,
-  selectedBeers,
+  beers,
 }) {
   const theme = useTheme();
 
   const handleSelectBeer = (index) => {
     const beer = beerList[index];
     setProfile((prevProfile) => {
-      const selectedIndex = prevProfile.selectedBeers.findIndex(
+      const selectedIndex = prevProfile.beers.findIndex(
         (selectedBeer) => selectedBeer.name === beer.name
       );
       if (selectedIndex !== -1) {
         return {
           ...prevProfile,
-          selectedBeers: prevProfile.selectedBeers.filter(
+          beers: prevProfile.beers.filter(
             (selectedBeer, i) => i !== selectedIndex
           ),
         };
       }
       return {
         ...prevProfile,
-        selectedBeers: [...prevProfile.selectedBeers, beer],
+        beers: [...prevProfile.beers, beer],
       };
     });
   };
@@ -47,9 +47,9 @@ export default function ProfileFavBeerForm({
   useEffect(() => {
     setProfile((prevProfile) => ({
       ...prevProfile,
-      selectedBeers: selectedBeers || [],
+      beers: beers || [],
     }));
-  }, [selectedBeers, setProfile]);
+  }, [beers, setProfile]);
 
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -71,7 +71,7 @@ export default function ProfileFavBeerForm({
                 boxShadow="lg"
                 onClick={() => handleSelectBeer(index)}
                 bg={
-                  profile.selectedBeers.find(
+                  profile.beers.find(
                     (selectedBeer) => selectedBeer.name === beer.name
                   )
                     ? theme.palette.accent
@@ -95,7 +95,7 @@ export default function ProfileFavBeerForm({
             <Button
               bg={theme.palette.accent}
               onClick={handleSubmit}
-              isDisabled={profile.selectedBeers.length === 0}
+              isDisabled={profile.beers.length === 0}
               isLoading={isFormSubmitting}
               color="black"
               _hover={{
@@ -122,10 +122,10 @@ export default function ProfileFavBeerForm({
 
 ProfileFavBeerForm.propTypes = {
   profile: PropTypes.shape({
-    selectedBeers: PropTypes.arrayOf(PropTypes.string).isRequired,
+    beers: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   setProfile: PropTypes.func.isRequired,
-  selectedBeers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  beers: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleBackStep: PropTypes.func.isRequired,
   isFormSubmitting: PropTypes.bool.isRequired,

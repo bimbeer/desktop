@@ -54,7 +54,7 @@ export default function ProfileInfoForm({
     lastName: '',
     username: [],
     age: '',
-    about: '',
+    description: '',
     avatar: '',
   });
 
@@ -68,7 +68,7 @@ export default function ProfileInfoForm({
         profile.firstName &&
         profile.username &&
         profile.age &&
-        profile.about &&
+        profile.description &&
         profile.gender &&
         profile.interest &&
         (selectedFile || avatarPreview) &&
@@ -80,7 +80,7 @@ export default function ProfileInfoForm({
     profile.firstName,
     profile.username,
     profile.age,
-    profile.about,
+    profile.description,
     profile.gender,
     profile.interest,
     selectedFile,
@@ -187,26 +187,26 @@ export default function ProfileInfoForm({
     if (!value.trim()) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        about: 'About section cannot be empty or contain only spaces',
+        description: 'About section cannot be empty or contain only spaces',
       }));
     } else if (!validateMaxLength(value, 255)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        about: 'About section cannot be longer than 255 characters',
+        description: 'About section cannot be longer than 255 characters',
       }));
     } else if (!validateNotOnlyNumbers(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        about:
+        description:
           'About section cannot contain only numbers or only spaces and zeros',
       }));
     } else {
-      setErrors((prevErrors) => ({ ...prevErrors, about: '' }));
+      setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
     }
     const capitalizedFirstLetter = capitalizer(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
-      about: capitalizedFirstLetter,
+      description: capitalizedFirstLetter,
     }));
   }
 
@@ -355,20 +355,24 @@ export default function ProfileInfoForm({
               </Flex>
             </FormControl>
           </HStack>
-          <FormControl isRequired id="about" isInvalid={errors.about}>
+          <FormControl
+            isRequired
+            id="description"
+            isInvalid={errors.description}
+          >
             <FormLabel>About me</FormLabel>
             <Textarea
               _placeholder={{ color: 'gray' }}
               borderColor="gray"
-              placeholder="Say something about yourself."
+              placeholder="Say something description yourself."
               size="sm"
-              value={profile.about}
+              value={profile.description}
               onChange={(event) => handleAboutChange(event)}
             />
-            {errors.about && (
+            {errors.description && (
               <FormErrorMessage>
                 <FormErrorIcon />
-                {errors.about}
+                {errors.description}
               </FormErrorMessage>
             )}
           </FormControl>
@@ -431,7 +435,7 @@ ProfileInfoForm.propTypes = {
     lastName: PropTypes.string,
     username: PropTypes.string,
     age: PropTypes.number,
-    about: PropTypes.string,
+    description: PropTypes.string,
     gender: PropTypes.string,
     interest: PropTypes.string,
   }).isRequired,

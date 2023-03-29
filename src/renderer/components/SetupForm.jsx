@@ -14,20 +14,22 @@ export default function SetupForm() {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [step, setStep] = useState(1);
   const [city, setCity] = useState('');
+  const [coordinates, setCoordinates] = useState();
+  const [geohash, setGeohash] = useState();
   const [selectedFile, setSelectedFile] = useState();
   const [profile, setProfile] = useState({
     firstName: '',
     lastName: '',
     username: '',
     age: '',
-    about: '',
+    description: '',
     gender: '',
     interest: '',
     location: '',
     range: 50,
     isGlobal: false,
     isLocal: false,
-    selectedBeers: [],
+    beers: [],
   });
   const navigate = useNavigate();
 
@@ -53,7 +55,13 @@ export default function SetupForm() {
     await setDoc(userDocRef, {
       ...profile,
       avatar: selectedFile ? downloadURL : profile.avatar,
-      location: city,
+      location: {
+        label: city,
+        position: {
+          coordinates,
+          geohash,
+        },
+      },
     });
     navigate('/profile');
   };
@@ -68,7 +76,7 @@ export default function SetupForm() {
       }
     }
     fetchData();
-  }, []);
+  }, [userId]);
 
   return (
     <Flex minHeight="100vh" justify="center" align="center">
@@ -89,6 +97,8 @@ export default function SetupForm() {
             setProfile={setProfile}
             city={profile.location}
             setCity={setCity}
+            setGeohash={setGeohash}
+            setCoordinates={setCoordinates}
             range={profile.range}
             isGlobal={profile.isGlobal}
             isLocal={profile.isLocal}
@@ -100,7 +110,7 @@ export default function SetupForm() {
           <ProfileFavBeerForm
             profile={profile}
             setProfile={setProfile}
-            selectedBeers={profile.selectedBeers}
+            beers={profile.beers}
             handleBackStep={handleBackStep}
             handleSubmit={handleSubmit}
             isFormSubmitting={isFormSubmitting}
