@@ -41,6 +41,7 @@ function Profile() {
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
+    location: '',
   });
 
   const handleLogout = async () => {
@@ -188,7 +189,7 @@ function Profile() {
                     fontWeight="400"
                     mb="30px"
                   >
-                    {profileData.about}
+                    {profileData.description}
                   </Text>
                   <Flex align="center" mb="18px">
                     <Text
@@ -271,7 +272,7 @@ function Profile() {
                       Location:{' '}
                     </Text>
                     <Text fontSize="md" color="gray.400" fontWeight="400">
-                      {profileData.location}
+                      {profileData.location.label}
                     </Text>
                   </Flex>
                   <Text

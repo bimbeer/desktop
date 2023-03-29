@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import useDebounce from 'renderer/hooks/useDebounceInput';
 import axios from 'axios';
+import { geohashForLocation } from 'geofire-common';
 import {
   Box,
   FormControl,
@@ -35,19 +36,17 @@ export default function ProfileDiscoverySettingsForm({
   handleBackStep,
   city: cityProp,
   setCity,
-  location,
-  range,
-  isGlobal,
-  isLocal,
+  setCoordinates,
+  setGeohash,
 }) {
   const theme = useTheme();
   const debounceInput = useDebounce();
   const [cities, setCities] = useState([]);
   const [citiesLoading, setCitiesLoading] = useState(false);
+  const [cityInputValue, setCityInputValue] = useState(cityProp);
   const [selectedCityState, setSelectedCityState] = useState(null);
   const [isCityEmpty, setIsCityEmpty] = useState(false);
   const [isCityTouched, setIsCityTouched] = useState(false);
-  const [cityInputValue, setCityInputValue] = useState(cityProp);
 
   const handleCityBlur = () => {
     setIsCityTouched(true);
@@ -61,12 +60,18 @@ export default function ProfileDiscoverySettingsForm({
       setCity(foundCity.address.label);
       setCities([]);
       setIsCityEmpty(true);
+      setCoordinates([foundCity.position.lat, foundCity.position.lng]);
+      setGeohash(
+        geohashForLocation([foundCity.position.lat, foundCity.position.lng])
+      );
     }
   };
 
-  const fetchCities = async (newString) => {
+  const fetchCities = async () => {
     const res = await axios.get(
-      `https://geocode.search.hereapi.com/v1/geocode?q=${newString}&apiKey=RQnyfAQCOhZukJzCLB6AEWHRZrSgU8mYkwSL80KZDrs`
+      `https://geocode.search.hereapi.com/v1/geocode?q=${
+        cityInputValue.label ? cityInputValue.label : cityInputValue
+      }&apiKey=RQnyfAQCOhZukJzCLB6AEWHRZrSgU8mYkwSL80KZDrs`
     );
     setCities(res.data.items);
     setCitiesLoading(false);
@@ -79,7 +84,10 @@ export default function ProfileDiscoverySettingsForm({
       setIsCityEmpty(false);
       return;
     }
-    if (selectedCityState && selectedCityState.address?.label === cityInputValue) {
+    if (
+      selectedCityState &&
+      selectedCityState.address?.label === cityInputValue
+    ) {
       setCitiesLoading(false);
       setIsCityEmpty(true);
       return;
@@ -88,7 +96,6 @@ export default function ProfileDiscoverySettingsForm({
     debounceInput(cityInputValue, fetchCities, DEBOUNCE_DELAY);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityInputValue]);
-
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
       <Stack align="center">
@@ -98,13 +105,18 @@ export default function ProfileDiscoverySettingsForm({
       </Stack>
       <Box rounded="lg" bg={theme.palette.secondary} boxShadow="lg" p={8}>
         <Stack spacing={4}>
-          <FormControl isRequired id="location" isInvalid={isCityTouched && !cityInputValue}>
+          <FormControl
+            isRequired
+            id="location"
+            isInvalid={isCityTouched && !cityInputValue}
+          >
             <FormLabel>Location</FormLabel>
             <Input
               type="text"
               _placeholder={{ color: 'gray' }}
-              value={cityProp}
-              value={cityInputValue}
+              value={
+                cityInputValue.label ? cityInputValue.label : cityInputValue
+              }
               onChange={(e) => {
                 setCityInputValue(e.target.value);
                 setCity(e.target.value);
@@ -112,8 +124,9 @@ export default function ProfileDiscoverySettingsForm({
               onBlur={handleCityBlur}
               placeholder="Enter your city"
             />
-            <FormErrorMessage><FormErrorIcon/>
-            Please select a city from the list
+            <FormErrorMessage>
+              <FormErrorIcon />
+              Please select a city from the list
             </FormErrorMessage>
 
             <Flex
@@ -231,7 +244,7 @@ export default function ProfileDiscoverySettingsForm({
               }}
             >
               Proceed
-              </Button>
+            </Button>
             <Button
               bg="gray.700"
               _hover={{
@@ -259,4 +272,6 @@ ProfileDiscoverySettingsForm.propTypes = {
   handleBackStep: PropTypes.func.isRequired,
   city: PropTypes.string.isRequired,
   setCity: PropTypes.func.isRequired,
+  setCoordinates: PropTypes.arrayOf(PropTypes.number).isRequired,
+  setGeohash: PropTypes.func.isRequired,
 };
