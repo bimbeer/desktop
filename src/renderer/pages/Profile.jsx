@@ -369,8 +369,8 @@ function Profile() {
                     mb="30px"
                   >
                     <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                      {profileData.selectedBeers &&
-                        profileData.selectedBeers.map((beer) => (
+                      {profileData.beers &&
+                        profileData.beers.map((beer) => (
                           <Box maxW="300px" key={beer.name}>
                             <Center>
                               <Image
