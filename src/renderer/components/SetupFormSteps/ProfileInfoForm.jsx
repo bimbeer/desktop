@@ -25,6 +25,8 @@ import {
   FormErrorIcon,
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
+import { getDocs, query, collection, where } from 'firebase/firestore';
+import { db } from 'renderer/firebase/firebase';
 import {
   validateTextOnly,
   validateTextAndNumbersOnly,
@@ -33,7 +35,10 @@ import {
   validateNotOnlyNumbers,
   validateNumbersOnly,
 } from 'renderer/helpers/validators';
-import { capitalizer, decapitalizer } from 'renderer/helpers/stringManipulator';
+import {
+  capitalizeFirstLetter,
+  convertToLowercase,
+} from 'renderer/helpers/normalizer';
 
 export default function ProfileInfoForm({
   profile,
@@ -44,10 +49,7 @@ export default function ProfileInfoForm({
   handleNextStep,
 }) {
   const theme = useTheme();
-  const [avatarPreviewState, setAvatarPreviewState] =
-    React.useState(avatarPreview);
   const fileInputRef = React.useRef();
-
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState({
     firstName: '',
@@ -57,6 +59,8 @@ export default function ProfileInfoForm({
     description: '',
     avatar: '',
   });
+  const [avatarPreviewState, setAvatarPreviewState] =
+    React.useState(avatarPreview);
 
   useEffect(() => {
     setAvatarPreviewState(avatarPreview);
@@ -103,7 +107,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       firstName: capitalizedFirstLetter,
@@ -125,14 +129,14 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       lastName: capitalizedFirstLetter,
     }));
   }
 
-  function handleUsernameChange(event) {
+  async function handleUsernameChange(event) {
     const { value } = event.target;
     const newErrors = [];
     if (!validateTextAndNumbersOnly(value)) {
@@ -141,8 +145,14 @@ export default function ProfileInfoForm({
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
+    const querySnapshot = await getDocs(
+      query(collection(db, 'profile'), where('username', '==', value))
+    );
+    if (!querySnapshot.empty) {
+      newErrors.push('Username is already in use');
+    }
     setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
-    const decapizalizedString = decapitalizer(value);
+    const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       username: decapizalizedString,
@@ -203,7 +213,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       description: capitalizedFirstLetter,
