@@ -145,15 +145,12 @@ export default function ProfileInfoForm({
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
-
-    // Check if username is already in use
     const querySnapshot = await getDocs(
       query(collection(db, 'profile'), where('username', '==', value))
     );
     if (!querySnapshot.empty) {
       newErrors.push('Username is already in use');
     }
-
     setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
     const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
