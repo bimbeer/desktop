@@ -33,7 +33,10 @@ import {
   validateNotOnlyNumbers,
   validateNumbersOnly,
 } from 'renderer/helpers/validators';
-import { capitalizer, decapitalizer } from 'renderer/helpers/stringManipulator';
+import {
+  capitalizeFirstLetter,
+  convertToLowercase,
+} from 'renderer/helpers/normalizer';
 
 export default function ProfileInfoForm({
   profile,
@@ -103,7 +106,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       firstName: capitalizedFirstLetter,
@@ -125,7 +128,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       lastName: capitalizedFirstLetter,
@@ -142,7 +145,7 @@ export default function ProfileInfoForm({
       newErrors.push('Username cannot be longer than 15 characters');
     }
     setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
-    const decapizalizedString = decapitalizer(value);
+    const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       username: decapizalizedString,
@@ -203,7 +206,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
     }
-    const capitalizedFirstLetter = capitalizer(value);
+    const capitalizedFirstLetter = capitalizeFirstLetter(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
       description: capitalizedFirstLetter,
