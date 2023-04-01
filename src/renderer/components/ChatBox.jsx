@@ -9,6 +9,7 @@ import {
   serverTimestamp,
   doc,
   getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import {
   Box,
@@ -21,13 +22,13 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react';
-import Sidebar from 'renderer/components/Sidebar';
-import { AiOutlineSend } from 'react-icons/ai';
+import { AiOutlineSend, AiFillCheckCircle } from 'react-icons/ai';
 import { db, auth } from 'renderer/firebase/firebase';
 
-function Messages() {
+export default function ChatBox() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = React.useState('');
+  const [recipientAvatar, setRecipientAvatar] = useState(null);
   const scrollToLastMessage = useRef(null);
   const senderId = auth.currentUser.uid;
 
@@ -41,8 +42,16 @@ function Messages() {
       avatar,
       createdAt: serverTimestamp(),
       uid: senderId,
+      status: 'sent',
     });
     setMessage('');
+  };
+
+  const handleReadMessage = async (messageId) => {
+    const messageRef = doc(db, 'messages', messageId);
+    await updateDoc(messageRef, {
+      status: 'read', // update the status of the message to "read"
+    });
   };
 
   useLayoutEffect(() => {
@@ -50,6 +59,15 @@ function Messages() {
       scrollToLastMessage.current.scrollIntoView({ behavior: 'auto' });
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage.uid !== senderId) {
+        handleReadMessage(lastMessage.id);
+      }
+    }
+  }, [messages, senderId]);
 
   useEffect(() => {
     const q = query(
@@ -61,110 +79,135 @@ function Messages() {
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
       const newMessages = [];
       QuerySnapshot.forEach((document) => {
-        newMessages.push({ ...document.data(), id: document.id });
+        const data = document.data();
+        if (data.uid !== senderId) {
+          setRecipientAvatar(data.avatar);
+        }
+        newMessages.push({ ...data, id: document.id });
       });
       setMessages(newMessages);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [senderId]);
 
   return (
-    <>
-      <Sidebar />
-      <Flex
-        align="center"
-        justify="center"
-        minH="100vh"
-        marginLeft="100px"
-        marginRight="20px"
+    <Flex
+      align="center"
+      justify="center"
+      minH="100vh"
+      marginLeft="100px"
+      marginRight="20px"
+    >
+      <Box
+        p={4}
+        w="50vw"
+        h="60vh"
+        borderColor="yellow.500"
+        borderWidth={2}
+        rounded="1rem"
+        bg="gray.800"
       >
-        <Box
-          p={4}
-          w="50vw"
-          h="60vh"
-          borderColor="yellow.500"
-          borderWidth={2}
-          rounded="1rem"
-          bg="gray.800"
-        >
-          <Flex direction="column" align="center" h="full">
-            <Flex
-              direction="column"
-              align="center"
-              w="full"
-              flex={1}
-              overflowY="auto"
-            >
-              {messages.map((chat) => (
-                <Flex
-                  key={chat.text}
-                  mb={2}
-                  alignSelf={chat.uid === senderId ? 'flex-end' : 'flex-start'}
-                >
-                  {chat.uid !== senderId && (
-                    <Image
-                      maxH={10}
-                      maxW={10}
-                      rounded="2rem"
-                      src={chat.avatar}
-                      mr={2}
-                    />
-                  )}
-                  <Box
-                    bg={chat.uid === senderId ? 'yellow.500' : 'gray.300'}
-                    color={chat.uid === senderId ? 'white' : 'black'}
-                    p={2}
-                    borderRadius="lg"
-                    mr={2}
-                    rounded="1rem"
-                  >
-                    <Text>{chat.text}</Text>
-                    <div ref={scrollToLastMessage} />
-                  </Box>
-                </Flex>
-              ))}
-            </Flex>
-            <Flex w="full" position="relative">
-              <FormControl
-                as="form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!message.trim()) {
-                    return;
-                  }
-                  handleSendMessage();
-                }}
+        <Flex direction="column" align="center" h="full">
+          <Flex
+            direction="column"
+            align="center"
+            w="full"
+            flex={1}
+            overflowY="auto"
+          >
+            {messages.map((chat, index) => (
+              <Flex
+                key={chat.text}
+                mb={2}
+                alignSelf={chat.uid === senderId ? 'flex-end' : 'flex-start'}
               >
-                <InputGroup>
-                  <Input
-                    mt={-4}
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    _placeholder={{ color: 'gray' }}
-                    placeholder="Type a message..."
+                {chat.uid !== senderId && (
+                  <Image
+                    maxH={10}
+                    maxW={10}
+                    rounded="2rem"
+                    src={chat.avatar}
+                    mr={2}
                   />
-                  {message && (
-                    <InputRightElement>
-                      <IconButton
-                        mt={-8}
-                        aria-label="Send chat"
-                        icon={<AiOutlineSend />}
-                        type="submit"
-                        bg="transparent"
-                        _hover={{
-                          bg: 'yellow.500',
+                )}
+                <Box
+                  bg={chat.uid === senderId ? 'yellow.500' : 'gray.300'}
+                  color={chat.uid === senderId ? 'white' : 'black'}
+                  p={2}
+                  borderRadius="lg"
+                  mr={2}
+                  rounded="1rem"
+                  position="relative"
+                >
+                  <Text>{chat.text}</Text>
+                  <div ref={scrollToLastMessage} />
+                  {chat.uid === senderId &&
+                    chat.status === 'sent' &&
+                    index === messages.length - 1 && (
+                      <AiFillCheckCircle
+                        style={{
+                          position: 'absolute',
+                          bottom: '-16px',
+                          right: '1px',
                         }}
                       />
-                    </InputRightElement>
-                  )}
-                </InputGroup>
-              </FormControl>
-            </Flex>
+                    )}
+                  {chat.uid === senderId &&
+                    chat.status === 'read' &&
+                    index === messages.length - 1 && (
+                      <Image
+                        maxH="14px"
+                        maxW="14px"
+                        rounded="full"
+                        src={recipientAvatar}
+                        position="absolute"
+                        bottom="-16px"
+                        right="1px"
+                      />
+                    )}
+                </Box>
+              </Flex>
+            ))}
           </Flex>
-        </Box>
-      </Flex>
-    </>
+          <Flex w="full" position="relative">
+            <FormControl
+              as="form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!message.trim()) {
+                  return;
+                }
+                handleSendMessage();
+              }}
+            >
+              <InputGroup>
+                <Input
+                  mt={-4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  _placeholder={{ color: 'gray' }}
+                  placeholder="Type a message..."
+                />
+                {message && (
+                  <InputRightElement>
+                    <IconButton
+                      mt={-8}
+                      aria-label="Send chat"
+                      icon={<AiOutlineSend />}
+                      type="submit"
+                      bg="transparent"
+                      _hover={{
+                        bg: 'yellow.500',
+                      }}
+                    />
+                  </InputRightElement>
+                )}
+              </InputGroup>
+            </FormControl>
+          </Flex>
+        </Flex>
+      </Box>
+    </Flex>
   );
 }
-export default Messages;
