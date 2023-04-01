@@ -13,7 +13,7 @@ import ProfileFavBeerForm from './SetupFormSteps/ProfileFavBeerForm';
 export default function SetupForm() {
   const userId = getUserFromLocalStorage();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-  const [step, setStep] = useState(1);
+  const [formStep, setStep] = useState(1);
   const [city, setCity] = useState('');
   const [coordinates, setCoordinates] = useState();
   const [geohash, setGeohash] = useState();
@@ -35,11 +35,11 @@ export default function SetupForm() {
   const navigate = useNavigate();
 
   const handleNextStep = () => {
-    setStep(step + 1);
+    setStep(formStep + 1);
   };
 
   const handleBackStep = () => {
-    setStep(step - 1);
+    setStep(formStep - 1);
   };
 
   const handleSubmit = async (event) => {
@@ -82,7 +82,7 @@ export default function SetupForm() {
   return (
     <Flex minHeight="100vh" justify="center" align="center">
       <Box maxW="4xl" w="full">
-        {step === 1 && (
+        {formStep === 1 && (
           <ProfileInfoForm
             profile={profile}
             setProfile={setProfile}
@@ -92,7 +92,7 @@ export default function SetupForm() {
             handleNextStep={handleNextStep}
           />
         )}
-        {step === 2 && (
+        {formStep === 2 && (
           <ProfileDiscoverySettingsForm
             profile={profile}
             setProfile={setProfile}
@@ -107,7 +107,7 @@ export default function SetupForm() {
             handleBackStep={handleBackStep}
           />
         )}
-        {step === 3 && (
+        {formStep === 3 && (
           <ProfileFavBeerForm
             profile={profile}
             setProfile={setProfile}
