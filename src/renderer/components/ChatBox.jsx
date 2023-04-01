@@ -24,7 +24,6 @@ import {
 import Sidebar from 'renderer/components/Sidebar';
 import { AiOutlineSend } from 'react-icons/ai';
 import { db, auth } from 'renderer/firebase/firebase';
-import 'renderer/theme/css/ScrollBar.css';
 
 function Messages() {
   const [messages, setMessages] = useState([]);
@@ -96,7 +95,6 @@ function Messages() {
               w="full"
               flex={1}
               overflowY="auto"
-              className="scrollable"
             >
               {messages.map((chat) => (
                 <Flex
