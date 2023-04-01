@@ -50,7 +50,7 @@ export default function ChatBox() {
   const handleReadMessage = async (messageId) => {
     const messageRef = doc(db, 'messages', messageId);
     await updateDoc(messageRef, {
-      status: 'read', // update the status of the message to "read"
+      status: 'read',
     });
   };
 
