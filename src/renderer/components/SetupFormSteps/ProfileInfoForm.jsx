@@ -395,8 +395,8 @@ export default function ProfileInfoForm({
               }
             >
               <HStack spacing="24px">
-                <Radio value="Male">Male</Radio>
-                <Radio value="Female">Female</Radio>
+                <Radio value="Man">Male</Radio>
+                <Radio value="Woman">Female</Radio>
                 <Radio value="Other">Other</Radio>
               </HStack>
             </RadioGroup>
@@ -415,7 +415,7 @@ export default function ProfileInfoForm({
               <HStack spacing="24px">
                 <Radio value="Man">Man</Radio>
                 <Radio value="Woman">Woman</Radio>
-                <Radio value="Both">Both</Radio>
+                <Radio value="All">All</Radio>
               </HStack>
             </RadioGroup>
           </FormControl>
