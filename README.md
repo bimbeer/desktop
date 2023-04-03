@@ -32,7 +32,7 @@ Bimbeer is created for lonely beer lovers, that have no one to drink with. Thank
 
 Clone the repo and install dependencies:
   ```sh
-  git clone --branch main https://github.com/bimbeer/desktop bimbeer
+  git clone --branch main https://github.com/bimbeer/desktop
   ```
 Navigate to project's folder
   ```sh
@@ -49,7 +49,7 @@ Run project
   ```sh
   npm start
   ```
-## Starting Development
+## Packing app
 To package apps for the local platform:
   ```sh
   npm run package
