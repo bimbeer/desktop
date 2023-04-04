@@ -16,8 +16,7 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Link } from '@chakra-ui/react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 import { doc, getDoc } from 'firebase/firestore';
 import {
@@ -127,11 +126,11 @@ export default function Sidebar() {
               <ListItemIcon
                 sx={{ paddingLeft: 1, paddingBottom: 1, paddingTop: 1 }}
               >
-                <a href="/#/dashboard">
+                <Link to="/dashboard">
                   <img src={beer} alt="beer logo" width="40px" />
-                </a>
+                </Link>
               </ListItemIcon>
-              <a href="/#/dashboard">
+              <Link to="/dashboard">
                 <ListItemText
                   primary="Bimbeer"
                   primaryTypographyProps={{
@@ -142,16 +141,16 @@ export default function Sidebar() {
                     },
                   }}
                 />
-              </a>
+              </Link>
             </ListItemButton>
           </ListItem>
           <Divider />
           <List>
             {[
-              { text: 'Dashboard', to: '/#/dashboard' },
-              { text: 'Pairs', to: '/#/pairs' },
-              { text: 'Messages', to: '/#/messages' },
-              { text: 'Profile', to: '/#/profile' },
+              { text: 'Dashboard', to: '/dashboard' },
+              { text: 'Pairs', to: '/pairs' },
+              { text: 'Messages', to: '/messages' },
+              { text: 'Profile', to: '/profile' },
               { text: 'Logout', to: undefined },
             ].map((item) => (
               <ListItem
@@ -174,7 +173,6 @@ export default function Sidebar() {
                     sx={{
                       paddingLeft: 1.5,
                       paddingRight: 5,
-                      // color: '#d4af37',
                     }}
                   >
                     {item.text === 'Dashboard' && <DashboardOutlinedIcon />}
@@ -192,20 +190,20 @@ export default function Sidebar() {
           </List>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
-            <a href="/#/profile">
+            <Link to="/profile">
               <Avatar
                 alt={user.email}
                 sx={{ width: 40, height: 40 }}
                 style={{ backgroundColor: '#d4af37' }}
                 src={profileData.avatar}
               />
-            </a>
+            </Link>
             {open && (
-              <a href="/#/profile">
+              <Link to="/profile">
                 <Typography variant="body2" sx={{ ml: 2 }}>
-                  {user && user.email}
+                  {user.email}
                 </Typography>
-              </a>
+              </Link>
             )}
           </Box>
         </Drawer>

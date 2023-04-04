@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Text, Spinner, Flex } from '@chakra-ui/react';
 import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
@@ -65,9 +66,9 @@ export default function SignInForm() {
   return (
     <div className="signin_section">
       <div>
-        <a href="/">
+        <Link to="/">
           <img src={logo} className="logo" alt="Bimbeer Logo" />
-        </a>
+        </Link>
       </div>
       <LoadingScreen isLoading={isLoading} />
       {authError && (
@@ -121,9 +122,9 @@ export default function SignInForm() {
           </div>
           <Text fontSize="sm" color="white">
             Don&apos;t have an account?{` `}
-            <a href="/#/sign-up">
+            <Link to="/sign-up">
               <b>Sign up</b>
-            </a>
+            </Link>
           </Text>
           <div className="signin-button">
             {isAuthLoading ? (

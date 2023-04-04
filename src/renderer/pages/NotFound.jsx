@@ -1,11 +1,11 @@
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
-
+import { Link } from 'react-router-dom';
 import { RiHome2Line } from 'react-icons/ri';
 import '../theme/css/NotFound.css';
 
 export default function NotFound() {
   return (
-    <Flex minH="80vh" align="center" justify="center">
+    <Flex minH="100vh" align="center" justify="center">
       <Card bg="whiteAlpha.100" maxW={600}>
         <CardBody p={30}>
           <Stack spacing="3">
@@ -18,9 +18,9 @@ export default function NotFound() {
                 home button will take you back to civilization.
               </Text>
               <div className="home-button">
-                <a href="/" className="button">
+                <Link to="/" className="button">
                   <RiHome2Line className="icon" />
-                </a>
+                </Link>
               </div>
             </Center>
           </Stack>

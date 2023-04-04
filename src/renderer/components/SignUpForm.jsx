@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
 import {
   passwordsMatch,
@@ -62,9 +62,9 @@ export default function SignUpForm() {
   return (
     <div className="signin_section">
       <div>
-        <a href="/">
+        <Link to="/">
           <img src={logo} className="logo" alt="Bimbeer Logo" />
-        </a>
+        </Link>
       </div>
       {error && (
         <Text fontSize="sm" mt={8} color="red">
@@ -108,9 +108,9 @@ export default function SignUpForm() {
           </div>
           <Text fontSize="sm" color="white">
             Already have an account?{` `}
-            <a href="/">
+            <Link to="/">
               <b>Sign In</b>
-            </a>
+            </Link>
           </Text>
           <div className="signin-button">
             <button type="submit">

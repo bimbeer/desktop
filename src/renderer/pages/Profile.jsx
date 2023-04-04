@@ -22,7 +22,7 @@ import {
   getUserFromLocalStorage,
 } from 'renderer/context/AuthContext';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaPenFancy } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
 import Sidebar from 'renderer/components/Sidebar';
@@ -124,28 +124,29 @@ function Profile() {
               direction={{ sm: 'column', lg: 'row' }}
               w={{ sm: '100%', md: '50%', lg: 'auto' }}
             >
-              <Button
-                as="a"
-                href="/#/setup"
-                p="5px"
-                bg="transparent"
-                variant="no-effects"
-              >
-                <Flex
-                  align="center"
+              <Link to="/setup">
+                <Button
                   w={{ sm: '100%', lg: '135px' }}
-                  bg={colorMode === 'dark' ? 'navy.900' : '#fff'}
-                  borderRadius="8px"
-                  justifyContent="center"
-                  py="10px"
-                  cursor="pointer"
+                  p="5px"
+                  bg="transparent"
+                  variant="no-effects"
                 >
-                  <Icon color={headerColor} as={FaPenFancy} me="6px" />
-                  <Text fontSize="xs" color={headerColor} fontWeight="bold">
-                    EDIT PROFILE
-                  </Text>
-                </Flex>
-              </Button>
+                  <Flex
+                    align="center"
+                    w={{ sm: '100%', lg: '135px' }}
+                    bg={colorMode === 'dark' ? 'navy.900' : '#fff'}
+                    borderRadius="8px"
+                    justifyContent="center"
+                    py="10px"
+                    cursor="pointer"
+                  >
+                    <Icon color={headerColor} as={FaPenFancy} me="6px" />
+                    <Text fontSize="xs" color={headerColor} fontWeight="bold">
+                      EDIT PROFILE
+                    </Text>
+                  </Flex>
+                </Button>
+              </Link>
               <Button p="5px" bg="transparent" variant="no-effects">
                 <Flex
                   align="center"
