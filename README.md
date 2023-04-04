@@ -49,7 +49,7 @@ Run project
   ```sh
   npm start
   ```
-## Packing app
+## Packaging for Production
 To package apps for the local platform:
   ```sh
   npm run package
