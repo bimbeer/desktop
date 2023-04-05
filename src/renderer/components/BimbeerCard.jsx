@@ -1,55 +1,63 @@
 import { useState } from 'react';
-import { Flex, Box, Stack, Text, Button, IconButton } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, IconButton } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import {
   FaChevronLeft,
   FaChevronRight,
   FaHeart,
   FaTimes,
 } from 'react-icons/fa';
+import { BsInfoCircleFill } from 'react-icons/bs';
+import PictureCount from './PictureCount';
 
-function PictureCount({ count, current }) {
-  return (
-    <Flex w="100%" pt={1} px={4}>
-      {Array.from({ length: count }, (_, i) => (
-        <Box
-          key={i}
-          flex="1"
-          h="4px"
-          bg={i === current ? 'yellow.400' : 'gray.500'}
-          mx={1}
-          rounded="1rem"
-        />
-      ))}
-    </Flex>
-  );
-}
-
-function BimbeerCard() {
-  const [showMore, setShowMore] = useState(false);
+export default function BimbeerCard({ user, onUserAction }) {
+  const [showDescription, setShowDescription] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
+  const [currentBeerIndex, setCurrentBeerIndex] = useState(0);
 
   const handleMouseEnter = () => setShowArrows(true);
   const handleMouseLeave = () => setShowArrows(false);
 
+  const handlePrevBeer = () => {
+    if (currentBeerIndex > 0) {
+      setCurrentBeerIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  const handleNextBeer = () => {
+    if (currentBeerIndex < user.beers.length - 1) {
+      setCurrentBeerIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
   return (
-    <Flex align="center" justify="center" w="100%" minH="100vh">
+    <Flex align="center" justify="center" minH="100vh" ml="100px" mr="20px">
       <Box
+        top={-8}
         maxW="450px"
         w="100%"
         h="70vh"
         rounded="1rem"
         bg="gray.800"
-        bgImage="https://www.history.com/.image/t_share/MTk1NTU5MDQ0MTYzODM5MDM3/gettyimages-1386915196.jpg"
-        bgPos="top"
-        bgRepeat="no-repeat"
-        bgSize="cover"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         position="relative"
+        bgGradient="linear(to-b, whiteAlpha.50 60%, blackAlpha.900 100%)"
       >
+        <Box
+          position="absolute"
+          top="30px"
+          left={0}
+          right={0}
+          bottom="80px"
+          bgImage={user.beers[currentBeerIndex].link}
+          bgPos="top"
+          bgRepeat="no-repeat"
+          bgSize="contain"
+        />
         <PictureCount
-          count={5}
-          current={1}
+          count={user.beers.length}
+          current={currentBeerIndex}
           position="absolute"
           top={4}
           left={0}
@@ -59,89 +67,93 @@ function BimbeerCard() {
           direction="column"
           rounded="1rem"
           h="100%"
-          bgGradient="linear(to-b, whiteAlpha.50 60%, blackAlpha.900 100%)"
           justify="space-between"
         >
           {showArrows && (
             <>
-              <Box
-                position="absolute"
-                left="1rem"
-                top="50%"
-                transform="translateY(-50%)"
-                onClick={() => console.log('left arrow clicked')}
-              >
-                <FaChevronLeft size={24} color="#ffffff" />
-              </Box>
+              {currentBeerIndex > 0 && (
+                <Box
+                  position="absolute"
+                  left="1rem"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  onClick={handlePrevBeer}
+                >
+                  <FaChevronLeft size={24} color="#ffffff" />
+                </Box>
+              )}
 
-              <Box
-                position="absolute"
-                right="1rem"
-                top="50%"
-                transform="translateY(-50%)"
-                onClick={() => console.log('right arrow clicked')}
-              >
-                <FaChevronRight size={24} color="#ffffff" />
-              </Box>
+              {currentBeerIndex < user.beers.length - 1 && (
+                <Box
+                  position="absolute"
+                  right="1rem"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  onClick={handleNextBeer}
+                >
+                  <FaChevronRight size={24} color="#ffffff" />
+                </Box>
+              )}
             </>
           )}
 
           <Box />
-          <Stack p="1rem">
-            <Text size="md">
-              Username, 19
-              <Text fontSize="xs">Legnica</Text>
-            </Text>
+          <Stack mb="15px" p="1rem" zIndex={10}>
+            <Flex justify="space-between" align="center">
+              <Text fontSize="25px" fontWeight="600">
+                {user.firstName}, {user.age}
+                <Text fontSize="sm" fontWeight="100">
+                  {user.location.label}
+                </Text>
+              </Text>
+              <IconButton
+                size="lg"
+                aria-label="Info"
+                icon={<BsInfoCircleFill />}
+                onClick={() => setShowDescription(!showDescription)}
+                bg="transparent"
+                _hover={{
+                  bg: 'transparent',
+                }}
+              />
+            </Flex>
 
-            <Text
-              fontSize="xs"
-              lineHeight="1.2rem"
-              maxH={showMore ? '' : '2.4rem'}
-              overflow={showMore ? '' : 'hidden'}
-            >
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Facere
-              obcaecati quibusdam impedit, dolore nostrum possimus! Non quam
-              reiciendis unde, labore blanditiis tenetur, perferendis modi
-              impedit, soluta error officiis iusto cupiditate.
-            </Text>
-
-            <Button
-              color="black"
-              _hover={{
-                bg: 'yellow.500',
-              }}
-              size="sm"
-              onClick={() => setShowMore(!showMore)}
-            >
-              {showMore ? 'Show less' : 'Show more'}
-            </Button>
+            {showDescription && (
+              <Text fontSize="xs" lineHeight="1.2rem">
+                {user.description}
+              </Text>
+            )}
           </Stack>
         </Flex>
         <Flex justify="center" mt={4} gap={50}>
           <IconButton
             aria-label="Decline"
             icon={<FaTimes />}
-            onClick={() => console.log('decline clicked')}
+            onClick={onUserAction}
             fontSize="30px"
             boxSize="60px"
             bg="transparent"
+            _hover={{
+              bg: 'red.800',
+            }}
             color="red.300"
-            borderColor="red.300"
+            borderColor="red.800"
             borderWidth={1}
-            colorScheme="red"
             rounded="2rem"
           />
           <IconButton
             aria-label="Heart"
             icon={<FaHeart />}
-            onClick={() => console.log('heart clicked')}
+            onClick={onUserAction}
             fontSize="30px"
             boxSize="60px"
             bg="transparent"
+            _hover={{
+              bg: 'green.800',
+            }}
             color="green.300"
-            borderColor="green.300"
+            borderColor="green.800"
             borderWidth={1}
-            colorScheme="green"
             rounded="2rem"
           />
         </Flex>
@@ -150,4 +162,19 @@ function BimbeerCard() {
   );
 }
 
-export default BimbeerCard;
+BimbeerCard.propTypes = {
+  user: PropTypes.shape({
+    beers: PropTypes.arrayOf(
+      PropTypes.shape({
+        link: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    firstName: PropTypes.string.isRequired,
+    age: PropTypes.number.isRequired,
+    location: PropTypes.shape({
+      label: PropTypes.string.isRequired,
+    }).isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
+  onUserAction: PropTypes.func.isRequired,
+};
