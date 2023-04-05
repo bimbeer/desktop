@@ -74,24 +74,44 @@ export default function BimbeerCard({ user, onUserAction }) {
               {currentBeerIndex > 0 && (
                 <Box
                   position="absolute"
-                  left="1rem"
+                  left={2}
                   top="50%"
                   transform="translateY(-50%)"
                   onClick={handlePrevBeer}
                 >
-                  <FaChevronLeft size={24} color="#ffffff" />
+                  <IconButton
+                    fontSize="25px"
+                    color="#ffffff"
+                    aria-label="Decline"
+                    icon={<FaChevronLeft />}
+                    onClick={onUserAction}
+                    bg="transparent"
+                    _hover={{
+                      bg: 'transparent',
+                    }}
+                  />
                 </Box>
               )}
 
               {currentBeerIndex < user.beers.length - 1 && (
                 <Box
                   position="absolute"
-                  right="1rem"
+                  right={2}
                   top="50%"
                   transform="translateY(-50%)"
                   onClick={handleNextBeer}
                 >
-                  <FaChevronRight size={24} color="#ffffff" />
+                  <IconButton
+                    fontSize="25px"
+                    color="#ffffff"
+                    aria-label="Decline"
+                    icon={<FaChevronRight />}
+                    onClick={onUserAction}
+                    bg="transparent"
+                    _hover={{
+                      bg: 'transparent',
+                    }}
+                  />
                 </Box>
               )}
             </>
