@@ -166,7 +166,6 @@ function Profile() {
               </Button>
             </Flex>
           </Flex>
-
           <Grid
             templateColumns={{ sm: '1fr', xl: 'repeat(3, 1fr)' }}
             gap="22px"
@@ -189,9 +188,7 @@ function Profile() {
                     color="gray.400"
                     fontWeight="400"
                     mb="30px"
-                    whiteSpace="pre-wrap"
-                    overflowWrap="break-word"
-                    wordBreak="break-all"
+                    overflowWrap="normal"
                   >
                     {profileData.description}
                   </Text>
