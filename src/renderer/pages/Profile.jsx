@@ -70,8 +70,8 @@ function Profile() {
           direction="column"
           width="160vh"
           minH="100vh"
-          marginLeft="100px"
-          marginRight="20px"
+          ml="100px"
+          mr="20px"
           pt={{ base: '120px', md: '75px', lg: '100px' }}
         >
           <Flex
@@ -189,6 +189,9 @@ function Profile() {
                     color="gray.400"
                     fontWeight="400"
                     mb="30px"
+                    whiteSpace="pre-wrap"
+                    overflowWrap="break-word"
+                    wordBreak="break-all"
                   >
                     {profileData.description}
                   </Text>
@@ -383,7 +386,7 @@ function Profile() {
                               />
                             </Center>
                             <Center>
-                              <p>{beer.name}</p>
+                              <Text textAlign="center">{beer.name}</Text>
                             </Center>
                           </Box>
                         ))}
