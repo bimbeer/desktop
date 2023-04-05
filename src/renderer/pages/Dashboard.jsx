@@ -110,7 +110,7 @@ export default function Dashboard() {
           thickness="4px"
           speed="0.65s"
           emptyColor="gray.700"
-          color="white"
+          color="yellow.500"
           size="xl"
         />
       </Center>
