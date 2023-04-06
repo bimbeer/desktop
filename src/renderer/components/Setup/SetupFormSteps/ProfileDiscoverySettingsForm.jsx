@@ -129,19 +129,16 @@ export default function ProfileDiscoverySettingsForm({
               Please select a city from the list
             </FormErrorMessage>
             {cities.length === 0 && !citiesLoading && cityInputValue && (
-  <List>
-    <ListItem>
-      <Box
-        bg="gray.700"
-        p="1rem"
-        mt={2}
-        rounded="1rem"
-      >
-        No cities were found
-      </Box>
-    </ListItem>
-  </List>
-)}
+              <List
+                display={!selectedCityState || !isCityEmpty ? 'block' : 'none'}
+              >
+                <ListItem>
+                  <Box bg="gray.700" p="1rem" mt={2} rounded="1rem">
+                    No cities were found
+                  </Box>
+                </ListItem>
+              </List>
+            )}
 
             <Flex
               justify="center"
@@ -149,7 +146,7 @@ export default function ProfileDiscoverySettingsForm({
               visibility={citiesLoading ? 'visible' : 'hidden'}
             >
               <Spinner size="md" mt={4} color="yellow.500" />
-       </Flex>
+            </Flex>
 
             <List
               display={cities.length > 0 && !citiesLoading ? 'block' : 'none'}

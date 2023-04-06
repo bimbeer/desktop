@@ -62,6 +62,8 @@ export default function ProfileInfoForm({
   const [avatarPreviewState, setAvatarPreviewState] =
     React.useState(avatarPreview);
 
+  const TIMEOUT_VALUE = 1;
+
   useEffect(() => {
     setAvatarPreviewState(avatarPreview);
   }, [avatarPreview]);
@@ -70,6 +72,7 @@ export default function ProfileInfoForm({
     const isFormValid = () => {
       return (
         profile.firstName &&
+        profile.lastName &&
         profile.username &&
         profile.age &&
         profile.description &&
@@ -82,6 +85,7 @@ export default function ProfileInfoForm({
     setIsValid(isFormValid());
   }, [
     profile.firstName,
+    profile.lastName,
     profile.username,
     profile.age,
     profile.description,
@@ -146,7 +150,7 @@ export default function ProfileInfoForm({
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
-    if (!validateNotOnlyNumbers(value)) {
+    if (value && !validateNotOnlyNumbers(value)) {
       newErrors.push('Username cannot contain only numbers');
     }
     clearTimeout(timeout);
@@ -160,7 +164,7 @@ export default function ProfileInfoForm({
         }
       }
       setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
-    }, 1);
+    }, TIMEOUT_VALUE);
 
     const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
