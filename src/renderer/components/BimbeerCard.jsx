@@ -84,7 +84,6 @@ export default function BimbeerCard({ user, onUserAction }) {
                     color="#ffffff"
                     aria-label="Decline"
                     icon={<FaChevronLeft />}
-                    onClick={onUserAction}
                     bg="transparent"
                     _hover={{
                       bg: 'transparent',
@@ -106,7 +105,6 @@ export default function BimbeerCard({ user, onUserAction }) {
                     color="#ffffff"
                     aria-label="Decline"
                     icon={<FaChevronRight />}
-                    onClick={onUserAction}
                     bg="transparent"
                     _hover={{
                       bg: 'transparent',
