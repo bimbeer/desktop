@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Text, Spinner, Flex } from '@chakra-ui/react';
@@ -10,7 +9,7 @@ import { UserAuth } from '../context/AuthContext';
 import { auth } from '../firebase/firebase';
 import logo from '../assets/images/logo.png';
 import LoadingScreen from './LoadingScreen';
-import '../theme/css/SignInForm.css';
+import '../theme/css/AuthForms.css';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');

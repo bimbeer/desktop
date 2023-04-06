@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
@@ -10,7 +9,7 @@ import {
 } from '../helpers/validators';
 import { UserAuth } from '../context/AuthContext';
 import logo from '../assets/images/logo.png';
-import '../theme/css/SignInForm.css';
+import '../theme/css/AuthForms.css';
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');
@@ -19,6 +18,8 @@ export default function SignUpForm() {
   const [error, setError] = useState('');
   const { createUser } = UserAuth();
   const navigate = useNavigate();
+
+  const ERROR_EMAIL_ALREADY_IN_USE = 'auth/email-already-in-use';
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -53,7 +54,7 @@ export default function SignUpForm() {
     } catch (e) {
       setError(e.message);
       const errorCode = e.code;
-      if (errorCode === 'auth/email-already-in-use') {
+      if (errorCode === ERROR_EMAIL_ALREADY_IN_USE) {
         setError('Email is already in use.');
       }
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import SignInForm from '../components/SignInForm';
-import '../theme/css/Start.css';
+import '../theme/css/AuthForms.css';
 import ThemeBackground from '../components/ThemeBackground';
 
 export default function Start() {
