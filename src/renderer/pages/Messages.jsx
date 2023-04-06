@@ -1,8 +1,8 @@
 import * as React from 'react';
-import ChatBox from 'renderer/components/ChatBox';
+import ChatBox from 'renderer/components/Messages/ChatBox';
 import Sidebar from 'renderer/components/Sidebar';
 
-function Messages() {
+export default function Messages() {
   return (
     <>
       <Sidebar />
@@ -10,4 +10,3 @@ function Messages() {
     </>
   );
 }
-export default Messages;

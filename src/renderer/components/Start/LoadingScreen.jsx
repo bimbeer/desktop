@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Center, Image, Spinner, Text } from '@chakra-ui/react';
-import logo from '../assets/images/logo.png';
+import logo from 'renderer/assets/images/logo.png';
 
 // eslint-disable-next-line react/prop-types
 export default function LoadingScreen({ isLoading }) {

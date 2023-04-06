@@ -137,6 +137,7 @@ export default function ProfileInfoForm({
   }
 
   async function handleUsernameChange(event) {
+    let timeout = null;
     const { value } = event.target;
     const newErrors = [];
     if (!validateTextAndNumbersOnly(value)) {
@@ -145,13 +146,21 @@ export default function ProfileInfoForm({
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
-    const querySnapshot = await getDocs(
-      query(collection(db, 'profile'), where('username', '==', value))
-    );
-    if (!querySnapshot.empty) {
-      newErrors.push('Username is already in use');
-    }
-    setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(async () => {
+      if (value) {
+        const querySnapshot = await getDocs(
+          query(collection(db, 'profile'), where('username', '==', value))
+        );
+        if (!querySnapshot.empty) {
+          newErrors.push('Username is already in use');
+        }
+      }
+      setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
+    }, 1);
+
     const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
       ...prevProfile,

@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
-import BimbeerCard from 'renderer/components/BimbeerCard.jsx';
+import BimbeerCard from 'renderer/components/Dashboard/BimbeerCard.jsx';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { Center, Spinner, Text, Flex, Card } from '@chakra-ui/react';
 import {
