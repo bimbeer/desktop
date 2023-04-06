@@ -94,7 +94,6 @@ export default function ProfileDiscoverySettingsForm({
     }
     setCitiesLoading(true);
     debounceInput(cityInputValue, fetchCities, DEBOUNCE_DELAY);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityInputValue]);
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
@@ -149,7 +148,8 @@ export default function ProfileDiscoverySettingsForm({
                     bg="gray.700"
                     transition="all 0.15s ease-in"
                     p="1rem"
-                    mb="0.5rem"
+                    mt={-8}
+                    mb={10}
                     rounded="1rem"
                     cursor="pointer"
                     onClick={() => handleCitySelect(city.id)}
@@ -161,7 +161,9 @@ export default function ProfileDiscoverySettingsForm({
             </List>
           </FormControl>
           <FormControl isRequired>
-            <FormLabel mb={8}>Range settings</FormLabel>
+            <FormLabel mt={-8} mb={8}>
+              Range settings
+            </FormLabel>
             <Slider
               defaultValue={profile.range}
               aria-label="slider-ex-6"
