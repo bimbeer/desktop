@@ -24,7 +24,7 @@ export function validateTextAndNumbersOnly(value) {
 }
 
 export function validateNotOnlyNumbers(value) {
-  return !/^[0\s]*$/.test(value);
+  return !/^[0-9\s]*$/.test(value);
 }
 
 export function validateNumbersOnly(value) {

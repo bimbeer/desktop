@@ -95,6 +95,7 @@ export default function ProfileDiscoverySettingsForm({
     setCitiesLoading(true);
     debounceInput(cityInputValue, fetchCities, DEBOUNCE_DELAY);
   }, [cityInputValue]);
+
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
       <Stack align="center">
@@ -127,6 +128,20 @@ export default function ProfileDiscoverySettingsForm({
               <FormErrorIcon />
               Please select a city from the list
             </FormErrorMessage>
+            {cities.length === 0 && !citiesLoading && cityInputValue && (
+  <List>
+    <ListItem>
+      <Box
+        bg="gray.700"
+        p="1rem"
+        mt={2}
+        rounded="1rem"
+      >
+        No cities were found
+      </Box>
+    </ListItem>
+  </List>
+)}
 
             <Flex
               justify="center"
@@ -134,7 +149,8 @@ export default function ProfileDiscoverySettingsForm({
               visibility={citiesLoading ? 'visible' : 'hidden'}
             >
               <Spinner size="md" mt={4} color="yellow.500" />
-            </Flex>
+       </Flex>
+
             <List
               display={cities.length > 0 && !citiesLoading ? 'block' : 'none'}
             >
