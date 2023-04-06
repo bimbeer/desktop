@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flex, Box, Stack, Text, IconButton } from '@chakra-ui/react';
+import { Flex, Box, Stack, Text, IconButton, Collapse } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import {
   FaChevronLeft,
@@ -82,11 +82,12 @@ export default function BimbeerCard({ user, onUserAction }) {
                   <IconButton
                     fontSize="25px"
                     color="#ffffff"
-                    aria-label="Decline"
+                    aria-label="previous-beer"
                     icon={<FaChevronLeft />}
                     bg="transparent"
                     _hover={{
                       bg: 'transparent',
+                      transform: 'scale(1.2)',
                     }}
                   />
                 </Box>
@@ -103,11 +104,12 @@ export default function BimbeerCard({ user, onUserAction }) {
                   <IconButton
                     fontSize="25px"
                     color="#ffffff"
-                    aria-label="Decline"
+                    aria-label="next-beer"
                     icon={<FaChevronRight />}
                     bg="transparent"
                     _hover={{
                       bg: 'transparent',
+                      transform: 'scale(1.2)',
                     }}
                   />
                 </Box>
@@ -126,21 +128,22 @@ export default function BimbeerCard({ user, onUserAction }) {
               </Text>
               <IconButton
                 size="lg"
-                aria-label="Info"
+                aria-label="show-description"
                 icon={<BsInfoCircleFill />}
                 onClick={() => setShowDescription(!showDescription)}
                 bg="transparent"
                 _hover={{
                   bg: 'transparent',
+                  transform: 'scale(1.2)',
                 }}
               />
             </Flex>
 
-            {showDescription && (
+            <Collapse in={showDescription}>
               <Text fontSize="xs" lineHeight="1.2rem">
                 {user.description}
               </Text>
-            )}
+            </Collapse>
           </Stack>
         </Flex>
         <Flex justify="center" mt={4} gap={50}>
@@ -153,6 +156,7 @@ export default function BimbeerCard({ user, onUserAction }) {
             bg="transparent"
             _hover={{
               bg: 'red.800',
+              transform: 'scale(1.2)',
             }}
             color="red.300"
             borderColor="red.800"
@@ -168,6 +172,7 @@ export default function BimbeerCard({ user, onUserAction }) {
             bg="transparent"
             _hover={{
               bg: 'green.800',
+              transform: 'scale(1.2)',
             }}
             color="green.300"
             borderColor="green.800"
