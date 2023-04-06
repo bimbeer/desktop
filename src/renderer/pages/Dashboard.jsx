@@ -19,19 +19,16 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isCardLoading, setIsCardLoading] = useState(true);
-  let content;
 
   useEffect(() => {
     const userId = getUserFromLocalStorage();
     const docRef = doc(db, 'profile', userId);
 
     async function fetchData() {
-      setIsCardLoading(true);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setProfileData(docSnap.data());
       }
-      setIsCardLoading(false);
     }
     fetchData();
   }, []);
@@ -103,29 +100,38 @@ export default function Dashboard() {
     }
   };
 
-  if (isCardLoading) {
-    content = (
-      <Center h="100vh">
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.700"
-          color="yellow.500"
-          size="xl"
+  const renderContent = () => {
+    if (isCardLoading) {
+      return (
+        <Center h="100vh">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.700"
+            color="yellow.500"
+            size="xl"
+          />
+        </Center>
+      );
+    }
+    if (users.length > 0) {
+      return (
+        <BimbeerCard
+          key={users[currentUserIndex].username}
+          user={users[currentUserIndex]}
+          onUserAction={handleUserAction}
         />
-      </Center>
-    );
-  } else if (users.length > 0) {
-    content = (
-      <BimbeerCard
-        key={users[currentUserIndex].username}
-        user={users[currentUserIndex]}
-        onUserAction={handleUserAction}
-      />
-    );
-  } else {
-    content = (
-      <Flex minH="100vh" align="center" justify="center" ml="100px" mr="20px">
+      );
+    }
+    return (
+      <Flex
+        display={isCardLoading ? 'none' : 'flex'}
+        minH="100vh"
+        align="center"
+        justify="center"
+        ml="100px"
+        mr="20px"
+      >
         <Card p={10} bg="whiteAlpha.100" maxW={650}>
           <Center>
             <Text color="white">
@@ -136,12 +142,12 @@ export default function Dashboard() {
         </Card>
       </Flex>
     );
-  }
+  };
 
   return (
     <>
       <Sidebar />
-      {content}
+      {renderContent()}
     </>
   );
 }
