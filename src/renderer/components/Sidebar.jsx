@@ -135,9 +135,9 @@ export default function Sidebar() {
                   primary="Bimbeer"
                   primaryTypographyProps={{
                     sx: {
-                      fontWeight: 'medium',
                       fontSize: '2rem',
                       paddingLeft: '15px',
+                      paddingTop: '7px',
                     },
                   }}
                 />
@@ -164,9 +164,16 @@ export default function Sidebar() {
                   onClick={item.text === 'Logout' ? handleLogout : undefined}
                   sx={{
                     backgroundColor:
-                      item.to && `/#${location.pathname}` === item.to
+                      item.to && location.pathname.replace('#', '') === item.to
                         ? '#d4af37'
                         : 'inherit',
+                    '&:hover': {
+                      backgroundColor:
+                        item.to &&
+                        location.pathname.replace('#', '') === item.to
+                          ? '#d69e2e'
+                          : '#252525',
+                    },
                   }}
                 >
                   <ListItemIcon
