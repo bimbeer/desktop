@@ -1,63 +1,63 @@
 const beerList = [
   {
     name: 'Piast',
-    link: 'https://www.carlsbergpolska.pl/media/55783/pl_08498_piast_milioner_2023_500ml.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fpl_08498_piast_milioner_2023_500ml.png?alt=media&token=79ff9750-0b44-445d-936e-e3bcfbbc614c',
   },
   {
     name: 'Harnaś',
-    link: 'https://www.carlsbergpolska.pl/media/52075/08149-harnas-opakowania-generyczne-5-9-alk_bottle.png?height=570&mode=maxD',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2F08149-harnas-opakowania-generyczne-5-9-alk_bottle.png?alt=media&token=3d4fde9d-465d-4541-89de-545973c1ab47',
   },
   {
     name: 'Carlsberg',
-    link: 'https://www.carlsbergpolska.pl/media/38402/cb_nd_50cl_pilsner_wet_bottle_kv_17k_iso_premium_merged_rgb.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fcb_nd_50cl_pilsner_wet_bottle_kv_17k_iso_premium_merged_rgb.png?alt=media&token=3e32670a-9ba3-4c7a-a436-0db3a43d963e',
   },
   {
     name: 'Okocim Jasne',
-    link: 'https://www.carlsbergpolska.pl/media/50324/okocim-jasne-2022-butelka-500-ml.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fokocim-jasne-2022-butelka-500-ml.png?alt=media&token=f7e0edbd-35ae-412b-bc41-3989f4baf6fc',
   },
   {
     name: 'Okocim Porter',
-    link: 'https://www.carlsbergpolska.pl/media/50326/okocim-porter-2022-butelka-500-ml.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fokocim-porter-2022-butelka-500-ml.png?alt=media&token=ad09cc3e-00fc-4c98-b022-8743b19632e3',
   },
   {
     name: 'Okocim 0.0%',
-    link: 'https://www.carlsbergpolska.pl/media/50315/okocim-00-2022-butelka-500-ml.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fokocim-00-2022-butelka-500-ml.png?alt=media&token=ea88737f-d58d-4a46-aa8e-d786ff22aea7',
   },
   {
     name: 'Książ',
-    link: 'https://www.carlsbergpolska.pl/media/1306/butelka_ksiaz_pop.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fbutelka_ksiaz_pop.png?alt=media&token=7dc207dd-f2e9-4a19-98f7-c4ec18dc0de2',
   },
   {
     name: 'Kasztelan Jasne',
-    link: 'https://www.carlsbergpolska.pl/media/39759/butelka-jpkasztelan-150cm-z-kroplami.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fbutelka-jpkasztelan-150cm-z-kroplami.png?alt=media&token=f74e8eea-11b5-4f99-bf36-006de3b71a2d',
   },
   {
     name: 'Kasztelan Mocne',
-    link: 'https://www.carlsbergpolska.pl/media/39757/butelka-mocnekasztelan-150cm-z-kroplami.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fbutelka-mocnekasztelan-150cm-z-kroplami.png?alt=media&token=aeb87989-9eb7-4522-9478-7c584f1f1f69',
   },
   {
     name: 'Žatecký Černý',
-    link: 'https://www.carlsbergpolska.pl/media/51266/zatecky-cerny-3-8.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fzatecky-cerny-3-8.png?alt=media&token=64bcc74e-c39e-4e70-a6e1-28dae56239d4',
   },
   {
     name: 'Žatecký Ležák',
-    link: 'https://www.carlsbergpolska.pl/media/19432/pl_zatecky-svetly-lezak.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fpl_zatecky-svetly-lezak.png?alt=media&token=752d7ad0-d0b8-4d86-8fe5-631e1651835b',
   },
   {
     name: 'Karmi',
-    link: 'https://i.imgur.com/eYr599i.png',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2FeYr599i.png?alt=media&token=af893b75-45df-4533-9a20-7c03ba02cf6e',
   },
   {
     name: 'Sommersby Apple',
-    link: 'https://www.carlsbergpolska.pl/media/30444/pl_somersby-apple.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fpl_somersby-apple.png?alt=media&token=64397b3d-12c1-426f-9d71-221182b690ee',
   },
   {
     name: 'Garage Mojito',
-    link: 'https://www.carlsbergpolska.pl/media/48484/garage_dragon-fruit_-ciemniejszy_400.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fgarage_dragon-fruit_-ciemniejszy_400.png?alt=media&token=f90d1e02-f768-4d06-a4ff-b438287f14e4',
   },
   {
     name: 'Garage Kamikaze',
-    link: 'https://www.carlsbergpolska.pl/media/42949/garage_kamikaze_400ml_2021.png?height=570&mode=max',
+    link: 'https://firebasestorage.googleapis.com/v0/b/bimbeer-af1dd.appspot.com/o/beers%2Fgarage_kamikaze_400ml_2021.png?alt=media&token=933486bc-6475-42f9-93e1-a2df2d5fc058',
   },
 ];
 export default beerList;
