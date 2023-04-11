@@ -138,7 +138,10 @@ export default function ProfilePanel() {
                     borderRadius="8px"
                     justifyContent="center"
                     py="10px"
-                    cursor="pointer"
+                    transition="transform 0.2s ease-in-out"
+                    _hover={{
+                      transform: 'scale(1.05)',
+                    }}
                   >
                     <Icon color={headerColor} as={FaPenFancy} me="6px" />
                     <Text fontSize="xs" color={headerColor} fontWeight="bold">
@@ -155,7 +158,10 @@ export default function ProfilePanel() {
                   borderRadius="8px"
                   justifyContent="center"
                   py="10px"
-                  cursor="pointer"
+                  transition="transform 0.2s ease-in-out"
+                  _hover={{
+                    transform: 'scale(1.05)',
+                  }}
                   onClick={handleLogout}
                 >
                   <Icon color={headerColor} as={RiLogoutBoxRLine} me="6px" />
