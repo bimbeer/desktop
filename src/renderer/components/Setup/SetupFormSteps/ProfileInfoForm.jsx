@@ -62,6 +62,8 @@ export default function ProfileInfoForm({
   const [avatarPreviewState, setAvatarPreviewState] =
     React.useState(avatarPreview);
 
+  const TIMEOUT_VALUE = 1;
+
   useEffect(() => {
     setAvatarPreviewState(avatarPreview);
   }, [avatarPreview]);
@@ -70,6 +72,7 @@ export default function ProfileInfoForm({
     const isFormValid = () => {
       return (
         profile.firstName &&
+        profile.lastName &&
         profile.username &&
         profile.age &&
         profile.description &&
@@ -82,6 +85,7 @@ export default function ProfileInfoForm({
     setIsValid(isFormValid());
   }, [
     profile.firstName,
+    profile.lastName,
     profile.username,
     profile.age,
     profile.description,
@@ -137,6 +141,7 @@ export default function ProfileInfoForm({
   }
 
   async function handleUsernameChange(event) {
+    let timeout = null;
     const { value } = event.target;
     const newErrors = [];
     if (!validateTextAndNumbersOnly(value)) {
@@ -145,13 +150,22 @@ export default function ProfileInfoForm({
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
-    const querySnapshot = await getDocs(
-      query(collection(db, 'profile'), where('username', '==', value))
-    );
-    if (!querySnapshot.empty) {
-      newErrors.push('Username is already in use');
+    if (value && !validateNotOnlyNumbers(value)) {
+      newErrors.push('Username cannot contain only numbers');
     }
-    setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
+    clearTimeout(timeout);
+    timeout = setTimeout(async () => {
+      if (value) {
+        const querySnapshot = await getDocs(
+          query(collection(db, 'profile'), where('username', '==', value))
+        );
+        if (!querySnapshot.empty) {
+          newErrors.push('Username is already in use');
+        }
+      }
+      setErrors((prevErrors) => ({ ...prevErrors, username: newErrors }));
+    }, TIMEOUT_VALUE);
+
     const decapizalizedString = convertToLowercase(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -160,10 +174,21 @@ export default function ProfileInfoForm({
   }
 
   function handleAgeChange(value) {
+    const age = parseInt(value, 10);
     if (!validateNumbersOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         age: 'Age can only contain numbers',
+      }));
+    } else if (age < 18) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        age: 'You need to be at least 18 to use Bimbeer',
+      }));
+    } else if (age > 120) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        age: 'Please enter your real age',
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, age: '' }));
@@ -194,21 +219,21 @@ export default function ProfileInfoForm({
 
   function handleAboutChange(event) {
     const { value } = event.target;
-    if (!value.trim()) {
+    if (value && value.trim() === '') {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        description: 'About section cannot be empty or contain only spaces',
+        description: 'About section cannot contain only space characters',
       }));
     } else if (!validateMaxLength(value, 255)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         description: 'About section cannot be longer than 255 characters',
       }));
-    } else if (!validateNotOnlyNumbers(value)) {
+    } else if (value && !validateNotOnlyNumbers(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         description:
-          'About section cannot contain only numbers or only spaces and zeros',
+          'About section cannot contain only numbers or only spaces and numbers',
       }));
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
@@ -307,8 +332,7 @@ export default function ProfileInfoForm({
             <FormControl isRequired id="age" isInvalid={errors.age}>
               <FormLabel>Age</FormLabel>
               <NumberInput
-                min={18}
-                max={120}
+                min={0}
                 value={profile.age}
                 onChange={(event) => handleAgeChange(event)}
                 borderColor="gray"
@@ -374,7 +398,7 @@ export default function ProfileInfoForm({
             <Textarea
               _placeholder={{ color: 'gray' }}
               borderColor="gray"
-              placeholder="Say something description yourself."
+              placeholder="Say something about youself."
               size="sm"
               value={profile.description}
               onChange={(event) => handleAboutChange(event)}
@@ -395,8 +419,8 @@ export default function ProfileInfoForm({
               }
             >
               <HStack spacing="24px">
-                <Radio value="Male">Male</Radio>
-                <Radio value="Female">Female</Radio>
+                <Radio value="Man">Male</Radio>
+                <Radio value="Woman">Female</Radio>
                 <Radio value="Other">Other</Radio>
               </HStack>
             </RadioGroup>
@@ -415,7 +439,7 @@ export default function ProfileInfoForm({
               <HStack spacing="24px">
                 <Radio value="Man">Man</Radio>
                 <Radio value="Woman">Woman</Radio>
-                <Radio value="Both">Both</Radio>
+                <Radio value="All">All</Radio>
               </HStack>
             </RadioGroup>
           </FormControl>

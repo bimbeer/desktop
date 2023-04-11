@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Heading, SimpleGrid, Center } from '@chakra-ui/react';
 import Sidebar from 'renderer/components/Sidebar';
-import MatchedPair from '../components/MatchedPair';
+import MatchedPair from '../components/Pairs/MatchedPair';
 
 function MatchedPairsPage({}) {
   const matchedPairs = [

@@ -92,13 +92,7 @@ export default function ChatBox() {
   }, [senderId]);
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      minH="100vh"
-      marginLeft="100px"
-      marginRight="20px"
-    >
+    <Flex align="center" justify="center" minH="100vh" ml="100px" mr="20px">
       <Box
         p={4}
         w="50vw"

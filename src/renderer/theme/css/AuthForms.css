@@ -92,11 +92,12 @@ form .input_field input:focus ~ label {
 
 .social-media-signin .fb-item:hover {
   background-color: #167bff;
+  transform: scale(1.05);
 }
 
 .social-media-signin .google-item:hover {
   background-color: #bfbfbf;
-  color: white;
+  transform: scale(1.05);
 }
 
 .signin-button {
@@ -107,10 +108,12 @@ form .input_field input:focus ~ label {
   border-radius: 30%;
   display: grid;
   place-items: center;
+  transition: transform 0.15s ease-in-out;
 }
 
 .signin-button:hover {
   border: 3px solid rgb(255, 255, 255);
+  transform: scale(1.05);
 }
 
 .signin-button .icon {
@@ -121,6 +124,7 @@ form .input_field input:focus ~ label {
 
 .signin-button .icon:hover {
   color: rgb(255, 255, 255);
+  transform: scale(1.05);
 }
 
 .other-actions {

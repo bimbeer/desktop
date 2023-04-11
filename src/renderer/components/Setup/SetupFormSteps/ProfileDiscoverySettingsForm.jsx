@@ -94,8 +94,8 @@ export default function ProfileDiscoverySettingsForm({
     }
     setCitiesLoading(true);
     debounceInput(cityInputValue, fetchCities, DEBOUNCE_DELAY);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cityInputValue]);
+
   return (
     <Stack spacing={8} mx="auto" py={12} px={6}>
       <Stack align="center">
@@ -128,6 +128,17 @@ export default function ProfileDiscoverySettingsForm({
               <FormErrorIcon />
               Please select a city from the list
             </FormErrorMessage>
+            {cities.length === 0 && !citiesLoading && cityInputValue && (
+              <List
+                display={!selectedCityState || !isCityEmpty ? 'block' : 'none'}
+              >
+                <ListItem>
+                  <Box bg="gray.700" p="1rem" mt={2} rounded="1rem">
+                    No cities were found
+                  </Box>
+                </ListItem>
+              </List>
+            )}
 
             <Flex
               justify="center"
@@ -136,6 +147,7 @@ export default function ProfileDiscoverySettingsForm({
             >
               <Spinner size="md" mt={4} color="yellow.500" />
             </Flex>
+
             <List
               display={cities.length > 0 && !citiesLoading ? 'block' : 'none'}
             >
@@ -149,7 +161,8 @@ export default function ProfileDiscoverySettingsForm({
                     bg="gray.700"
                     transition="all 0.15s ease-in"
                     p="1rem"
-                    mb="0.5rem"
+                    mt={-8}
+                    mb={10}
                     rounded="1rem"
                     cursor="pointer"
                     onClick={() => handleCitySelect(city.id)}
@@ -161,7 +174,9 @@ export default function ProfileDiscoverySettingsForm({
             </List>
           </FormControl>
           <FormControl isRequired>
-            <FormLabel mb={8}>Range settings</FormLabel>
+            <FormLabel mt={-8} mb={8}>
+              Range settings
+            </FormLabel>
             <Slider
               defaultValue={profile.range}
               aria-label="slider-ex-6"
