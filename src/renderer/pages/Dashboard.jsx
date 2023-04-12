@@ -11,13 +11,18 @@ import {
 } from '@chakra-ui/react';
 
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
-import { addPairs, checkForMatch } from 'renderer/services/interactions';
-import BimbeerCard from '../components/Dashboard/BimbeerCard';
-import Sidebar from '../components/Sidebar';
+import {
+  addPairs,
+  checkForMatch,
+  getInteractedUsers,
+} from 'renderer/services/interactions';
 import {
   getUserData,
-  getUsersWithMatchingBeersAndInterests,
+  getUsersWithMatchingBeers,
+  getUsersWithMatchingInterests,
 } from '../services/profiles';
+import BimbeerCard from '../components/Dashboard/BimbeerCard';
+import Sidebar from '../components/Sidebar';
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
@@ -33,10 +38,21 @@ export default function Dashboard() {
       const data = await getUserData(currentUserId);
 
       if (data) {
-        const matchedUsers = await getUsersWithMatchingBeersAndInterests(
+        let matchedUsers = await getUsersWithMatchingBeers(currentUserId, data);
+        matchedUsers = getUsersWithMatchingInterests(
           currentUserId,
-          data
+          data,
+          matchedUsers
         );
+
+        // Get users that should not be displayed
+        const usersToExclude = await getInteractedUsers(currentUserId);
+
+        // Filter out users that should not be displayed
+        matchedUsers = matchedUsers.filter(
+          (user) => !usersToExclude.includes(user.id)
+        );
+
         setUsers(matchedUsers);
         setIsCardLoading(false);
       }
