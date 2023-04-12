@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+
 import ChatBox from 'renderer/components/Messages/ChatBox';
 import Sidebar from 'renderer/components/Sidebar';
 

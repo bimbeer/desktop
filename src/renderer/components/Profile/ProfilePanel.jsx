@@ -17,15 +17,16 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from '@chakra-ui/react';
-import {
-  UserAuth,
-  getUserFromLocalStorage,
-} from 'renderer/context/AuthContext';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaPenFancy } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
+
 import { getUserData } from 'renderer/services/profiles';
+import {
+  UserAuth,
+  getUserFromLocalStorage,
+} from 'renderer/context/AuthContext';
 import Sidebar from 'renderer/components/Sidebar';
 import Card from './ProfileCards/Card';
 import CardBody from './ProfileCards/CardBody';
@@ -49,9 +50,9 @@ export default function ProfilePanel() {
   };
 
   useEffect(() => {
-    const userId = getUserFromLocalStorage();
+    const currentUserId = getUserFromLocalStorage();
     async function fetchData() {
-      const userData = await getUserData(userId);
+      const userData = await getUserData(currentUserId);
       if (userData) {
         setProfileData(userData);
       }

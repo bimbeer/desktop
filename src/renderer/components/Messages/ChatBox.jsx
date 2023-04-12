@@ -23,6 +23,7 @@ import {
   InputRightElement,
 } from '@chakra-ui/react';
 import { AiOutlineSend, AiFillCheckCircle } from 'react-icons/ai';
+
 import { db, auth } from 'renderer/firebase/firebase';
 
 export default function ChatBox() {

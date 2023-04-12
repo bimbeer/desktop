@@ -1,3 +1,5 @@
+import React from 'react';
+
 import background from '../assets/images/background.jpg';
 import '../theme/css/Start.css';
 

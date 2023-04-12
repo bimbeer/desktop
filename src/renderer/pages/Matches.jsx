@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Center, Box, Heading, SimpleGrid, Spinner } from '@chakra-ui/react';
+
 import { getMatches, unpairUsers } from 'renderer/services/interactions';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import MatchedUsers from 'renderer/components/Matches/MatchedUsers';

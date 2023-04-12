@@ -6,6 +6,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
+
 import { db } from '../firebase/firebase';
 
 const profileCollection = collection(db, 'profile');

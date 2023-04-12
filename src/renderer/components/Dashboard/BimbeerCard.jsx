@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { CiBeerMugFull } from 'react-icons/ci';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
+
 import PictureCount from './PictureCount';
 
 export default function BimbeerCard({ user, handleLike, handleDislike }) {

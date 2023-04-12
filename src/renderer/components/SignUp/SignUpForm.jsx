@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
+
+import 'renderer/theme/css/AuthForms.css';
 import logo from 'renderer/assets/images/logo.png';
+import { UserAuth } from '../../context/AuthContext';
 import {
   passwordsMatch,
   isStrongPassword,
   isValidEmail,
 } from '../../helpers/validators';
-import { UserAuth } from '../../context/AuthContext';
-import 'renderer/theme/css/AuthForms.css';
 
 export default function SignUpForm() {
   const [email, setEmail] = useState('');

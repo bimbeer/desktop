@@ -6,6 +6,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
+
 import { getUserData } from './profiles';
 import { db } from '../firebase/firebase';
 

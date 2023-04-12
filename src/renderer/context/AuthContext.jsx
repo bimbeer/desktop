@@ -10,6 +10,7 @@ import {
 } from 'firebase/auth';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+
 import { auth, db } from '../firebase/firebase';
 
 const AuthContext = createContext();

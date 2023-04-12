@@ -18,12 +18,12 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
-import { doc, getDoc } from 'firebase/firestore';
+
+import { getUserData } from 'renderer/services/profiles';
 import {
   getUserFromLocalStorage,
   UserAuth,
 } from 'renderer/context/AuthContext';
-import { db } from '../firebase/firebase';
 import beer from '../assets/images/beer.png';
 
 const darkTheme = createTheme({
@@ -99,13 +99,11 @@ export default function Sidebar() {
   };
 
   useEffect(() => {
-    const userId = getUserFromLocalStorage();
-    const docRef = doc(db, 'profile', userId);
-
+    const currentUserId = getUserFromLocalStorage();
     async function fetchData() {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setProfileData(docSnap.data());
+      const userData = await getUserData(currentUserId);
+      if (userData) {
+        setProfileData(userData);
       }
     }
     fetchData();
@@ -200,7 +198,7 @@ export default function Sidebar() {
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
             <Link to="/profile">
               <Avatar
-                alt={user.email}
+                alt="User avatar"
                 sx={{ width: 40, height: 40 }}
                 style={{ backgroundColor: '#d4af37' }}
                 src={profileData.avatar}

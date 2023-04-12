@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import BimbeerCard from 'renderer/components/Dashboard/BimbeerCard.jsx';
-import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import {
   Center,
   Spinner,
@@ -11,12 +9,15 @@ import {
   Box,
   Heading,
 } from '@chakra-ui/react';
+
+import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { addPairs, checkForMatch } from 'renderer/services/interactions';
+import BimbeerCard from '../components/Dashboard/BimbeerCard';
+import Sidebar from '../components/Sidebar';
 import {
   getUserData,
   getUsersWithMatchingBeersAndInterests,
 } from '../services/profiles';
-import Sidebar from '../components/Sidebar';
 
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
