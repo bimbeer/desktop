@@ -136,8 +136,9 @@ export default function Sidebar() {
                   primaryTypographyProps={{
                     sx: {
                       fontSize: '2rem',
+                      fontFamily: 'Pacifico',
                       paddingLeft: '15px',
-                      paddingTop: '7px',
+                      paddingTop: '0px',
                     },
                   }}
                 />
@@ -148,7 +149,7 @@ export default function Sidebar() {
           <List>
             {[
               { text: 'Dashboard', to: '/dashboard' },
-              { text: 'Pairs', to: '/pairs' },
+              { text: 'Matches', to: '/matches' },
               { text: 'Messages', to: '/messages' },
               { text: 'Profile', to: '/profile' },
               { text: 'Logout', to: undefined },
@@ -183,7 +184,7 @@ export default function Sidebar() {
                     }}
                   >
                     {item.text === 'Dashboard' && <DashboardOutlinedIcon />}
-                    {item.text === 'Pairs' && <Diversity1Icon />}
+                    {item.text === 'Matches' && <Diversity1Icon />}
                     {item.text === 'Messages' && (
                       <ChatBubbleOutlineOutlinedIcon />
                     )}
