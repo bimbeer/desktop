@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { Flex, Box, Stack, Text, IconButton, Collapse } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaHeart,
-  FaTimes,
-} from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { CiBeerMugFull } from 'react-icons/ci';
 import { BsInfoCircleFill } from 'react-icons/bs';
+import { RxCross2 } from 'react-icons/rx';
 import PictureCount from './PictureCount';
 
-export default function BimbeerCard({ user, onUserAction }) {
+export default function BimbeerCard({ user, handleLike, handleDislike }) {
   const [showDescription, setShowDescription] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [currentBeerIndex, setCurrentBeerIndex] = useState(0);
@@ -60,7 +57,6 @@ export default function BimbeerCard({ user, onUserAction }) {
           current={currentBeerIndex}
           position="absolute"
           top={4}
-          left={0}
           w="100%"
         />
         <Flex
@@ -149,8 +145,8 @@ export default function BimbeerCard({ user, onUserAction }) {
         <Flex justify="center" mt={4} gap={50}>
           <IconButton
             aria-label="Decline"
-            icon={<FaTimes />}
-            onClick={onUserAction}
+            icon={<RxCross2 />}
+            onClick={handleDislike}
             fontSize="30px"
             boxSize="60px"
             bg="transparent"
@@ -165,9 +161,9 @@ export default function BimbeerCard({ user, onUserAction }) {
           />
           <IconButton
             aria-label="Heart"
-            icon={<FaHeart />}
-            onClick={onUserAction}
-            fontSize="30px"
+            icon={<CiBeerMugFull />}
+            onClick={handleLike}
+            fontSize="35px"
             boxSize="60px"
             bg="transparent"
             _hover={{
@@ -193,11 +189,13 @@ BimbeerCard.propTypes = {
       })
     ).isRequired,
     firstName: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     age: PropTypes.number.isRequired,
     location: PropTypes.shape({
       label: PropTypes.string.isRequired,
     }).isRequired,
     description: PropTypes.string.isRequired,
   }).isRequired,
-  onUserAction: PropTypes.func.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleDislike: PropTypes.func.isRequired,
 };

@@ -2,102 +2,93 @@
 import React, { useEffect, useState } from 'react';
 import BimbeerCard from 'renderer/components/Dashboard/BimbeerCard.jsx';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
-import { Center, Spinner, Text, Flex, Card } from '@chakra-ui/react';
 import {
-  collection,
-  query,
-  where,
-  getDocs,
-  doc,
-  getDoc,
-} from 'firebase/firestore';
+  Center,
+  Spinner,
+  Text,
+  Flex,
+  Card,
+  useToast,
+  Box,
+  Heading,
+} from '@chakra-ui/react';
+import { addPairs, checkForMatch } from 'renderer/services/interactions';
+import {
+  getUserData,
+  getUsersWithMatchingBeersAndInterests,
+} from '../services/profiles';
 import Sidebar from '../components/Sidebar';
-import { db } from '../firebase/firebase';
 
 export default function Dashboard() {
-  const [profileData, setProfileData] = useState();
   const [users, setUsers] = useState([]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [isCardLoading, setIsCardLoading] = useState(true);
+  const [noMoreSuggestions, setNoMoreSuggestions] = useState(false);
+  const currentUserId = getUserFromLocalStorage();
+  const toast = useToast();
 
   useEffect(() => {
-    const userId = getUserFromLocalStorage();
-    const docRef = doc(db, 'profile', userId);
-
     async function fetchData() {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setProfileData(docSnap.data());
+      setIsCardLoading(true);
+      const data = await getUserData(currentUserId);
+
+      if (data) {
+        const matchedUsers = await getUsersWithMatchingBeersAndInterests(
+          currentUserId,
+          data
+        );
+        setUsers(matchedUsers);
+        setIsCardLoading(false);
       }
     }
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function getUsersWithMatchingBeersAndInterests() {
-      setIsCardLoading(true);
-      const userId = getUserFromLocalStorage();
-      let matchedUsers = [];
-
-      const genders = ['Man', 'Woman', 'Other'];
-      const interests = [profileData.gender, 'All'];
-
-      async function getMatchedUsers(gender, interest) {
-        const beerChunks = [];
-        for (let i = 0; i < profileData.beers.length; i += 10) {
-          beerChunks.push(profileData.beers.slice(i, i + 10));
-        }
-
-        const promises = beerChunks.map(async (beers) => {
-          let q;
-          if (profileData.interest === 'All') {
-            q = query(
-              collection(db, 'profile'),
-              where('beers', 'array-contains-any', beers),
-              where('gender', '==', gender),
-              where('__name__', '!=', userId),
-              where('interest', '==', interest)
-            );
-          } else {
-            q = query(
-              collection(db, 'profile'),
-              where('beers', 'array-contains-any', beers),
-              where('interest', '==', profileData.gender),
-              where('gender', '==', profileData.interest),
-              where('__name__', '!=', userId)
-            );
-          }
-          const querySnapshot = await getDocs(q);
-          querySnapshot.forEach((document) => {
-            matchedUsers.push(document.data());
-          });
-        });
-
-        await Promise.all(promises);
-      }
-
-      const promises = [];
-      for (const gender of genders) {
-        for (const interest of interests) {
-          promises.push(getMatchedUsers(gender, interest));
-        }
-      }
-      await Promise.all(promises);
-
-      matchedUsers = [...new Set(matchedUsers)];
-      setUsers(matchedUsers);
-      setIsCardLoading(false);
-    }
-
-    if (profileData) {
-      getUsersWithMatchingBeersAndInterests();
-    }
-  }, [profileData]);
+  }, [currentUserId]);
 
   const handleUserAction = () => {
     if (currentUserIndex < users.length - 1) {
       setCurrentUserIndex((prevIndex) => prevIndex + 1);
+    } else {
+      setNoMoreSuggestions(true);
     }
+  };
+
+  const handleLike = async () => {
+    addPairs(currentUserId, users[currentUserIndex].id, 'like');
+
+    const isMatch = await checkForMatch(
+      currentUserId,
+      users[currentUserIndex].id
+    );
+    if (isMatch) {
+      toast({
+        duration: 3000,
+        position: 'top-right',
+        isClosable: true,
+        render: () => (
+          <Box
+            color="white"
+            py={3}
+            p={3}
+            mt={2}
+            bg="gray.700"
+            borderLeft="4px"
+            borderColor="yellow.500"
+          >
+            <Heading as="h4" size="sm" mb={1}>
+              Match!
+            </Heading>
+            You have matched with {users[currentUserIndex].firstName}!
+          </Box>
+        ),
+      });
+    }
+
+    handleUserAction();
+  };
+
+  const handleDislike = () => {
+    addPairs(currentUserId, users[currentUserIndex].id, 'dislike');
+    handleUserAction();
   };
 
   const renderContent = () => {
@@ -114,12 +105,27 @@ export default function Dashboard() {
         </Center>
       );
     }
+    if (noMoreSuggestions) {
+      return (
+        <Flex minH="100vh" align="center" justify="center" ml="100px" mr="20px">
+          <Card p={10} bg="whiteAlpha.100" maxW={550}>
+            <Center>
+              <Text color="white">
+                You have swiped through all possible suggestions, consider
+                enabling global search or wait for new people!
+              </Text>
+            </Center>
+          </Card>
+        </Flex>
+      );
+    }
     if (users.length > 0) {
       return (
         <BimbeerCard
           key={users[currentUserIndex].username}
           user={users[currentUserIndex]}
-          onUserAction={handleUserAction}
+          handleLike={handleLike}
+          handleDislike={handleDislike}
         />
       );
     }

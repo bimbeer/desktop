@@ -10,7 +10,7 @@ import Start from './pages/Start';
 import SignUp from './pages/SignUp';
 import Setup from './pages/Setup';
 import Dashboard from './pages/Dashboard';
-import Pairs from './pages/Pairs';
+import Matches from './pages/Matches';
 import Messages from './pages/Messages';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
@@ -55,10 +55,10 @@ export default function App() {
                 }
               />
               <Route
-                path="/pairs"
+                path="/matches"
                 element={
                   <ProtectedRoute>
-                    <Pairs />
+                    <Matches />
                   </ProtectedRoute>
                 }
               />
