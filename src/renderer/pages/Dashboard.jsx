@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from 'react';
 import BimbeerCard from 'renderer/components/Dashboard/BimbeerCard.jsx';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
