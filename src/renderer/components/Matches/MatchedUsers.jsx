@@ -7,6 +7,7 @@ export default function MatchedUsers({ pairData, handleUnpair }) {
   return (
     <Flex
       w="60vw"
+      maxW="85vh"
       borderWidth="2px"
       borderColor="yellow.500"
       borderRadius="lg"
