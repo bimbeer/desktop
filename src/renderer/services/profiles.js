@@ -20,60 +20,46 @@ export async function getUserData(userId) {
   return undefined;
 }
 
-export async function getUsersWithMatchingBeersAndInterests(
-  currentUserId,
-  profileData
-) {
-  let matchedUsers = [];
+export async function getUsersWithMatchingBeers(currentUserId, profileData) {
+  const matchedUsers = [];
 
-  const genders = ['Man', 'Woman', 'Other'];
-  const interests = [profileData.gender, 'All'];
+  const beerChunks = [];
+  for (let i = 0; i < profileData.beers.length; i += 10) {
+    beerChunks.push(profileData.beers.slice(i, i + 10));
+  }
 
-  async function getMatchedUsers(gender, interest) {
-    const beerChunks = [];
-    for (let i = 0; i < profileData.beers.length; i += 10) {
-      beerChunks.push(profileData.beers.slice(i, i + 10));
-    }
+  const promises = beerChunks.map(async (beers) => {
+    const q = query(
+      profileCollection,
+      where('beers', 'array-contains-any', beers),
+      where('__name__', '!=', currentUserId)
+    );
 
-    const promises = beerChunks.map(async (beers) => {
-      let q;
-      if (profileData.interest === 'All') {
-        q = query(
-          profileCollection,
-          where('beers', 'array-contains-any', beers),
-          where('gender', '==', gender),
-          where('__name__', '!=', currentUserId),
-          where('interest', '==', interest)
-        );
-      } else {
-        q = query(
-          profileCollection,
-          where('beers', 'array-contains-any', beers),
-          where('interest', '==', profileData.gender),
-          where('gender', '==', profileData.interest),
-          where('__name__', '!=', currentUserId)
-        );
-      }
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((document) => {
-        const data = document.data();
-        data.id = document.id;
-        matchedUsers.push(data);
-      });
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((document) => {
+      const data = document.data();
+      data.id = document.id;
+      matchedUsers.push(data);
     });
+  });
 
-    await Promise.all(promises);
-  }
-
-  const promises = [];
-  for (const gender of genders) {
-    for (const interest of interests) {
-      promises.push(getMatchedUsers(gender, interest));
-    }
-  }
   await Promise.all(promises);
 
-  matchedUsers = [...new Set(matchedUsers)];
   return matchedUsers;
+}
+
+export function getUsersWithMatchingInterests(
+  currentUserId,
+  profileData,
+  users
+) {
+  return users.filter((user) => {
+    if (profileData.interest === 'All') {
+      return user.interest === profileData.gender || user.interest === 'All';
+    }
+    return (
+      user.gender === profileData.interest &&
+      (user.interest === profileData.gender || user.interest === 'All')
+    );
+  });
 }
