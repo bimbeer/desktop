@@ -104,3 +104,14 @@ export async function getMatches(currentUserId) {
   const matches = results.filter((result) => result !== null);
   return matches;
 }
+
+export async function getInteractedUsers(currentUserId) {
+  const q = query(
+    interactionsCollection,
+    where('sender', '==', currentUserId),
+    where('reactionType', 'in', ['dislike', 'like'])
+  );
+  const querySnapshot = await getDocs(q);
+  const users = querySnapshot.docs.map((doc) => doc.data().recipent);
+  return users;
+}
