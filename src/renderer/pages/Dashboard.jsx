@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Center,
   Spinner,
@@ -45,10 +45,8 @@ export default function Dashboard() {
           matchedUsers
         );
 
-        // Get users that should not be displayed
         const usersToExclude = await getInteractedUsers(currentUserId);
 
-        // Filter out users that should not be displayed
         matchedUsers = matchedUsers.filter(
           (user) => !usersToExclude.includes(user.id)
         );
@@ -68,7 +66,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleLike = async () => {
+  const handleLike = useCallback(async () => {
     addPairs(currentUserId, users[currentUserIndex].id, 'like');
 
     const isMatch = await checkForMatch(
@@ -100,12 +98,28 @@ export default function Dashboard() {
     }
 
     handleUserAction();
-  };
+  });
 
-  const handleDislike = () => {
+  const handleDislike = useCallback(() => {
     addPairs(currentUserId, users[currentUserIndex].id, 'dislike');
     handleUserAction();
-  };
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowRight') {
+        handleLike();
+      } else if (event.key === 'ArrowLeft') {
+        handleDislike();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleDislike, handleLike]);
 
   const renderContent = () => {
     if (isCardLoading) {
