@@ -1,32 +1,30 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import {
-  query,
-  collection,
-  orderBy,
-  onSnapshot,
-  limit,
-  addDoc,
-  serverTimestamp,
-  doc,
-  getDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { sendMessage, handleReadMessage } from 'renderer/services/messages';
 import {
   Box,
   Flex,
   Text,
   Input,
   IconButton,
-  Image,
+  Avatar,
   FormControl,
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react';
+import {
+  query,
+  collection,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
+} from 'firebase/firestore';
 import { AiOutlineSend, AiFillCheckCircle } from 'react-icons/ai';
+import PropTypes from 'prop-types';
 
 import { db, auth } from 'renderer/firebase/firebase';
 
-export default function ChatBox() {
+export default function ChatBox({ pairId }) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = React.useState('');
   const [recipientAvatar, setRecipientAvatar] = useState(null);
@@ -34,25 +32,8 @@ export default function ChatBox() {
   const senderId = auth.currentUser.uid;
 
   const handleSendMessage = async () => {
-    const profileDocRef = doc(db, 'profile', senderId);
-    const profileDocSnap = await getDoc(profileDocRef);
-    const profileData = profileDocSnap.data();
-    const { avatar } = profileData;
-    await addDoc(collection(db, 'messages'), {
-      text: message,
-      avatar,
-      createdAt: serverTimestamp(),
-      uid: senderId,
-      status: 'sent',
-    });
+    await sendMessage(senderId, message, pairId);
     setMessage('');
-  };
-
-  const handleReadMessage = async (messageId) => {
-    const messageRef = doc(db, 'messages', messageId);
-    await updateDoc(messageRef, {
-      status: 'read',
-    });
   };
 
   useLayoutEffect(() => {
@@ -73,6 +54,7 @@ export default function ChatBox() {
   useEffect(() => {
     const q = query(
       collection(db, 'messages'),
+      where('pairId', '==', pairId),
       orderBy('createdAt'),
       limit(50)
     );
@@ -90,7 +72,7 @@ export default function ChatBox() {
     });
 
     return () => unsubscribe();
-  }, [senderId]);
+  }, [pairId, senderId]);
 
   return (
     <Flex align="center" justify="center" minH="100vh" ml="100px" mr="20px">
@@ -118,10 +100,11 @@ export default function ChatBox() {
                 alignSelf={chat.uid === senderId ? 'flex-end' : 'flex-start'}
               >
                 {chat.uid !== senderId && (
-                  <Image
+                  <Avatar
                     maxH={10}
                     maxW={10}
                     rounded="2rem"
+                    style={{ backgroundColor: '#d4af37' }}
                     src={chat.avatar}
                     mr={2}
                   />
@@ -151,10 +134,11 @@ export default function ChatBox() {
                   {chat.uid === senderId &&
                     chat.status === 'read' &&
                     index === messages.length - 1 && (
-                      <Image
+                      <Avatar
                         maxH="14px"
                         maxW="14px"
                         rounded="full"
+                        style={{ backgroundColor: '#d4af37' }}
                         src={recipientAvatar}
                         position="absolute"
                         bottom="-16px"
@@ -206,3 +190,7 @@ export default function ChatBox() {
     </Flex>
   );
 }
+
+ChatBox.propTypes = {
+  pairId: PropTypes.string.isRequired,
+};
