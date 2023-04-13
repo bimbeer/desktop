@@ -5,11 +5,12 @@ import { BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { getRedirectResult } from 'firebase/auth';
+
 import logo from 'renderer/assets/images/logo.png';
+import 'renderer/theme/css/AuthForms.css';
 import { UserAuth } from '../../context/AuthContext';
 import { auth } from '../../firebase/firebase';
 import LoadingScreen from './LoadingScreen';
-import 'renderer/theme/css/AuthForms.css';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');

@@ -5,6 +5,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { CiBeerMugFull } from 'react-icons/ci';
 import { BsInfoCircleFill } from 'react-icons/bs';
 import { RxCross2 } from 'react-icons/rx';
+
 import PictureCount from './PictureCount';
 
 export default function BimbeerCard({ user, handleLike, handleDislike }) {
@@ -144,7 +145,7 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
         </Flex>
         <Flex justify="center" mt={4} gap={50}>
           <IconButton
-            aria-label="Decline"
+            aria-label="Dislike"
             icon={<RxCross2 />}
             onClick={handleDislike}
             fontSize="30px"
@@ -160,7 +161,7 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
             rounded="2rem"
           />
           <IconButton
-            aria-label="Heart"
+            aria-label="Like"
             icon={<CiBeerMugFull />}
             onClick={handleLike}
             fontSize="35px"

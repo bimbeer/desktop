@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Center, Box, Heading, SimpleGrid, Spinner } from '@chakra-ui/react';
+
 import { getMatches, unpairUsers } from 'renderer/services/interactions';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import MatchedUsers from 'renderer/components/Matches/MatchedUsers';
@@ -19,13 +20,13 @@ export default function Matches() {
     fetchMatches();
   }, [currentUserId]);
 
-  async function handleUnpair(senderId, recipentId) {
-    await unpairUsers(currentUserId, recipentId);
+  async function handleUnpair(senderId, recipientId) {
+    await unpairUsers(currentUserId, recipientId);
 
     setMatches((prevMatches) =>
       prevMatches.filter(
         (match) =>
-          match.recipent !== currentUserId && match.recipent !== recipentId
+          match.recipient !== currentUserId && match.recipient !== recipientId
       )
     );
   }
@@ -54,10 +55,11 @@ export default function Matches() {
             <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={10}>
               {matches.map((match) => (
                 <MatchedUsers
-                  key={match.recipent}
+                  key={match.recipient}
                   pairData={match.userData}
+                  pairId={match.pairId}
                   handleUnpair={() =>
-                    handleUnpair(currentUserId, match.recipent)
+                    handleUnpair(currentUserId, match.recipient)
                   }
                 />
               ))}

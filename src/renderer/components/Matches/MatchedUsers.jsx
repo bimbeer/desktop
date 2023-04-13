@@ -2,11 +2,14 @@ import React from 'react';
 import { Flex, Image, Box, Text, IconButton } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { RxCross2 } from 'react-icons/rx';
+import { Link } from 'react-router-dom';
+import { BsFillChatDotsFill } from 'react-icons/bs';
 
-export default function MatchedUsers({ pairData, handleUnpair }) {
+export default function MatchedUsers({ pairData, pairId, handleUnpair }) {
   return (
     <Flex
       w="60vw"
+      maxW="85vh"
       borderWidth="2px"
       borderColor="yellow.500"
       borderRadius="lg"
@@ -22,6 +25,24 @@ export default function MatchedUsers({ pairData, handleUnpair }) {
         <Text>@{pairData.username}</Text>
       </Box>
       <Flex alignItems="center">
+        <Link to={`/messages/${pairId}`}>
+          <IconButton
+            mr={4}
+            aria-label="Message"
+            icon={<BsFillChatDotsFill />}
+            fontSize="20px"
+            boxSize="40px"
+            bg="transparent"
+            _hover={{
+              bg: 'grey',
+              transform: 'scale(1.2)',
+            }}
+            color="white"
+            borderWidth={2}
+            borderColor="grey"
+            rounded="2rem"
+          />
+        </Link>
         <IconButton
           mr={4}
           aria-label="Unpair"
@@ -52,4 +73,5 @@ MatchedUsers.propTypes = {
     username: PropTypes.string.isRequired,
   }).isRequired,
   handleUnpair: PropTypes.func.isRequired,
+  pairId: PropTypes.string.isRequired,
 };

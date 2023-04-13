@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db } from '../../firebase/firebase';
 
+import { db } from '../../firebase/firebase';
 import ProfileInfoForm from './SetupFormSteps/ProfileInfoForm';
 import ProfileDiscoverySettingsForm from './SetupFormSteps/ProfileDiscoverySettingsForm';
 import ProfileFavBeerForm from './SetupFormSteps/ProfileFavBeerForm';

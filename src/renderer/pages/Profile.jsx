@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+
 import ProfilePanel from 'renderer/components/Profile/ProfilePanel';
 import Sidebar from 'renderer/components/Sidebar';
 

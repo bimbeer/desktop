@@ -17,20 +17,20 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from '@chakra-ui/react';
-import {
-  UserAuth,
-  getUserFromLocalStorage,
-} from 'renderer/context/AuthContext';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaPenFancy } from 'react-icons/fa';
 import { RiLogoutBoxRLine } from 'react-icons/ri';
+
+import { getUserData } from 'renderer/services/profiles';
+import {
+  UserAuth,
+  getUserFromLocalStorage,
+} from 'renderer/context/AuthContext';
 import Sidebar from 'renderer/components/Sidebar';
-import { doc, getDoc } from 'firebase/firestore';
 import Card from './ProfileCards/Card';
 import CardBody from './ProfileCards/CardBody';
 import CardHeader from './ProfileCards/CardHeader';
-import { db } from '../../firebase/firebase';
 
 export default function ProfilePanel() {
   const { colorMode } = useColorMode();
@@ -50,13 +50,11 @@ export default function ProfilePanel() {
   };
 
   useEffect(() => {
-    const userId = getUserFromLocalStorage();
-    const docRef = doc(db, 'profile', userId);
-
+    const currentUserId = getUserFromLocalStorage();
     async function fetchData() {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setProfileData(docSnap.data());
+      const userData = await getUserData(currentUserId);
+      if (userData) {
+        setProfileData(userData);
       }
     }
     fetchData();

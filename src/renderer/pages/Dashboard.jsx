@@ -1,7 +1,4 @@
-/* eslint-disable no-restricted-syntax */
-import React, { useEffect, useState } from 'react';
-import BimbeerCard from 'renderer/components/Dashboard/BimbeerCard.jsx';
-import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Center,
   Spinner,
@@ -12,11 +9,19 @@ import {
   Box,
   Heading,
 } from '@chakra-ui/react';
-import { addPairs, checkForMatch } from 'renderer/services/interactions';
+
+import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
+import {
+  addPairs,
+  checkForMatch,
+  getInteractedUsers,
+} from 'renderer/services/interactions';
 import {
   getUserData,
-  getUsersWithMatchingBeersAndInterests,
+  getUsersWithMatchingBeers,
+  getUsersWithMatchingInterests,
 } from '../services/profiles';
+import BimbeerCard from '../components/Dashboard/BimbeerCard';
 import Sidebar from '../components/Sidebar';
 
 export default function Dashboard() {
@@ -33,10 +38,19 @@ export default function Dashboard() {
       const data = await getUserData(currentUserId);
 
       if (data) {
-        const matchedUsers = await getUsersWithMatchingBeersAndInterests(
+        let matchedUsers = await getUsersWithMatchingBeers(currentUserId, data);
+        matchedUsers = getUsersWithMatchingInterests(
           currentUserId,
-          data
+          data,
+          matchedUsers
         );
+
+        const usersToExclude = await getInteractedUsers(currentUserId);
+
+        matchedUsers = matchedUsers.filter(
+          (user) => !usersToExclude.includes(user.id)
+        );
+
         setUsers(matchedUsers);
         setIsCardLoading(false);
       }
@@ -52,7 +66,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleLike = async () => {
+  const handleLike = useCallback(async () => {
     addPairs(currentUserId, users[currentUserIndex].id, 'like');
 
     const isMatch = await checkForMatch(
@@ -84,12 +98,28 @@ export default function Dashboard() {
     }
 
     handleUserAction();
-  };
+  });
 
-  const handleDislike = () => {
+  const handleDislike = useCallback(() => {
     addPairs(currentUserId, users[currentUserIndex].id, 'dislike');
     handleUserAction();
-  };
+  });
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'ArrowRight') {
+        handleLike();
+      } else if (event.key === 'ArrowLeft') {
+        handleDislike();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleDislike, handleLike]);
 
   const renderContent = () => {
     if (isCardLoading) {

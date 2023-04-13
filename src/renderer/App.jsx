@@ -1,10 +1,11 @@
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+
 import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
-import './theme/css/App.css';
 import theme from './theme/theme';
+import './theme/css/App.css';
 
 import Start from './pages/Start';
 import SignUp from './pages/SignUp';
@@ -63,7 +64,7 @@ export default function App() {
                 }
               />
               <Route
-                path="/messages"
+                path="/messages/:pairId"
                 element={
                   <ProtectedRoute>
                     <Messages />

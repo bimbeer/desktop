@@ -1,6 +1,9 @@
+import React from 'react';
+
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { RiHome2Line } from 'react-icons/ri';
+
 import '../theme/css/NotFound.css';
 
 export default function NotFound() {
