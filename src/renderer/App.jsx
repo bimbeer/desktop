@@ -64,7 +64,7 @@ export default function App() {
                 }
               />
               <Route
-                path="/messages"
+                path="/messages/:pairId"
                 element={
                   <ProtectedRoute>
                     <Messages />
