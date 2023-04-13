@@ -58,52 +58,54 @@ export default function Dashboard() {
     fetchData();
   }, [currentUserId]);
 
-  const handleUserAction = () => {
+  const handleUserAction = useCallback(() => {
     if (currentUserIndex < users.length - 1) {
       setCurrentUserIndex((prevIndex) => prevIndex + 1);
     } else {
       setNoMoreSuggestions(true);
     }
-  };
+  }, [currentUserIndex, users.length]);
 
   const handleLike = useCallback(async () => {
-    addPairs(currentUserId, users[currentUserIndex].id, 'like');
-
-    const isMatch = await checkForMatch(
-      currentUserId,
-      users[currentUserIndex].id
-    );
-    if (isMatch) {
-      toast({
-        duration: 3000,
-        position: 'top-right',
-        isClosable: true,
-        render: () => (
-          <Box
-            color="white"
-            py={3}
-            p={3}
-            mt={2}
-            bg="gray.700"
-            borderLeft="4px"
-            borderColor="yellow.500"
-          >
-            <Heading as="h4" size="sm" mb={1}>
-              Match!
-            </Heading>
-            You have matched with {users[currentUserIndex].firstName}!
-          </Box>
-        ),
-      });
+    if (users[currentUserIndex]) {
+      addPairs(currentUserId, users[currentUserIndex].id, 'like');
+      const isMatch = await checkForMatch(
+        currentUserId,
+        users[currentUserIndex].id
+      );
+      if (isMatch) {
+        toast({
+          duration: 3000,
+          position: 'top-right',
+          isClosable: true,
+          render: () => (
+            <Box
+              color="white"
+              py={3}
+              p={3}
+              mt={2}
+              bg="gray.700"
+              borderLeft="4px"
+              borderColor="yellow.500"
+            >
+              <Heading as="h4" size="sm" mb={1}>
+                Match!
+              </Heading>
+              You have matched with {users[currentUserIndex].firstName}!
+            </Box>
+          ),
+        });
+      }
+      handleUserAction();
     }
-
-    handleUserAction();
-  });
+  }, [users, currentUserIndex, currentUserId, handleUserAction, toast]);
 
   const handleDislike = useCallback(() => {
-    addPairs(currentUserId, users[currentUserIndex].id, 'dislike');
-    handleUserAction();
-  });
+    if (users[currentUserIndex]) {
+      addPairs(currentUserId, users[currentUserIndex].id, 'dislike');
+      handleUserAction();
+    }
+  }, [users, currentUserIndex, currentUserId, handleUserAction]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
