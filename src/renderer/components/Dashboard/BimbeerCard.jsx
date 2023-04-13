@@ -145,7 +145,7 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
         </Flex>
         <Flex justify="center" mt={4} gap={50}>
           <IconButton
-            aria-label="Decline"
+            aria-label="Dislike"
             icon={<RxCross2 />}
             onClick={handleDislike}
             fontSize="30px"
@@ -161,7 +161,7 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
             rounded="2rem"
           />
           <IconButton
-            aria-label="Heart"
+            aria-label="Like"
             icon={<CiBeerMugFull />}
             onClick={handleLike}
             fontSize="35px"
