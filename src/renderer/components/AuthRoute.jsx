@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { UserAuth } from '../context/AuthContext.jsx';
-import LoadingScreen from './Start/LoadingScreen.jsx';
+import LoadingScreen from './LoadingScreen.jsx';
 
 export default function AuthRoute({ children }) {
   const { user, initializing } = UserAuth();
