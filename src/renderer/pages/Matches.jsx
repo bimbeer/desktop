@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Center, Box, Heading, SimpleGrid, Spinner } from '@chakra-ui/react';
+import { Center, Box, Heading, SimpleGrid, Flex } from '@chakra-ui/react';
 
 import { getMatches, unpairUsers } from 'renderer/services/interactions';
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
+import InfoCard from 'renderer/components/InfoCard';
 import MatchedUsers from 'renderer/components/Matches/MatchedUsers';
+import BimbeerSpinner from 'renderer/components/BimbeerSpinner';
 import Sidebar from '../components/Sidebar';
 
 export default function Matches() {
@@ -31,6 +33,36 @@ export default function Matches() {
     );
   }
 
+  const renderContent = () => {
+    if (areMatchesLoading) {
+      return <BimbeerSpinner />;
+    }
+
+    if (matches.length === 0) {
+      return (
+        <Flex align="center" justify="center">
+          <InfoCard
+            text="It's looks kinda empty here and you don't have any buddies to drink with yet *◠* Move to
+                dashboard and start searching for them filthy beer lovers!"
+          />
+        </Flex>
+      );
+    }
+
+    return (
+      <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={10}>
+        {matches.map((match) => (
+          <MatchedUsers
+            key={match.recipient}
+            pairData={match.userData}
+            pairId={match.pairId}
+            handleUnpair={() => handleUnpair(currentUserId, match.recipient)}
+          />
+        ))}
+      </SimpleGrid>
+    );
+  };
+
   return (
     <>
       <Sidebar />
@@ -41,30 +73,7 @@ export default function Matches() {
               Drinking buddies
             </Heading>
           </Center>
-          {areMatchesLoading ? (
-            <Center h="10vh">
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.700"
-                color="yellow.500"
-                size="xl"
-              />
-            </Center>
-          ) : (
-            <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={10}>
-              {matches.map((match) => (
-                <MatchedUsers
-                  key={match.recipient}
-                  pairData={match.userData}
-                  pairId={match.pairId}
-                  handleUnpair={() =>
-                    handleUnpair(currentUserId, match.recipient)
-                  }
-                />
-              ))}
-            </SimpleGrid>
-          )}
+          {renderContent()}
         </Box>
       </Center>
     </>
