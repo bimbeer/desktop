@@ -21,3 +21,6 @@
   background: #d4af37;
 }
 
+body {
+  overflow: hidden;
+}
