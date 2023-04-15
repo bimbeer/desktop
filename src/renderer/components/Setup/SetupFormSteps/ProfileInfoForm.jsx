@@ -468,7 +468,7 @@ ProfileInfoForm.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     username: PropTypes.string,
-    age: PropTypes.number,
+    age: PropTypes.string,
     description: PropTypes.string,
     gender: PropTypes.string,
     interest: PropTypes.string,
