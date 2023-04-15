@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { Flex, Box, Stack, Text, IconButton, Collapse } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { CiBeerMugFull } from 'react-icons/ci';
 import { BsInfoCircleFill } from 'react-icons/bs';
-import { RxCross2 } from 'react-icons/rx';
 
 import PictureCount from './PictureCount';
 
-export default function BimbeerCard({ user, handleLike, handleDislike }) {
+export default function BimbeerCard({ user, style }) {
   const [showDescription, setShowDescription] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [currentBeerIndex, setCurrentBeerIndex] = useState(0);
@@ -29,7 +27,14 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
   };
 
   return (
-    <Flex align="center" justify="center" minH="100vh" ml="100px" mr="20px">
+    <Flex
+      align="center"
+      justify="center"
+      ml="100px"
+      mr="20px"
+      mt="125px"
+      style={style}
+    >
       <Box
         top={-8}
         maxW="450px"
@@ -89,7 +94,6 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
                   />
                 </Box>
               )}
-
               {currentBeerIndex < user.beers.length - 1 && (
                 <Box
                   position="absolute"
@@ -113,7 +117,6 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
               )}
             </>
           )}
-
           <Box />
           <Stack mb="15px" p="1rem" zIndex={10}>
             <Flex justify="space-between" align="center">
@@ -135,47 +138,12 @@ export default function BimbeerCard({ user, handleLike, handleDislike }) {
                 }}
               />
             </Flex>
-
             <Collapse in={showDescription}>
               <Text fontSize="xs" lineHeight="1.2rem">
                 {user.description}
               </Text>
             </Collapse>
           </Stack>
-        </Flex>
-        <Flex justify="center" mt={4} gap={50}>
-          <IconButton
-            aria-label="Dislike"
-            icon={<RxCross2 />}
-            onClick={handleDislike}
-            fontSize="30px"
-            boxSize="60px"
-            bg="transparent"
-            _hover={{
-              bg: 'red.800',
-              transform: 'scale(1.2)',
-            }}
-            color="red.300"
-            borderColor="red.800"
-            borderWidth={1}
-            rounded="2rem"
-          />
-          <IconButton
-            aria-label="Like"
-            icon={<CiBeerMugFull />}
-            onClick={handleLike}
-            fontSize="35px"
-            boxSize="60px"
-            bg="transparent"
-            _hover={{
-              bg: 'green.800',
-              transform: 'scale(1.2)',
-            }}
-            color="green.300"
-            borderColor="green.800"
-            borderWidth={1}
-            rounded="2rem"
-          />
         </Flex>
       </Box>
     </Flex>
@@ -191,12 +159,23 @@ BimbeerCard.propTypes = {
     ).isRequired,
     firstName: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired,
+    age: PropTypes.string.isRequired,
     location: PropTypes.shape({
       label: PropTypes.string.isRequired,
     }).isRequired,
     description: PropTypes.string.isRequired,
   }).isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleDislike: PropTypes.func.isRequired,
+  style: PropTypes.shape({
+    zIndex: PropTypes.number,
+    position: PropTypes.string,
+    top: PropTypes.number,
+    left: PropTypes.string,
+    marginLeft: PropTypes.number,
+    marginRight: PropTypes.number,
+    maxWidth: PropTypes.number,
+    width: PropTypes.string,
+    transition: PropTypes.string,
+    transform: PropTypes.string,
+    opacity: PropTypes.number,
+  }).isRequired,
 };
