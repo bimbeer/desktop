@@ -2,7 +2,7 @@ import { Center, Spinner } from '@chakra-ui/react';
 
 export default function BimbeerSpinner() {
   return (
-    <Center h="10vh">
+    <Center h="40vh">
       <Spinner
         thickness="4px"
         speed="0.65s"
