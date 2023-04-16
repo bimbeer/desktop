@@ -6,7 +6,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background: #1a1a1a;
+  background: #141517;
 }
 
 ::-webkit-scrollbar {
@@ -21,6 +21,6 @@
   background: #d4af37;
 }
 
-body {
+body.hide-overflow {
   overflow: hidden;
 }

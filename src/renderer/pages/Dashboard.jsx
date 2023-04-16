@@ -1,13 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  Center,
-  Text,
-  Flex,
-  Card,
-  useToast,
-  Box,
-  Heading,
-} from '@chakra-ui/react';
+import { Center, Flex, useToast, Box, Heading } from '@chakra-ui/react';
 
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import {
@@ -17,6 +9,8 @@ import {
 } from 'renderer/services/interactions';
 import BimbeerSpinner from 'renderer/components/BimbeerSpinner';
 import InfoCard from 'renderer/components/InfoCard';
+import happyBeer from 'renderer/assets/images/happyBeer.png';
+import sadBeer from 'renderer/assets/images/sadBeer.png';
 import {
   getUserData,
   getUsersWithMatchingBeers,
@@ -38,6 +32,14 @@ export default function Dashboard() {
   const [cardTransform, setCardTransform] = useState('');
   const currentUserId = getUserFromLocalStorage();
   const toast = useToast();
+
+  useEffect(() => {
+    document.body.classList.add('hide-overflow');
+
+    return () => {
+      document.body.classList.remove('hide-overflow');
+    };
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -178,8 +180,22 @@ export default function Dashboard() {
 
     if (noMoreSuggestions) {
       return (
-        <Flex minH="100vh" align="center" justify="center" ml="100px" mr="20px">
-          <InfoCard text="You have swiped through all possible suggestions, consider enabling global search or wait for new people!" />
+        <Flex
+          w="100vw"
+          h="350px"
+          align="center"
+          justify="center"
+          bg="whiteAlpha.100"
+          mt="275px"
+          pl="100px"
+          pr="35px"
+        >
+          <InfoCard
+            heading="Woah, that was quick!"
+            text="You have swiped through all possible suggestions.
+              We hope to get you more as fast as possible!"
+            beerStatus={happyBeer}
+          />
         </Flex>
       );
     }
@@ -220,15 +236,20 @@ export default function Dashboard() {
     return (
       <Flex
         display={isCardLoading ? 'none' : 'flex'}
-        minH="100vh"
+        w="100vw"
+        h="350px"
         align="center"
         justify="center"
-        ml="100px"
-        mr="20px"
+        bg="whiteAlpha.100"
+        mt="275px"
+        pl="100px"
+        pr="35px"
       >
         <InfoCard
+          heading="No suggestions *◠*"
           text="It seems like we have no suggestions ready for you at the moment,
-              consider enabling global search or wait for new people!"
+            consider enabling global search or wait for new people!"
+          beerStatus={sadBeer}
         />
       </Flex>
     );
