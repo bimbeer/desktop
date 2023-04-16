@@ -6,6 +6,7 @@ import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import InfoCard from 'renderer/components/InfoCard';
 import MatchedUsers from 'renderer/components/Matches/MatchedUsers';
 import BimbeerSpinner from 'renderer/components/BimbeerSpinner';
+import sadBeer from 'renderer/assets/images/sadBeer.png';
 import Sidebar from '../components/Sidebar';
 
 export default function Matches() {
@@ -35,15 +36,29 @@ export default function Matches() {
 
   const renderContent = () => {
     if (areMatchesLoading) {
-      return <BimbeerSpinner />;
+      return (
+        <Center ml={20} h="75vh">
+          <BimbeerSpinner />
+        </Center>
+      );
     }
 
     if (matches.length === 0) {
       return (
-        <Flex align="center" justify="center">
+        <Flex
+          w="100vw"
+          h="350px"
+          align="center"
+          justify="center"
+          bg="whiteAlpha.100"
+          mt="175px"
+          pl="70px"
+          pr="35px"
+        >
           <InfoCard
-            text="It's looks kinda empty here and you don't have any buddies to drink with yet *◠* Move to
-                dashboard and start searching for them filthy beer lovers!"
+            heading="Looks empty *◠*"
+            text="Move to dashboard and start searching for them filthy beer lovers!"
+            beerStatus={sadBeer}
           />
         </Flex>
       );
@@ -67,7 +82,7 @@ export default function Matches() {
     <>
       <Sidebar />
       <Center>
-        <Box p={6} h="100vh" ml="100px" mr="20px">
+        <Box p={6} h="100vh" overflow="hidden">
           <Center>
             <Heading mt={4} mb={8}>
               Drinking buddies

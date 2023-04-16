@@ -1,14 +1,23 @@
 import React from 'react';
 
-import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
+import {
+  Card,
+  CardBody,
+  Center,
+  Flex,
+  Stack,
+  Text,
+  Image,
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { RiHome2Line } from 'react-icons/ri';
 
+import notFoundBeer from 'renderer/assets/images/notFoundBeer.png';
 import '../theme/css/NotFound.css';
 
 export default function NotFound() {
   return (
-    <Flex minH="100vh" align="center" justify="center">
+    <Flex mt="30vh" align="center" justify="center" p={5} bg="whiteAlpha.100">
       <Card bg="whiteAlpha.100" maxW={600}>
         <CardBody p={30}>
           <Stack spacing="3">
@@ -29,6 +38,7 @@ export default function NotFound() {
           </Stack>
         </CardBody>
       </Card>
+      <Image src={notFoundBeer} ml={20} h="300px" />
     </Flex>
   );
 }
