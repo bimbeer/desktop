@@ -155,7 +155,7 @@ export default function Sidebar() {
             {[
               { text: 'Dashboard', to: '/dashboard' },
               { text: 'Matches', to: '/matches' },
-              { text: 'Messages', to: '/messages' },
+              { text: 'Messages', to: '/messages/undefined' },
               { text: 'Profile', to: '/profile' },
               { text: 'Logout', to: undefined },
             ].map((item) => (

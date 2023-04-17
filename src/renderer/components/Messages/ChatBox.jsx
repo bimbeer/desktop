@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { sendMessage, handleReadMessage } from 'renderer/services/messages';
 import {
   Box,
   Flex,
@@ -23,13 +22,18 @@ import { AiOutlineSend, AiFillCheckCircle } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 
 import { db, auth } from 'renderer/firebase/firebase';
+import {
+  sendMessage,
+  handleReadMessage,
+  useRecipient,
+} from 'renderer/services/messages';
 
 export default function ChatBox({ pairId }) {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = React.useState('');
-  const [recipientAvatar, setRecipientAvatar] = useState(null);
   const scrollToLastMessage = useRef(null);
   const senderId = auth.currentUser.uid;
+  const { recipientData } = useRecipient(pairId, senderId);
 
   const handleSendMessage = async () => {
     await sendMessage(senderId, message, pairId);
@@ -63,9 +67,6 @@ export default function ChatBox({ pairId }) {
       const newMessages = [];
       QuerySnapshot.forEach((document) => {
         const data = document.data();
-        if (data.uid !== senderId) {
-          setRecipientAvatar(data.avatar);
-        }
         newMessages.push({ ...data, id: document.id });
       });
       setMessages(newMessages);
@@ -75,18 +76,34 @@ export default function ChatBox({ pairId }) {
   }, [pairId, senderId]);
 
   return (
-    <Flex align="center" justify="center" minH="100vh" ml="100px" mr="20px">
+    <Flex align="center" justify="center" minH="100vh">
       <Box
         p={4}
         w="50vw"
         h="60vh"
         borderColor="yellow.500"
-        borderWidth={2}
+        borderWidth={1}
         rounded="1rem"
-        bg="gray.800"
+        bg="#242526"
       >
+        {recipientData && (
+          <Flex
+            direction="row"
+            align="center"
+            height="57px"
+            mb={-14}
+            pb={2}
+            borderBottom="1px solid grey"
+          >
+            <Avatar src={recipientData.avatar} />
+            <Text ml={2}>
+              {recipientData.firstName} {recipientData.lastName}
+            </Text>
+          </Flex>
+        )}
         <Flex direction="column" align="center" h="full">
           <Flex
+            mt={16}
             direction="column"
             align="center"
             w="full"
@@ -95,7 +112,7 @@ export default function ChatBox({ pairId }) {
           >
             {messages.map((chat, index) => (
               <Flex
-                key={chat.text}
+                key={chat.index}
                 mb={2}
                 alignSelf={chat.uid === senderId ? 'flex-end' : 'flex-start'}
               >
@@ -105,7 +122,7 @@ export default function ChatBox({ pairId }) {
                     maxW={10}
                     rounded="2rem"
                     style={{ backgroundColor: '#d4af37' }}
-                    src={chat.avatar}
+                    src={recipientData.avatar}
                     mr={2}
                   />
                 )}
@@ -139,7 +156,7 @@ export default function ChatBox({ pairId }) {
                         maxW="14px"
                         rounded="full"
                         style={{ backgroundColor: '#d4af37' }}
-                        src={recipientAvatar}
+                        src={recipientData.avatar}
                         position="absolute"
                         bottom="-16px"
                         right="1px"
@@ -149,7 +166,7 @@ export default function ChatBox({ pairId }) {
               </Flex>
             ))}
           </Flex>
-          <Flex w="full" position="relative">
+          <Flex w="full" position="relative" mt={-4}>
             <FormControl
               as="form"
               onSubmit={(e) => {
@@ -162,7 +179,6 @@ export default function ChatBox({ pairId }) {
             >
               <InputGroup>
                 <Input
-                  mt={-4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   _placeholder={{ color: 'gray' }}
@@ -171,7 +187,6 @@ export default function ChatBox({ pairId }) {
                 {message && (
                   <InputRightElement>
                     <IconButton
-                      mt={-8}
                       aria-label="Send chat"
                       icon={<AiOutlineSend />}
                       type="submit"
