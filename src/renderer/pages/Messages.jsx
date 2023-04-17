@@ -1,8 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { HStack, Center } from '@chakra-ui/react';
 
-import ChatBox from 'renderer/components/Messages/ChatBox';
 import Sidebar from 'renderer/components/Sidebar';
+import RecentChats from 'renderer/components/Messages/RecentChats';
+import ChatBox from 'renderer/components/Messages/ChatBox';
 
 export default function Messages() {
   const { pairId } = useParams();
@@ -10,7 +12,12 @@ export default function Messages() {
   return (
     <>
       <Sidebar />
-      <ChatBox pairId={pairId} />
+      <Center ml="100px" mr="20px">
+        <HStack>
+          <RecentChats />
+          <ChatBox pairId={pairId} />
+        </HStack>
+      </Center>
     </>
   );
 }
