@@ -64,3 +64,24 @@ export function useRecipient(pairId, senderId) {
 
   return { recipientId, recipientData };
 }
+
+export async function fetchRecentChatsData(pairId, currentUserId) {
+  const interactionsQuery = query(
+    collection(db, 'interactions'),
+    where('pairId', '==', pairId)
+  );
+  const interactionsSnapshot = await getDocs(interactionsQuery);
+  if (!interactionsSnapshot.empty) {
+    const interactionData = interactionsSnapshot.docs[0].data();
+    const recipientId =
+      interactionData.sender === currentUserId
+        ? interactionData.recipient
+        : interactionData.sender;
+    const recipientDocRef = doc(db, 'profile', recipientId);
+    const recipientDocSnap = await getDoc(recipientDocRef);
+    if (recipientDocSnap.exists()) {
+      return recipientDocSnap.data();
+    }
+  }
+  return null;
+}
