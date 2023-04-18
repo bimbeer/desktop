@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Image, Box, Text, IconButton } from '@chakra-ui/react';
+import { Flex, Avatar, Box, Text, IconButton } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import { RxCross2 } from 'react-icons/rx';
 import { Link } from 'react-router-dom';
@@ -10,14 +10,15 @@ export default function MatchedUsers({ pairData, pairId, handleUnpair }) {
     <Flex
       w="60vw"
       maxW="85vh"
-      borderWidth="2px"
+      p={4}
+      borderWidth="1px"
       borderColor="yellow.500"
       borderRadius="lg"
       overflow="hidden"
       boxShadow="lg"
-      bgColor="gray.800"
+      bg="#242526"
     >
-      <Image src={pairData.avatar} w={24} h={24} objectFit="cover" />
+      <Avatar src={pairData.avatar} w={24} h={24} objectFit="cover" />
       <Box p="6" flex="1">
         <Text fontWeight="bold">
           {`${pairData.firstName} ${pairData.lastName}`}

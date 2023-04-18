@@ -192,7 +192,7 @@ export default function ProfilePanel() {
                     color="gray.400"
                     fontWeight="400"
                     mb="30px"
-                    overflowWrap="normal"
+                    wordBreak="break-word"
                   >
                     {profileData.description}
                   </Text>

@@ -87,6 +87,7 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     await logout();
+    localStorage.removeItem('avatar');
     navigate('/');
   };
 
@@ -101,9 +102,15 @@ export default function Sidebar() {
   useEffect(() => {
     const currentUserId = getUserFromLocalStorage();
     async function fetchData() {
-      const userData = await getUserData(currentUserId);
-      if (userData) {
-        setProfileData(userData);
+      const storedAvatar = localStorage.getItem('avatar');
+      if (storedAvatar) {
+        setProfileData((prevState) => ({ ...prevState, avatar: storedAvatar }));
+      } else {
+        const userData = await getUserData(currentUserId);
+        if (userData) {
+          setProfileData(userData);
+          localStorage.setItem('avatar', userData.avatar);
+        }
       }
     }
     fetchData();
@@ -148,7 +155,7 @@ export default function Sidebar() {
             {[
               { text: 'Dashboard', to: '/dashboard' },
               { text: 'Matches', to: '/matches' },
-              { text: 'Messages', to: '/messages' },
+              { text: 'Messages', to: '/messages/undefined' },
               { text: 'Profile', to: '/profile' },
               { text: 'Logout', to: undefined },
             ].map((item) => (

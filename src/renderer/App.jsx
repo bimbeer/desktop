@@ -3,7 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { AuthContextProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import ProtectedRouteRedirect from './components/ProtectedRouteRedirect';
+import AuthRoute from './components/AuthRoute';
 import theme from './theme/theme';
 import './theme/css/App.css';
 
@@ -26,17 +26,17 @@ export default function App() {
               <Route
                 path="/"
                 element={
-                  <ProtectedRouteRedirect>
+                  <AuthRoute>
                     <Start />
-                  </ProtectedRouteRedirect>
+                  </AuthRoute>
                 }
               />
               <Route
                 path="/sign-up"
                 element={
-                  <ProtectedRouteRedirect>
+                  <AuthRoute>
                     <SignUp />
-                  </ProtectedRouteRedirect>
+                  </AuthRoute>
                 }
               />
               <Route

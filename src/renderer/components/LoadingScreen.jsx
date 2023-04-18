@@ -3,8 +3,7 @@ import { Box, Center, Image, Spinner, Text } from '@chakra-ui/react';
 
 import logo from 'renderer/assets/images/logo.png';
 
-// eslint-disable-next-line react/prop-types
-export default function LoadingScreen({ isLoading }) {
+export default function LoadingScreen() {
   return (
     <Box
       pos="fixed"
@@ -13,7 +12,7 @@ export default function LoadingScreen({ isLoading }) {
       w="100%"
       h="100%"
       bg="#141517"
-      display={isLoading ? 'flex' : 'none'}
+      display="flex"
       zIndex={10}
     >
       <Center h="100%" w="100%">

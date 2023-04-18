@@ -285,8 +285,14 @@ ProfileDiscoverySettingsForm.propTypes = {
   setProfile: PropTypes.func.isRequired,
   handleNextStep: PropTypes.func.isRequired,
   handleBackStep: PropTypes.func.isRequired,
-  city: PropTypes.string.isRequired,
+  city: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    position: PropTypes.shape({
+      coordinates: PropTypes.arrayOf(PropTypes.number).isRequired,
+      geohash: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   setCity: PropTypes.func.isRequired,
-  setCoordinates: PropTypes.arrayOf(PropTypes.number).isRequired,
+  setCoordinates: PropTypes.func.isRequired,
   setGeohash: PropTypes.func.isRequired,
 };

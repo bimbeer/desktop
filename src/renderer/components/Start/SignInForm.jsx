@@ -10,7 +10,6 @@ import logo from 'renderer/assets/images/logo.png';
 import 'renderer/theme/css/AuthForms.css';
 import { UserAuth } from '../../context/AuthContext';
 import { auth } from '../../firebase/firebase';
-import LoadingScreen from './LoadingScreen';
 
 export default function SignInForm() {
   const [email, setEmail] = useState('');
@@ -19,7 +18,6 @@ export default function SignInForm() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { signIn, googleSignIn, facebookSignIn } = UserAuth();
 
   const ERROR_INVALID_EMAIL = 'auth/invalid-email';
@@ -58,7 +56,6 @@ export default function SignInForm() {
   useEffect(() => {
     if (window.sessionStorage.getItem('pending')) {
       window.sessionStorage.removeItem('pending');
-      setIsLoading(true);
       getRedirectResult(auth);
     }
   }, []);
@@ -70,7 +67,6 @@ export default function SignInForm() {
           <img src={logo} className="logo" alt="Bimbeer Logo" />
         </Link>
       </div>
-      <LoadingScreen isLoading={isLoading} />
       {authError && (
         <Text fontSize="sm" color="red" mt={8}>
           {authError}
