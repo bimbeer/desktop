@@ -134,6 +134,7 @@ export default function ChatBox({ pairId }) {
                   mr={2}
                   rounded="1rem"
                   position="relative"
+                  wordBreak="break-word"
                 >
                   <Text>{chat.text}</Text>
                   <div ref={scrollToLastMessage} />
@@ -166,7 +167,12 @@ export default function ChatBox({ pairId }) {
               </Flex>
             ))}
           </Flex>
-          <Flex w="full" position="relative" mt={-4}>
+          <Flex
+            w="full"
+            position="relative"
+            mt={-4}
+            display={!recipientData ? 'none' : 'flex'}
+          >
             <FormControl
               as="form"
               onSubmit={(e) => {
@@ -182,7 +188,11 @@ export default function ChatBox({ pairId }) {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   _placeholder={{ color: 'gray' }}
-                  placeholder="Type a message..."
+                  placeholder={
+                    recipientData.username
+                      ? `Message @${recipientData.username}`
+                      : 'Type a message...'
+                  }
                 />
                 {message && (
                   <InputRightElement>
