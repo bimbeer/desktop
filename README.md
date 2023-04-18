@@ -44,15 +44,21 @@ Install NPM packages
   ```
 
 ## Starting Development
-
 Run project
   ```sh
   npm start
   ```
+  
 ## Packaging for Production
 To package apps for the local platform:
   ```sh
   npm run package
+  ```
+  
+## Running tests
+Run tests:
+  ```sh
+  npm run test
   ```
 
 [react.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
