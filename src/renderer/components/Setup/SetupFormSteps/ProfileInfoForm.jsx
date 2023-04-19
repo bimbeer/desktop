@@ -36,7 +36,8 @@ import {
   validateNumbersOnly,
 } from 'renderer/helpers/validators';
 import {
-  capitalizeFirstLetter,
+  capitalizeFirstLetterAndLowercaseRest,
+  capitalizeFirstLetterOnly,
   convertToLowercase,
 } from 'renderer/helpers/normalizer';
 
@@ -111,10 +112,10 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
     }
-    const capitalizedFirstLetter = capitalizeFirstLetter(value);
+    const normalizedFirstName = capitalizeFirstLetterAndLowercaseRest(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
-      firstName: capitalizedFirstLetter,
+      firstName: normalizedFirstName,
     }));
   }
 
@@ -133,10 +134,10 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
     }
-    const capitalizedFirstLetter = capitalizeFirstLetter(value);
+    const normalizedLastName = capitalizeFirstLetterAndLowercaseRest(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
-      lastName: capitalizedFirstLetter,
+      lastName: normalizedLastName,
     }));
   }
 
@@ -217,7 +218,7 @@ export default function ProfileInfoForm({
     }
   }
 
-  function handleAboutChange(event) {
+  function handleDescriptionChange(event) {
     const { value } = event.target;
     if (value && value.trim() === '') {
       setErrors((prevErrors) => ({
@@ -238,10 +239,10 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
     }
-    const capitalizedFirstLetter = capitalizeFirstLetter(value);
+    const normalizedDescription = capitalizeFirstLetterOnly(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
-      description: capitalizedFirstLetter,
+      description: normalizedDescription,
     }));
   }
 
@@ -402,7 +403,7 @@ export default function ProfileInfoForm({
               placeholder="Say something about youself."
               size="sm"
               value={profile.description}
-              onChange={(event) => handleAboutChange(event)}
+              onChange={(event) => handleDescriptionChange(event)}
             />
             {errors.description && (
               <FormErrorMessage>
