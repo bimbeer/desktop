@@ -78,6 +78,7 @@ const createWindow = async () => {
     autoHideMenuBar: true,
     icon: getAssetPath('logo.ico'),
     webPreferences: {
+      devTools: false,
       // nodeIntegration: true,
       // contextIsolation: false,
       preload: app.isPackaged
