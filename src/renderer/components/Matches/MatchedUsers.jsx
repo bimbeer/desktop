@@ -18,7 +18,13 @@ export default function MatchedUsers({ pairData, pairId, handleUnpair }) {
       boxShadow="lg"
       bg="#242526"
     >
-      <Avatar src={pairData.avatar} w={24} h={24} objectFit="cover" />
+      <Avatar
+        bg="#d69e2e"
+        src={pairData.avatar}
+        w={24}
+        h={24}
+        objectFit="cover"
+      />
       <Box p="6" flex="1">
         <Text fontWeight="bold">
           {`${pairData.firstName} ${pairData.lastName}`}

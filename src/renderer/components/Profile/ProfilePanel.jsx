@@ -98,6 +98,7 @@ export default function ProfilePanel() {
                 w="80px"
                 h="80px"
                 borderRadius="15px"
+                bg="#d69e2e"
                 src={profileData.avatar}
               />
               <Flex direction="column" maxWidth="100%" my={{ sm: '14px' }}>
