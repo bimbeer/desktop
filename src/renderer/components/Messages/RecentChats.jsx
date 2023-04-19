@@ -25,7 +25,7 @@ import { fetchRecentChatsData } from 'renderer/services/messages';
 import sadBeer from 'renderer/assets/images/sadBeer.png';
 import InfoCard from '../InfoCard';
 import BimbeerSpinner from '../BimbeerSpinner';
-import TimeSinceLastMessage from './timeSinceLastMessage';
+import TimeSinceLastMessage from './TimeSinceLastMessage';
 
 export default function RecentChats() {
   const [recentChats, setRecentChats] = useState([]);
@@ -140,7 +140,7 @@ export default function RecentChats() {
             >
               <Flex align="center" justifyContent="space-between">
                 <Flex align="center">
-                  <Avatar src={chat.avatar} size="md" mr={4} />
+                  <Avatar bg="#d69e2e" src={chat.avatar} size="md" mr={4} />
                   <Flex direction="column">
                     <Text fontWeight="bold">{chat.name}</Text>
                     <Flex>

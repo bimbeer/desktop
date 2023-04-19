@@ -17,7 +17,7 @@ import {
   Flex,
   VStack,
   Button,
-  Image,
+  Avatar,
   Textarea,
   RadioGroup,
   Radio,
@@ -378,9 +378,10 @@ export default function ProfileInfoForm({
                   </FormErrorMessage>
                 )}
                 {avatarPreviewState && (
-                  <Image
+                  <Avatar
                     src={avatarPreviewState}
                     alt="Avatar preview"
+                    bg="#d69e2e"
                     boxSize="70px"
                     objectFit="cover"
                     borderRadius="full"

@@ -95,7 +95,7 @@ export default function ChatBox({ pairId }) {
             pb={2}
             borderBottom="1px solid grey"
           >
-            <Avatar src={recipientData.avatar} />
+            <Avatar bg="#d69e2e" src={recipientData.avatar} />
             <Text ml={2}>
               {recipientData.firstName} {recipientData.lastName}
             </Text>
@@ -121,7 +121,7 @@ export default function ChatBox({ pairId }) {
                     maxH={10}
                     maxW={10}
                     rounded="2rem"
-                    style={{ backgroundColor: '#d4af37' }}
+                    bg="#d69e2e"
                     src={recipientData.avatar}
                     mr={2}
                   />
@@ -156,7 +156,7 @@ export default function ChatBox({ pairId }) {
                         maxH="14px"
                         maxW="14px"
                         rounded="full"
-                        style={{ backgroundColor: '#d4af37' }}
+                        bg="#d69e2e"
                         src={recipientData.avatar}
                         position="absolute"
                         bottom="-16px"

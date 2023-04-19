@@ -65,7 +65,7 @@ export default function Matches() {
     }
 
     return (
-      <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={10}>
+      <SimpleGrid columns={{ sm: 1, md: 1 }} spacing={5}>
         {matches.map((match) => (
           <MatchedUsers
             key={match.recipient}

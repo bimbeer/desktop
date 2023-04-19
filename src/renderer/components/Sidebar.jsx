@@ -17,7 +17,7 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Avatar } from '@material-ui/core';
+import { Image } from '@chakra-ui/react';
 
 import { getUserData } from 'renderer/services/profiles';
 import {
@@ -204,16 +204,29 @@ export default function Sidebar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
             <Link to="/profile">
-              <Avatar
+              <Image
+                position="absolute"
+                bottom={15}
+                left={20}
                 alt="User avatar"
-                sx={{ width: 40, height: 40 }}
-                style={{ backgroundColor: '#d4af37' }}
+                rounded="full"
+                sx={{ width: 40, height: 40, borderRadius: '50% !important' }}
+                style={{
+                  backgroundColor: '#d69e2e',
+                  borderRadius: '50% !important',
+                }}
                 src={profileData.avatar}
               />
             </Link>
             {open && (
               <Link to="/profile">
-                <Typography variant="body2" sx={{ ml: 2 }}>
+                <Typography
+                  position="absolute"
+                  bottom={25}
+                  left={60}
+                  variant="body2"
+                  sx={{ ml: 2 }}
+                >
                   {user.email}
                 </Typography>
               </Link>
