@@ -290,26 +290,29 @@ export default function ProfilePanel() {
                     RANGE SETTINGS
                   </Text>
                   <Box pt={6} pb={2}>
-                    <Slider
-                      isDisabled
-                      aria-label="slider-ex-6"
-                      value={profileData.range}
-                    >
-                      <SliderMark
+                    <Flex>
+                      <Slider
+                        isDisabled
+                        aria-label="slider-ex-6"
                         value={profileData.range}
-                        textAlign="center"
-                        color="white"
-                        mt="-10"
-                        ml="-5"
-                        w="12"
+                        maxWidth="96%"
                       >
-                        {profileData.range}km
-                      </SliderMark>
-                      <SliderTrack bg="yellow.800">
-                        <SliderFilledTrack bg="yellow.500" />
-                      </SliderTrack>
-                      <SliderThumb />
-                    </Slider>
+                        <SliderMark
+                          value={profileData.range}
+                          textAlign="center"
+                          color="white"
+                          mt="-10"
+                          ml="-4"
+                          w="30"
+                        >
+                          {profileData.range}km
+                        </SliderMark>
+                        <SliderTrack bg="yellow.800">
+                          <SliderFilledTrack bg="yellow.500" />
+                        </SliderTrack>
+                        <SliderThumb />
+                      </Slider>
+                    </Flex>
                     <Text
                       py={4}
                       noOfLines={1}
