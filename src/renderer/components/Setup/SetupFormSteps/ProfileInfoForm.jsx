@@ -26,6 +26,7 @@ import {
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
 import { getDocs, query, collection, where } from 'firebase/firestore';
+
 import { db } from 'renderer/firebase/firebase';
 import {
   validateTextOnly,

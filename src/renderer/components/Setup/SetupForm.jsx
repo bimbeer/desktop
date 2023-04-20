@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { db } from '../../firebase/firebase';
 import ProfileInfoForm from './SetupFormSteps/ProfileInfoForm';
 import ProfileDiscoverySettingsForm from './SetupFormSteps/ProfileDiscoverySettingsForm';

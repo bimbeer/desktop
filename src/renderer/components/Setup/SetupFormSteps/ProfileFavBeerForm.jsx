@@ -11,6 +11,7 @@ import {
   Center,
   Image,
 } from '@chakra-ui/react';
+
 import beerList from '../BeerList';
 
 export default function ProfileFavBeerForm({
