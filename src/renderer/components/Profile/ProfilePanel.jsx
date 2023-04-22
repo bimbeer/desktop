@@ -325,7 +325,7 @@ export default function ProfilePanel() {
                     </Text>
                     <Flex align="center" mb="20px">
                       <Switch
-                        isChecked={profileData.isGlobal}
+                        isChecked={profileData.searchGlobal}
                         colorScheme="yellow"
                         me="10px"
                         isDisabled
@@ -341,7 +341,7 @@ export default function ProfilePanel() {
                     </Flex>
                     <Flex align="center" mb="20px">
                       <Switch
-                        isChecked={profileData.isLocal}
+                        isChecked={profileData.searchLocal}
                         colorScheme="yellow"
                         me="10px"
                         isDisabled

@@ -218,11 +218,11 @@ export default function ProfileDiscoverySettingsForm({
                 }}
                 colorScheme="yellow"
                 me="10px"
-                isChecked={profile.isGlobal}
+                isChecked={profile.searchGlobal}
                 onChange={(e) =>
                   setProfile((prevProfile) => ({
                     ...prevProfile,
-                    isGlobal: e.target.checked,
+                    searchGlobal: e.target.checked,
                   }))
                 }
               />
@@ -239,11 +239,11 @@ export default function ProfileDiscoverySettingsForm({
                 }}
                 colorScheme="yellow"
                 me="10px"
-                isChecked={profile.isLocal}
+                isChecked={profile.searchLocal}
                 onChange={(e) =>
                   setProfile((prevProfile) => ({
                     ...prevProfile,
-                    isLocal: e.target.checked,
+                    searchLocal: e.target.checked,
                   }))
                 }
               />
@@ -284,8 +284,8 @@ export default function ProfileDiscoverySettingsForm({
 ProfileDiscoverySettingsForm.propTypes = {
   profile: PropTypes.shape({
     range: PropTypes.number,
-    isGlobal: PropTypes.bool,
-    isLocal: PropTypes.bool,
+    searchGlobal: PropTypes.bool,
+    searchLocal: PropTypes.bool,
   }).isRequired,
   setProfile: PropTypes.func.isRequired,
   handleNextStep: PropTypes.func.isRequired,
