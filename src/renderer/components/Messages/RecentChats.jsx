@@ -31,6 +31,7 @@ export default function RecentChats() {
   const [recentChats, setRecentChats] = useState([]);
   const [areChatsLoading, setAreChatsLoading] = useState(true);
   const currentUserId = auth.currentUser.uid;
+  let chatsStatus;
 
   useEffect(() => {
     const updateRecentChats = async () => {
@@ -38,6 +39,7 @@ export default function RecentChats() {
         collection(db, 'interactions'),
         where('sender', '==', currentUserId)
       );
+
       const interactionsSnapshot = await getDocs(interactionsQuery);
       const pairIds = interactionsSnapshot.docs
         .map((doc) => doc.data().pairId)
@@ -53,9 +55,11 @@ export default function RecentChats() {
         );
 
         const recipientData = await fetchRecentChatsData(pairId, currentUserId);
+
         const messagesSnapshot = await getDocs(messagesQuery);
         if (!messagesSnapshot.empty) {
           const data = messagesSnapshot.docs[0].data();
+
           chats.push({
             id: messagesSnapshot.docs[0].id,
             name: `${recipientData.firstName} ${recipientData.lastName}`,
@@ -74,7 +78,6 @@ export default function RecentChats() {
     onSnapshot(messagesQuery, updateRecentChats);
   }, [currentUserId]);
 
-  let chatsStatus;
   if (areChatsLoading) {
     chatsStatus = (
       <Box mt={10}>

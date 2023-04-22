@@ -114,9 +114,11 @@ export async function getMatches(currentUserId) {
     where('reactionType', '==', 'like')
   );
   const querySnapshot = await getDocs(q1);
+
   const promises = querySnapshot.docs.map(async (doc) => {
     const data = doc.data();
     const recipientId = data.recipient;
+
     const q2 = query(
       interactionsCollection,
       where('sender', '==', recipientId),
@@ -124,15 +126,18 @@ export async function getMatches(currentUserId) {
       where('reactionType', '==', 'like')
     );
     const querySnapshot2 = await getDocs(q2);
+
     if (!querySnapshot2.empty) {
       const userData = await getUserData(recipientId);
       return { ...data, userData };
     }
+
     return null;
   });
 
   const results = await Promise.all(promises);
   const matches = results.filter((result) => result !== null);
+
   return matches;
 }
 
@@ -142,7 +147,9 @@ export async function getInteractedUsers(currentUserId) {
     where('sender', '==', currentUserId),
     where('reactionType', 'in', ['dislike', 'like'])
   );
+
   const querySnapshot = await getDocs(q);
   const users = querySnapshot.docs.map((doc) => doc.data().recipient);
+
   return users;
 }

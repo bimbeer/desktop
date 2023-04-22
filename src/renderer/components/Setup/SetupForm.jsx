@@ -46,12 +46,14 @@ export default function SetupForm() {
     event.preventDefault();
     setIsFormSubmitting(true);
     let downloadURL;
+
     if (selectedFile) {
       const storage = getStorage();
       const storageRef = ref(storage, `avatars/${userId}`);
       await uploadBytes(storageRef, selectedFile);
       downloadURL = await getDownloadURL(storageRef);
     }
+
     const userDocRef = doc(db, 'profile', userId);
     await setDoc(userDocRef, {
       ...profile,
@@ -64,6 +66,7 @@ export default function SetupForm() {
         },
       },
     });
+
     navigate('/profile');
   };
 

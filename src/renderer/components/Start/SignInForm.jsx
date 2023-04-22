@@ -33,6 +33,7 @@ export default function SignInForm() {
     } catch (e) {
       setAuthError(e.message);
       const errorCode = e.code;
+
       if (
         errorCode === ERROR_INVALID_EMAIL ||
         errorCode === ERROR_WRONG_PASSWORD

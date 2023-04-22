@@ -26,10 +26,12 @@ import {
 } from 'renderer/context/AuthContext';
 import beer from '../assets/images/beer.png';
 
+const drawerWidth = 294;
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+
   typography: {
     fontFamily: 'Poppins',
     fontWeightLight: 400,
@@ -38,8 +40,6 @@ const darkTheme = createTheme({
     fontWeightBold: 700,
   },
 });
-
-const drawerWidth = 294;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -101,12 +101,15 @@ export default function Sidebar() {
 
   useEffect(() => {
     const currentUserId = getUserFromLocalStorage();
+
     async function fetchData() {
       const storedAvatar = localStorage.getItem('avatar');
+
       if (storedAvatar) {
         setProfileData((prevState) => ({ ...prevState, avatar: storedAvatar }));
       } else {
         const userData = await getUserData(currentUserId);
+
         if (userData) {
           setProfileData(userData);
           localStorage.setItem('avatar', userData.avatar);

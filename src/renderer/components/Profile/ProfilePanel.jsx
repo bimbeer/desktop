@@ -51,6 +51,7 @@ export default function ProfilePanel() {
 
   useEffect(() => {
     const currentUserId = getUserFromLocalStorage();
+
     async function fetchData() {
       const userData = await getUserData(currentUserId);
       if (userData) {

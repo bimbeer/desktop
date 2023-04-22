@@ -49,6 +49,7 @@ export default function ChatBox({ pairId }) {
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
+
       if (lastMessage.uid !== senderId) {
         handleReadMessage(lastMessage.id);
       }
@@ -65,6 +66,7 @@ export default function ChatBox({ pairId }) {
 
     const unsubscribe = onSnapshot(q, (QuerySnapshot) => {
       const newMessages = [];
+
       QuerySnapshot.forEach((document) => {
         const data = document.data();
         newMessages.push({ ...data, id: document.id });

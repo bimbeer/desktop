@@ -10,6 +10,7 @@ export default function TimeSinceLastMessage({ timestamp }) {
       const now = new Date();
       const diff = now - timestamp;
       const diffInMinutes = Math.round(diff / 1000 / 60);
+
       if (diffInMinutes < 60) {
         setTimeSinceLastMessage(`${diffInMinutes}m`);
       } else {

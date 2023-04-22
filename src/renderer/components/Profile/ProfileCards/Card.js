@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 export default function Card(props) {
   const { variant, children, ...rest } = props;
   const styles = useStyleConfig('Card', { variant });
+
   return (
     <Box
       __css={styles}

@@ -30,6 +30,7 @@ export default function ProfileFavBeerForm({
       const selectedIndex = prevProfile.beers.findIndex(
         (selectedBeer) => selectedBeer.name === beer.name
       );
+
       if (selectedIndex !== -1) {
         return {
           ...prevProfile,
@@ -38,6 +39,7 @@ export default function ProfileFavBeerForm({
           ),
         };
       }
+
       return {
         ...prevProfile,
         beers: [...prevProfile.beers, beer],

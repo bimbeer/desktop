@@ -85,6 +85,7 @@ export default function ProfileDiscoverySettingsForm({
       setIsCityEmpty(false);
       return;
     }
+
     if (
       selectedCityState &&
       selectedCityState.address?.label === cityInputValue
