@@ -6,7 +6,7 @@ import {
   where,
   getDocs,
 } from 'firebase/firestore';
-import { distanceBetween, encodeGeohash } from 'geofire-common';
+import { distanceBetween } from 'geofire-common';
 import ngeohash from 'ngeohash';
 
 import { db } from '../firebase/firebase';
@@ -94,20 +94,20 @@ export async function getUsersWithinRange(
   });
 
   const querySnapshots = await Promise.all(queries);
-
   const processedUserIds = new Set();
+
   querySnapshots.forEach((querySnapshot) => {
     querySnapshot.forEach((document) => {
       if (document.id !== currentUserId && !processedUserIds.has(document.id)) {
         processedUserIds.add(document.id);
         const data = document.data();
         data.id = document.id;
+
         const distance = distanceBetween(
           coordinates,
           data.location.position.coordinates
         );
 
-        console.log(distance);
         if (distance <= range && distance <= data.range) {
           matchedUsers.push(data);
         }

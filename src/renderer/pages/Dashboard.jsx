@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Center, Flex, useToast, Box, Heading } from '@chakra-ui/react';
+import { distanceBetween } from 'geofire-common';
 
 import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import {
@@ -57,15 +58,24 @@ export default function Dashboard() {
           matchedUsers
         );
 
-        console.log(matchedUsers);
-        matchedUsers = await getUsersWithinRange(
-          data.location.position.coordinates,
-          data.range,
-          currentUserId,
-          data.location.position.geohash
-        );
+        if (data.searchGlobal) {
+          matchedUsers = matchedUsers.filter(
+            (user) =>
+              user.searchLocal === false ||
+              distanceBetween(
+                data.location.position.coordinates,
+                user.location.position.coordinates
+              ) <= user.range
+          );
+        } else if (data.searchLocal) {
+          matchedUsers = await getUsersWithinRange(
+            data.location.position.coordinates,
+            data.range,
+            currentUserId,
+            data.location.position.geohash
+          );
+        }
 
-        console.log(matchedUsers);
         const usersToExclude = await getInteractedUsers(currentUserId);
 
         matchedUsers = matchedUsers.filter(
