@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import useDebounce from 'renderer/hooks/useDebounceInput';
 import axios from 'axios';
-import { geohashForLocation } from 'geofire-common';
+import ngeohash from 'ngeohash';
 import {
   Box,
   FormControl,
@@ -26,6 +25,8 @@ import {
   FormErrorMessage,
   FormErrorIcon,
 } from '@chakra-ui/react';
+
+import useDebounce from 'renderer/hooks/useDebounceInput';
 
 const DEBOUNCE_DELAY = 500;
 
@@ -62,7 +63,7 @@ export default function ProfileDiscoverySettingsForm({
       setIsCityEmpty(true);
       setCoordinates([foundCity.position.lat, foundCity.position.lng]);
       setGeohash(
-        geohashForLocation([foundCity.position.lat, foundCity.position.lng])
+        ngeohash.encode(foundCity.position.lat, foundCity.position.lng, 5)
       );
     }
   };
@@ -84,6 +85,7 @@ export default function ProfileDiscoverySettingsForm({
       setIsCityEmpty(false);
       return;
     }
+
     if (
       selectedCityState &&
       selectedCityState.address?.label === cityInputValue
@@ -177,31 +179,34 @@ export default function ProfileDiscoverySettingsForm({
             <FormLabel mt={-8} mb={8}>
               Range settings
             </FormLabel>
-            <Slider
-              defaultValue={profile.range}
-              aria-label="slider-ex-6"
-              onChange={(val) =>
-                setProfile((prevProfile) => ({
-                  ...prevProfile,
-                  range: val,
-                }))
-              }
-            >
-              <SliderMark
-                value={profile.range}
-                textAlign="center"
-                color="white"
-                mt="-10"
-                ml="-5"
-                w="12"
+            <Flex>
+              <Slider
+                maxWidth="99%"
+                defaultValue={profile.range}
+                aria-label="slider-ex-6"
+                onChange={(val) =>
+                  setProfile((prevProfile) => ({
+                    ...prevProfile,
+                    range: val,
+                  }))
+                }
               >
-                {profile.range}km
-              </SliderMark>
-              <SliderTrack bg="yellow.800">
-                <SliderFilledTrack bg="yellow.500" />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
+                <SliderMark
+                  value={profile.range}
+                  textAlign="center"
+                  color="white"
+                  mt="-8"
+                  ml="-5"
+                  w="30"
+                >
+                  {profile.range}km
+                </SliderMark>
+                <SliderTrack bg="yellow.800">
+                  <SliderFilledTrack bg="yellow.500" />
+                </SliderTrack>
+                <SliderThumb />
+              </Slider>
+            </Flex>
           </FormControl>
           <FormControl>
             <Flex align="center" mb="20px">

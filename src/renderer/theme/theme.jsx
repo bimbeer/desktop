@@ -8,15 +8,18 @@ const theme = extendTheme({
       },
     },
   },
+
   palette: {
     primary: '#141517',
     secondary: '#1c1e1f',
     accent: '#d4af37',
   },
+
   fonts: {
     heading: `'Poppins', sans-serif`,
     body: `'Poppins', sans-serif`,
   },
+
   components: {
     Input: {
       defaultProps: {
@@ -30,16 +33,19 @@ const theme = extendTheme({
         },
       },
     },
+
     Textarea: {
       defaultProps: {
         focusBorderColor: 'yellow.500',
       },
     },
+
     NumberInput: {
       defaultProps: {
         focusBorderColor: 'yellow.500',
       },
     },
+
     Radio: {
       defaultProps: {
         colorScheme: 'yellow',

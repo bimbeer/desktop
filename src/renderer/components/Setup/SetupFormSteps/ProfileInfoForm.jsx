@@ -26,6 +26,7 @@ import {
 } from '@chakra-ui/react';
 import { useTheme } from '@emotion/react';
 import { getDocs, query, collection, where } from 'firebase/firestore';
+
 import { db } from 'renderer/firebase/firebase';
 import {
   validateTextOnly,
@@ -99,6 +100,7 @@ export default function ProfileInfoForm({
 
   function handleFirstNameChange(event) {
     const { value } = event.target;
+
     if (!validateTextOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -112,6 +114,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
     }
+
     const normalizedFirstName = capitalizeFirstLetterAndLowercaseRest(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -121,6 +124,7 @@ export default function ProfileInfoForm({
 
   function handleLastNameChange(event) {
     const { value } = event.target;
+
     if (!validateTextOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -134,6 +138,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
     }
+
     const normalizedLastName = capitalizeFirstLetterAndLowercaseRest(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -145,21 +150,26 @@ export default function ProfileInfoForm({
     let timeout = null;
     const { value } = event.target;
     const newErrors = [];
+
     if (!validateTextAndNumbersOnly(value)) {
       newErrors.push('Username can only contain letters and numbers');
     }
+
     if (!validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
+
     if (value && !validateNotOnlyNumbers(value)) {
       newErrors.push('Username cannot contain only numbers');
     }
+
     clearTimeout(timeout);
     timeout = setTimeout(async () => {
       if (value) {
         const querySnapshot = await getDocs(
           query(collection(db, 'profile'), where('username', '==', value))
         );
+
         if (!querySnapshot.empty) {
           newErrors.push('Username is already in use');
         }
@@ -176,6 +186,7 @@ export default function ProfileInfoForm({
 
   function handleAgeChange(value) {
     const age = parseInt(value, 10);
+
     if (!validateNumbersOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -194,6 +205,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, age: '' }));
     }
+
     setProfile((prevProfile) => ({
       ...prevProfile,
       age: value,
@@ -202,6 +214,7 @@ export default function ProfileInfoForm({
 
   async function handleAvatarChange(event) {
     const avatar = event.target.files[0];
+
     if (!validateFileType(avatar, ['image/jpeg', 'image/png', 'image/gif'])) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -211,15 +224,18 @@ export default function ProfileInfoForm({
       setErrors((prevErrors) => ({ ...prevErrors, avatar: '' }));
       setSelectedFile(avatar);
       const reader = new FileReader();
+
       reader.onload = (e) => {
         setAvatarPreviewState(e.target.result);
       };
+
       reader.readAsDataURL(avatar);
     }
   }
 
   function handleDescriptionChange(event) {
     const { value } = event.target;
+
     if (value && value.trim() === '') {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -239,6 +255,7 @@ export default function ProfileInfoForm({
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, description: '' }));
     }
+
     const normalizedDescription = capitalizeFirstLetterOnly(value);
     setProfile((prevProfile) => ({
       ...prevProfile,
@@ -255,6 +272,7 @@ export default function ProfileInfoForm({
   React.useEffect(() => {
     if (selectedFile) {
       const reader = new FileReader();
+
       reader.onload = (e) => {
         setAvatarPreviewState(e.target.result);
       };

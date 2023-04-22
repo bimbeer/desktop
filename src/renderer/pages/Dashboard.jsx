@@ -15,6 +15,7 @@ import {
   getUserData,
   getUsersWithMatchingBeers,
   getUsersWithMatchingInterests,
+  getUsersWithinRange,
 } from '../services/profiles';
 import BimbeerCard from '../components/Dashboard/BimbeerCard';
 import CardButtons from '../components/Dashboard/BimbeerCardButtons';
@@ -25,12 +26,14 @@ const ACTION_DELAY_DURATION = 500;
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
+  const currentUserId = getUserFromLocalStorage();
+
   const [isCardLoading, setIsCardLoading] = useState(true);
   const [noMoreSuggestions, setNoMoreSuggestions] = useState(false);
   const [isActionButtonDisabled, setIsActionButtonDisabled] = useState(false);
   const [hideActionButtons, setHideActionButtons] = useState(false);
+
   const [cardTransform, setCardTransform] = useState('');
-  const currentUserId = getUserFromLocalStorage();
   const toast = useToast();
 
   useEffect(() => {
@@ -54,6 +57,15 @@ export default function Dashboard() {
           matchedUsers
         );
 
+        console.log(matchedUsers);
+        matchedUsers = await getUsersWithinRange(
+          data.location.position.coordinates,
+          data.range,
+          currentUserId,
+          data.location.position.geohash
+        );
+
+        console.log(matchedUsers);
         const usersToExclude = await getInteractedUsers(currentUserId);
 
         matchedUsers = matchedUsers.filter(
@@ -80,6 +92,7 @@ export default function Dashboard() {
     if (!(currentUserIndex < users.length - 1)) {
       setHideActionButtons(true);
     }
+
     if (!isActionButtonDisabled) {
       setCardTransform('translateX(150%) rotate(-30deg');
 
@@ -113,6 +126,7 @@ export default function Dashboard() {
             ),
           });
         }
+
         setTimeout(() => {
           handleUserAction();
           setIsActionButtonDisabled(false);
@@ -223,6 +237,7 @@ export default function Dashboard() {
               />
             ))}
           </Flex>
+
           {!hideActionButtons ? (
             <CardButtons
               handleLike={handleLike}

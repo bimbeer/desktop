@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import { getUserFromLocalStorage } from 'renderer/context/AuthContext';
 import { db } from '../../firebase/firebase';
 import ProfileInfoForm from './SetupFormSteps/ProfileInfoForm';
 import ProfileDiscoverySettingsForm from './SetupFormSteps/ProfileDiscoverySettingsForm';
@@ -46,12 +46,14 @@ export default function SetupForm() {
     event.preventDefault();
     setIsFormSubmitting(true);
     let downloadURL;
+
     if (selectedFile) {
       const storage = getStorage();
       const storageRef = ref(storage, `avatars/${userId}`);
       await uploadBytes(storageRef, selectedFile);
       downloadURL = await getDownloadURL(storageRef);
     }
+
     const userDocRef = doc(db, 'profile', userId);
     await setDoc(userDocRef, {
       ...profile,
@@ -64,6 +66,7 @@ export default function SetupForm() {
         },
       },
     });
+
     navigate('/profile');
   };
 
