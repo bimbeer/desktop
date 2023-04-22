@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { geohashForLocation } from 'geofire-common';
+import ngeohash from 'ngeohash';
 import {
   Box,
   FormControl,
@@ -63,7 +63,7 @@ export default function ProfileDiscoverySettingsForm({
       setIsCityEmpty(true);
       setCoordinates([foundCity.position.lat, foundCity.position.lng]);
       setGeohash(
-        geohashForLocation([foundCity.position.lat, foundCity.position.lng])
+        ngeohash.encode(foundCity.position.lat, foundCity.position.lng, 5)
       );
     }
   };
