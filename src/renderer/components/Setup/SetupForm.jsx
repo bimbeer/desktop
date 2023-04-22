@@ -28,8 +28,8 @@ export default function SetupForm() {
     interest: '',
     location: '',
     range: 50,
-    isGlobal: false,
-    isLocal: false,
+    searchGlobal: false,
+    searchLocal: false,
     beers: [],
   });
   const navigate = useNavigate();
@@ -104,8 +104,8 @@ export default function SetupForm() {
             setGeohash={setGeohash}
             setCoordinates={setCoordinates}
             range={profile.range}
-            isGlobal={profile.isGlobal}
-            isLocal={profile.isLocal}
+            searchGlobal={profile.searchGlobal}
+            searchLocal={profile.searchLocal}
             handleNextStep={handleNextStep}
             handleBackStep={handleBackStep}
           />
