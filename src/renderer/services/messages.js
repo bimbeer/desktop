@@ -13,8 +13,10 @@ import { useState, useEffect } from 'react';
 
 import { db } from '../firebase/firebase';
 
+const messagesCollection = collection(db, 'messages');
+
 export async function sendMessage(senderId, message, pairId) {
-  await addDoc(collection(db, 'messages'), {
+  await addDoc(messagesCollection, {
     text: message,
     createdAt: serverTimestamp(),
     pairId,
@@ -24,7 +26,7 @@ export async function sendMessage(senderId, message, pairId) {
 }
 
 export async function handleReadMessage(messageId) {
-  const messageRef = doc(db, 'messages', messageId);
+  const messageRef = doc(messagesCollection, messageId);
   await updateDoc(messageRef, {
     status: 'read',
   });
