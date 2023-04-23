@@ -61,6 +61,7 @@ export default function Dashboard() {
         if (data.searchGlobal) {
           matchedUsers = matchedUsers.filter(
             (user) =>
+              (user.searchGlobal && data.searchGlobal) ||
               user.searchLocal === false ||
               distanceBetween(
                 data.location.position.coordinates,
