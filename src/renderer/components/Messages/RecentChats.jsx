@@ -177,8 +177,10 @@ export default function RecentChats() {
                 </Flex>
               </Link>
             ))}
+            <Box w="400px" mr="-10px" mt="3vh">
+              {chatsStatus}
+            </Box>
           </Flex>
-          {chatsStatus}
         </Flex>
       </Box>
     </Flex>
