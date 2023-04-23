@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 /**
@@ -72,9 +73,9 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1350,
-    height: 880,
+    height: 920,
     minWidth: 930,
-    minHeight: 880,
+    minHeight: 920,
     autoHideMenuBar: true,
     icon: getAssetPath('logo.ico'),
     webPreferences: {
