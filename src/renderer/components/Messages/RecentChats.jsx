@@ -18,7 +18,7 @@ import {
   orderBy,
   getDocs,
 } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { db, auth } from 'renderer/firebase/firebase';
 import { fetchRecentChatsData } from 'renderer/services/messages';
@@ -30,6 +30,7 @@ import TimeSinceLastMessage from './TimeSinceLastMessage';
 export default function RecentChats() {
   const [recentChats, setRecentChats] = useState([]);
   const [areChatsLoading, setAreChatsLoading] = useState(true);
+  const currentLocation = useLocation();
   const currentUserId = auth.currentUser.uid;
   let chatsStatus;
 
@@ -136,9 +137,18 @@ export default function RecentChats() {
               mb={2}
               p={4}
               rounded="1rem"
-              _hover={{ bg: 'yellow.500' }}
+              _hover={{
+                bg:
+                  currentLocation.pathname === `/messages/${chat.pairId}`
+                    ? '#ab7e24'
+                    : 'yellow.500',
+              }}
               boxShadow="0px 5px 5px -5px rgba(0,0,0,0.75)"
-              bg="#484848"
+              bg={
+                currentLocation.pathname === `/messages/${chat.pairId}`
+                  ? 'yellow.500'
+                  : '#484848'
+              }
               overflowWrap="break-word"
             >
               <Flex align="center" justifyContent="space-between">
