@@ -47,7 +47,9 @@ export default function RecentChats() {
         .filter((pairId) => pairId !== undefined);
 
       const chats = [];
-      for (const pairId of pairIds) {
+      await pairIds.reduce(async (previousPromise, pairId) => {
+        await previousPromise;
+
         const messagesQuery = query(
           collection(db, 'messages'),
           where('pairId', '==', pairId),
@@ -70,7 +72,7 @@ export default function RecentChats() {
             timestamp: data.createdAt.toDate(),
           });
         }
-      }
+      }, Promise.resolve());
       setRecentChats(chats);
       setAreChatsLoading(false);
     };
