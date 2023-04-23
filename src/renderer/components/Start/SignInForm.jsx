@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Text, Spinner, Flex } from '@chakra-ui/react';

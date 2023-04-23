@@ -1,13 +1,4 @@
-import {
-  Box,
-  List,
-  ListItem,
-  Avatar,
-  Text,
-  Center,
-  Flex,
-  Stack,
-} from '@chakra-ui/react';
+import { Box, Avatar, Text, Center, Flex, Stack } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import {
   collection,
@@ -18,7 +9,7 @@ import {
   orderBy,
   getDocs,
 } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { db, auth } from 'renderer/firebase/firebase';
 import { fetchRecentChatsData } from 'renderer/services/messages';
@@ -30,6 +21,7 @@ import TimeSinceLastMessage from './TimeSinceLastMessage';
 export default function RecentChats() {
   const [recentChats, setRecentChats] = useState([]);
   const [areChatsLoading, setAreChatsLoading] = useState(true);
+  const currentLocation = useLocation();
   const currentUserId = auth.currentUser.uid;
   let chatsStatus;
 
@@ -46,7 +38,9 @@ export default function RecentChats() {
         .filter((pairId) => pairId !== undefined);
 
       const chats = [];
-      for (const pairId of pairIds) {
+      await pairIds.reduce(async (previousPromise, pairId) => {
+        await previousPromise;
+
         const messagesQuery = query(
           collection(db, 'messages'),
           where('pairId', '==', pairId),
@@ -69,7 +63,7 @@ export default function RecentChats() {
             timestamp: data.createdAt.toDate(),
           });
         }
-      }
+      }, Promise.resolve());
       setRecentChats(chats);
       setAreChatsLoading(false);
     };
@@ -99,67 +93,94 @@ export default function RecentChats() {
   }
 
   return (
-    <Box
-      p={4}
-      maxW="400px"
-      minW="330px"
-      w="30vw"
-      h="60vh"
-      overflow="hidden"
-      bg="#242526"
-      rounded="1rem"
-      borderColor="yellow.500"
-      borderWidth={1}
-      overflowY="auto"
-    >
-      <Flex
-        height="57px"
-        mb={-14}
-        pb={2}
-        direction="row"
-        align="center"
-        borderBottom="1px solid grey"
+    <Flex align="center" justify="center" minH="100vh">
+      <Box
+        p={4}
+        maxW="400px"
+        minW="330px"
+        w="30vw"
+        h="60vh"
+        bg="#242526"
+        rounded="1rem"
+        borderColor="yellow.500"
+        borderWidth={1}
       >
-        <Center>
+        <Flex
+          direction="row"
+          align="center"
+          height="57px"
+          mb={-14}
+          pb={2}
+          borderBottom="1px solid grey"
+        >
           <Text fontSize={26} fontWeight={900}>
             {' '}
             Recent Chats
           </Text>
-        </Center>
-      </Flex>
-      <List spacing={2} mx={4} mt={16}>
-        {recentChats.map((chat) => (
-          <Link to={`/messages/${chat.pairId}`}>
-            <ListItem
-              key={chat.id}
-              mx={-2}
-              mb={2}
-              p={4}
-              rounded="1rem"
-              _hover={{ bg: 'yellow.500' }}
-              boxShadow="0px 5px 5px -5px rgba(0,0,0,0.75)"
-              bg="#484848"
-              overflowWrap="break-word"
-            >
-              <Flex align="center" justifyContent="space-between">
-                <Flex align="center">
-                  <Avatar bg="#d69e2e" src={chat.avatar} size="md" mr={4} />
-                  <Flex direction="column">
-                    <Text fontWeight="bold">{chat.name}</Text>
-                    <Flex>
-                      <Text fontSize="sm" isTruncated maxW="140px">
-                        {chat.lastMessage}
-                      </Text>
-                      <TimeSinceLastMessage timestamp={chat.timestamp} />
+        </Flex>
+        <Flex direction="column" align="center" h="full">
+          <Flex
+            mt={16}
+            direction="column"
+            align="center"
+            w="full"
+            minW="240px"
+            flex={1}
+            pr="15px"
+            mr="-5px"
+            overflowY="auto"
+            overflowX="hidden"
+            gap={2}
+          >
+            {recentChats.map((chat) => (
+              <Link to={`/messages/${chat.pairId}`}>
+                <Flex
+                  mr={-3}
+                  p={6}
+                  w="26vw"
+                  minW="288px"
+                  maxW="360px"
+                  key={chat.index}
+                  rounded="1rem"
+                  _hover={{
+                    bg:
+                      currentLocation.pathname === `/messages/${chat.pairId}`
+                        ? '#ab7e24'
+                        : 'yellow.500',
+                  }}
+                  boxShadow="0px 5px 5px -5px rgba(0,0,0,0.75)"
+                  bg={
+                    currentLocation.pathname === `/messages/${chat.pairId}`
+                      ? 'yellow.500'
+                      : '#484848'
+                  }
+                >
+                  <Avatar
+                    maxH={40}
+                    maxW={40}
+                    rounded="2rem"
+                    bg="#d69e2e"
+                    src={chat.avatar}
+                    mr={4}
+                  />
+                  <Box borderRadius="lg" rounded="1rem">
+                    <Flex direction="column">
+                      <Text fontWeight="bold">{chat.name}</Text>
+                      <Flex>
+                        <Text fontSize="sm" isTruncated maxW="140px">
+                          {chat.lastMessage}
+                        </Text>
+                        <TimeSinceLastMessage timestamp={chat.timestamp} />
+                      </Flex>
                     </Flex>
-                  </Flex>
+                  </Box>
                 </Flex>
-              </Flex>
-            </ListItem>
-          </Link>
-        ))}
-      </List>
-      {chatsStatus}
-    </Box>
+              </Link>
+            ))}
+          </Flex>
+          {chatsStatus}
+        </Flex>
+      </Box>
+    </Flex>
   );
 }

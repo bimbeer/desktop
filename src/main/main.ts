@@ -72,9 +72,9 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1350,
-    height: 880,
+    height: 920,
     minWidth: 930,
-    minHeight: 880,
+    minHeight: 920,
     autoHideMenuBar: true,
     icon: getAssetPath('logo.ico'),
     webPreferences: {
@@ -117,11 +117,11 @@ const createWindow = async () => {
 };
 
 // Block users from reloading using F5/Ctrl+R
-app.on('browser-window-focus', function () {
+app.on('browser-window-focus', function onFocus() {
   globalShortcut.register('CommandOrControl+R', () => {});
   globalShortcut.register('F5', () => {});
 });
-app.on('browser-window-blur', function () {
+app.on('browser-window-blur', function onBlur() {
   globalShortcut.unregister('CommandOrControl+R');
   globalShortcut.unregister('F5');
 });

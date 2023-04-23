@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';

@@ -17,13 +17,13 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Image } from '@chakra-ui/react';
 
 import { getUserData } from 'renderer/services/profiles';
 import {
   getUserFromLocalStorage,
   UserAuth,
 } from 'renderer/context/AuthContext';
+import { Avatar } from '@mui/material';
 import beer from '../assets/images/beer.png';
 
 const drawerWidth = 294;
@@ -99,6 +99,26 @@ export default function Sidebar() {
     setOpen(false);
   };
 
+  const getBackgroundColor = (item) => {
+    if (item.to && location.pathname.startsWith(item.to)) {
+      return '#d4af37';
+    }
+    if (item.text === 'Messages' && location.pathname.startsWith('/messages')) {
+      return '#d4af37';
+    }
+    return 'inherit';
+  };
+
+  const getHoverBackgroundColor = (item) => {
+    if (item.to && location.pathname.startsWith(item.to)) {
+      return '#d69e2e';
+    }
+    if (item.text === 'Messages' && location.pathname.startsWith('/messages')) {
+      return '#d69e2e';
+    }
+    return '#252525';
+  };
+
   useEffect(() => {
     const currentUserId = getUserFromLocalStorage();
 
@@ -172,16 +192,9 @@ export default function Sidebar() {
                   to={item.to}
                   onClick={item.text === 'Logout' ? handleLogout : undefined}
                   sx={{
-                    backgroundColor:
-                      item.to && location.pathname.replace('#', '') === item.to
-                        ? '#d4af37'
-                        : 'inherit',
+                    backgroundColor: getBackgroundColor(item, location),
                     '&:hover': {
-                      backgroundColor:
-                        item.to &&
-                        location.pathname.replace('#', '') === item.to
-                          ? '#d69e2e'
-                          : '#252525',
+                      backgroundColor: getHoverBackgroundColor(item, location),
                     },
                   }}
                 >
@@ -207,29 +220,16 @@ export default function Sidebar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ p: 2.5, pb: 2, display: 'flex', alignItems: 'center' }}>
             <Link to="/profile">
-              <Image
-                position="absolute"
-                bottom={15}
-                left={20}
+              <Avatar
                 alt="User avatar"
-                rounded="full"
-                sx={{ width: 40, height: 40, borderRadius: '50% !important' }}
-                style={{
-                  backgroundColor: '#d69e2e',
-                  borderRadius: '50% !important',
-                }}
+                sx={{ width: 40, height: 40 }}
+                style={{ backgroundColor: '#d4af37' }}
                 src={profileData.avatar}
               />
             </Link>
             {open && (
               <Link to="/profile">
-                <Typography
-                  position="absolute"
-                  bottom={25}
-                  left={60}
-                  variant="body2"
-                  sx={{ ml: 2 }}
-                >
+                <Typography variant="body2" sx={{ ml: 2 }}>
                   {user.email}
                 </Typography>
               </Link>
