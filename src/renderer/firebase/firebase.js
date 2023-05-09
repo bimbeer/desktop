@@ -7,13 +7,13 @@ import {
 } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBuuBldZLbOnJYVea1sHs5247GuXBYYmK0',
-  authDomain: 'bimbeer-af1dd.firebaseapp.com',
-  projectId: 'bimbeer-af1dd',
-  storageBucket: 'bimbeer-af1dd.appspot.com',
-  messagingSenderId: '41820867549',
-  appId: '1:41820867549:web:552421a37e58cb79ef0434',
-  measurementId: 'G-ET9H0R1DT6',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKE,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

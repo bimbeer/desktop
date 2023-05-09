@@ -103,9 +103,11 @@ export default function Sidebar() {
     if (item.to && location.pathname.startsWith(item.to)) {
       return '#d4af37';
     }
+
     if (item.text === 'Messages' && location.pathname.startsWith('/messages')) {
       return '#d4af37';
     }
+
     return 'inherit';
   };
 
@@ -113,6 +115,7 @@ export default function Sidebar() {
     if (item.to && location.pathname.startsWith(item.to)) {
       return '#d69e2e';
     }
+
     if (item.text === 'Messages' && location.pathname.startsWith('/messages')) {
       return '#d69e2e';
     }
