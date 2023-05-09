@@ -33,7 +33,7 @@ import {
   capitalizeFirstLetterAndLowercaseRest,
   capitalizeFirstLetterOnly,
   convertToLowercase,
-} from 'renderer/helpers/normalizers';
+} from 'renderer/helpers/Normalizer';
 
 const MATURE_AGE = 18;
 const UNREAL_AGE = 20;
