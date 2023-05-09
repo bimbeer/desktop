@@ -28,19 +28,15 @@ import { useTheme } from '@emotion/react';
 import { getDocs, query, collection, where } from 'firebase/firestore';
 
 import { db } from 'renderer/firebase/firebase';
-import {
-  validateTextOnly,
-  validateTextAndNumbersOnly,
-  validateMaxLength,
-  validateFileType,
-  validateNotOnlyNumbers,
-  validateNumbersOnly,
-} from 'renderer/helpers/validators';
+import Validator from 'renderer/helpers/Validator';
 import {
   capitalizeFirstLetterAndLowercaseRest,
   capitalizeFirstLetterOnly,
   convertToLowercase,
-} from 'renderer/helpers/normalizer';
+} from 'renderer/helpers/Normalizer';
+
+const MATURE_AGE = 18;
+const UNREAL_AGE = 20;
 
 export default function ProfileInfoForm({
   profile,
@@ -50,6 +46,7 @@ export default function ProfileInfoForm({
   setSelectedFile,
   handleNextStep,
 }) {
+  const validator = Validator.getInstance();
   const theme = useTheme();
   const fileInputRef = React.useRef();
   const [isValid, setIsValid] = useState(false);
@@ -101,12 +98,12 @@ export default function ProfileInfoForm({
   function handleFirstNameChange(event) {
     const { value } = event.target;
 
-    if (!validateTextOnly(value)) {
+    if (!validator.validateTextOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         firstName: 'First name can only contain letters',
       }));
-    } else if (!validateMaxLength(value, 30)) {
+    } else if (!validator.validateMaxLength(value, 30)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         firstName: 'First name cannot be longer than 30 characters',
@@ -125,12 +122,12 @@ export default function ProfileInfoForm({
   function handleLastNameChange(event) {
     const { value } = event.target;
 
-    if (!validateTextOnly(value)) {
+    if (!validator.validateTextOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         lastName: 'Last name can only contain letters',
       }));
-    } else if (!validateMaxLength(value, 30)) {
+    } else if (!validator.validateMaxLength(value, 30)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         lastName: 'Last name cannot be longer than 30 characters',
@@ -151,15 +148,15 @@ export default function ProfileInfoForm({
     const { value } = event.target;
     const newErrors = [];
 
-    if (!validateTextAndNumbersOnly(value)) {
+    if (!validator.validateTextAndNumbersOnly(value)) {
       newErrors.push('Username can only contain letters and numbers');
     }
 
-    if (!validateMaxLength(value, 15)) {
+    if (!validator.validateMaxLength(value, 15)) {
       newErrors.push('Username cannot be longer than 15 characters');
     }
 
-    if (value && !validateNotOnlyNumbers(value)) {
+    if (value && !validator.validateNotOnlyNumbers(value)) {
       newErrors.push('Username cannot contain only numbers');
     }
 
@@ -187,17 +184,17 @@ export default function ProfileInfoForm({
   function handleAgeChange(value) {
     const age = parseInt(value, 10);
 
-    if (!validateNumbersOnly(value)) {
+    if (!validator.validateNumbersOnly(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         age: 'Age can only contain numbers',
       }));
-    } else if (age < 18) {
+    } else if (age < MATURE_AGE) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         age: 'You need to be at least 18 to use Bimbeer',
       }));
-    } else if (age > 120) {
+    } else if (age > UNREAL_AGE) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         age: 'Please enter your real age',
@@ -215,7 +212,13 @@ export default function ProfileInfoForm({
   async function handleAvatarChange(event) {
     const avatar = event.target.files[0];
 
-    if (!validateFileType(avatar, ['image/jpeg', 'image/png', 'image/gif'])) {
+    if (
+      !validator.validateFileType(avatar, [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+      ])
+    ) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         avatar: 'Avatar must be a JPEG, PNG, or GIF image',
@@ -241,12 +244,12 @@ export default function ProfileInfoForm({
         ...prevErrors,
         description: 'About section cannot contain only space characters',
       }));
-    } else if (!validateMaxLength(value, 255)) {
+    } else if (!validator.validateMaxLength(value, 255)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         description: 'About section cannot be longer than 255 characters',
       }));
-    } else if (value && !validateNotOnlyNumbers(value)) {
+    } else if (value && !validator.validateNotOnlyNumbers(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         description:
