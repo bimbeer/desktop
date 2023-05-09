@@ -99,7 +99,7 @@ export default function Sidebar() {
     setOpen(false);
   };
 
-  const getBackgroundColor = (item) => {
+  const getBorderColor = (item) => {
     if (item.to && location.pathname.startsWith(item.to)) {
       return '#d4af37';
     }
@@ -109,7 +109,7 @@ export default function Sidebar() {
     return 'inherit';
   };
 
-  const getHoverBackgroundColor = (item) => {
+  const getHoverBorderColor = (item) => {
     if (item.to && location.pathname.startsWith(item.to)) {
       return '#d69e2e';
     }
@@ -192,15 +192,23 @@ export default function Sidebar() {
                   to={item.to}
                   onClick={item.text === 'Logout' ? handleLogout : undefined}
                   sx={{
-                    backgroundColor: getBackgroundColor(item, location),
+                    borderLeft: `4px solid ${getBorderColor(item, location)}`,
                     '&:hover': {
-                      backgroundColor: getHoverBackgroundColor(item, location),
+                      borderLeft: `4px solid ${getHoverBorderColor(
+                        item,
+                        location
+                      )}`,
                     },
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      paddingLeft: 1.5,
+                      paddingLeft:
+                        (item.to && location.pathname.startsWith(item.to)) ||
+                        (item.text === 'Messages' &&
+                          location.pathname.startsWith('/messages'))
+                          ? 0.75 - 0.25
+                          : 1,
                       paddingRight: 5,
                     }}
                   >
