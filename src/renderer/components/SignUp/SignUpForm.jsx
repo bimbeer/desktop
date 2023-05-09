@@ -7,13 +7,10 @@ import { Text } from '@chakra-ui/react';
 import 'renderer/theme/css/AuthForms.css';
 import logo from 'renderer/assets/images/logo.png';
 import { UserAuth } from '../../context/AuthContext';
-import {
-  passwordsMatch,
-  isStrongPassword,
-  isValidEmail,
-} from '../../helpers/validators';
+import Validator from '../../helpers/Validator';
 
 export default function SignUpForm() {
+  const validator = Validator.getInstance();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -38,15 +35,15 @@ export default function SignUpForm() {
   const handleSignUp = async (event) => {
     event.preventDefault();
     setError('');
-    if (!passwordsMatch(password, confirmPassword)) {
+    if (!validator.passwordsMatch(password, confirmPassword)) {
       setError('Passwords do not match');
       return;
     }
-    if (!isStrongPassword(password)) {
+    if (!validator.isStrongPassword(password)) {
       setError('The password must be at least 6 characters.');
       return;
     }
-    if (!isValidEmail(email)) {
+    if (!validator.isValidEmail(email)) {
       setError('Invalid email address.');
       return;
     }
