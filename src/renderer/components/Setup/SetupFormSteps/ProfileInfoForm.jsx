@@ -36,7 +36,8 @@ import {
 } from 'renderer/helpers/Normalizer';
 
 const MATURE_AGE = 18;
-const UNREAL_AGE = 20;
+const UNREAL_AGE = 120;
+const TIMEOUT_VALUE = 1;
 
 export default function ProfileInfoForm({
   profile,
@@ -60,8 +61,6 @@ export default function ProfileInfoForm({
   });
   const [avatarPreviewState, setAvatarPreviewState] =
     React.useState(avatarPreview);
-
-  const TIMEOUT_VALUE = 1;
 
   useEffect(() => {
     setAvatarPreviewState(avatarPreview);
