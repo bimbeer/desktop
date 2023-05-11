@@ -180,7 +180,7 @@ export default function Sidebar() {
           <List>
             {[
               { text: 'Dashboard', to: '/dashboard' },
-              { text: 'Matches', to: '/matches' },
+              { text: 'Beer buddies', to: '/matches' },
               { text: 'Messages', to: '/messages/undefined' },
               { text: 'Profile', to: '/profile' },
               { text: 'Logout', to: undefined },
@@ -216,7 +216,7 @@ export default function Sidebar() {
                     }}
                   >
                     {item.text === 'Dashboard' && <DashboardOutlinedIcon />}
-                    {item.text === 'Matches' && <Diversity1Icon />}
+                    {item.text === 'Beer buddies' && <Diversity1Icon />}
                     {item.text === 'Messages' && (
                       <ChatBubbleOutlineOutlinedIcon />
                     )}
